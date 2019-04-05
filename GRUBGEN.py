@@ -1,4 +1,5 @@
 import random
+import json
 
 class Horn:
  #Horns are stored in trolls as just the code part.  Use this class when manipulating.
@@ -40,19 +41,18 @@ def main():
 
 def save(grub):
  save = open(grub["firname"] + "." + grub["surname"] + ".troll", "wt")
- save.write("#SaveVersion2#" + "\n")
- for x in grub.values():
-  save.write(x + "\n")
+ save.write("#SaveVersion4#" + "\n")
+ y = json.dumps(grub, indent=4)
+ save.write(y)
  save.close
  return
 
 def load(filename):
  trollobj = CreateTroll()
  load = open(filename + ".troll", "rt")
- if load.readline() == "#SaveVersion2#\n": 
-  for x in trollobj:
-   tempstring = load.readline()
-   trollobj[x] = tempstring[0:len(tempstring) - 1]
+ if load.readline() == "#SaveVersion4#\n": 
+  y = load.read()
+  trollobj = json.loads(y)
  load.close
  return trollobj
 

@@ -1,14 +1,16 @@
-#SaveVersion2#
-Libbie
-Pickle
-F
-RG
-Gold
-Landdweller
-Psychic
-21RIn.f point
-21RIn.f point
-tall
-medium
-short
-grey
+#SaveVersion4#
+{
+    "firname": "Libbie",
+    "surname": "Pickle",
+    "sex": "F",
+    "blood": "RG",
+    "caste": "Gold",
+    "sea": "Landdweller",
+    "powers": "Psychic",
+    "hornL": "17RIn.f point",
+    "hornR": "17RIn.f point",
+    "height": "short",
+    "build": "heavy",
+    "hair": "long curly",
+    "skin": "grey freckled"
+}
