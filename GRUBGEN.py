@@ -61,8 +61,8 @@ def onprogramload():
  
 def updatescreen():
  tcod.console_set_default_foreground(0, tcod.white)
- #displaytroll(1,1,libbie)
- #displaytroll(40,1,lester)
+ displaytroll(1,1,libbie)
+ displaytroll(40,1,lester)
  draw(player_x,player_y,"@")
  tcod.console_flush()
  draw(player_x,player_y," ")
@@ -71,7 +71,7 @@ def updatescreen():
 def draw(x,y,thing):
  #draws a foreground element.
  #Have a separate function for background boxes.
- tcod.console_put_char(0, x, y, thing, tcod.BKGND_NONE)
+ tcod.console_print(0, x, y, thing)
  return
 
 def handle_keys():
@@ -124,11 +124,22 @@ def CreateTroll():
  return t0
 
 def displaytroll(x,y,t0):
- draw(x,y,t0["firname"] + " " + t0["surname"] + ", " + t0["blood"] + " " + t0["sex"] + ", " + t0["caste"] + ", " + t0["powers"]) 
- draw(x,y,t0["sea"])
- draw(x,y,t0["height"] + ", " + t0["build"] + " build, " + t0["hair"] + " hair, " + t0["skin"] + " skin")
- draw(x,y,"LHorn: " + t0["hornL"])
- draw(x,y,"RHorn: " + t0["hornR"])
+ string1 = t0["firname"] + " " + t0["surname"] + ", " + t0["blood"] + " " + t0["sex"]
+ string2 = t0["caste"] + ", " + t0["powers"] 
+ string3 = t0["sea"]
+ string4 = t0["height"] + ", " + t0["build"] + " build" 
+ string5 = t0["hair"] + " hair"
+ string6 = t0["skin"] + " skin"
+ string7 = "LHorn: " + t0["hornL"]
+ string8 = "RHorn: " + t0["hornR"]
+ draw(x,y,string1) 
+ draw(x,y+1,string2)
+ draw(x,y+2,string3)
+ draw(x,y+3,string4)
+ draw(x,y+4,string5)
+ draw(x,y+5,string6)
+ draw(x,y+6,string7)
+ draw(x,y+7,string8)
  return
  
 main()
