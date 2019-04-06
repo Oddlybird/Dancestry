@@ -1,5 +1,6 @@
 import random
 import json
+import libtcodpy as tcod
 
 class Horn:
  #Horns are stored in trolls as just the code part.  Use this class when manipulating.
@@ -26,18 +27,66 @@ class Horn:
   #use by going descriptionstring = horntemp.desc() 
   description = ""
   return description
-
  
 #have Trolls (one contributor)
 #have Donations (A particular donation by 2 trolls)
 #have Slurries (An array of Donations, with some meta-data)
 
 def main(): 
- troll0 = CreateTroll()
- save(troll0)
- troll0 = load("Libbie.Pickle")
- displaytroll(troll0) 
+ onprogramload()
+ while not tcod.console_is_window_closed():
+  updatescreen()
+  exit = handle_keys()
+  if exit:
+    break
  return
+
+def onprogramload():
+ SCREEN_WIDTH = 80
+ SCREEN_HEIGHT = 50
+ VERSIONNUM = "0.1.2"
+ global player_x, player_y
+ player_x = SCREEN_WIDTH // 2
+ player_y = SCREEN_HEIGHT // 2
+ font_path = 'terminal8x12_gs_tc.png'
+ font_flags = tcod.FONT_TYPE_GREYSCALE | tcod.FONT_LAYOUT_TCOD
+ tcod.console_set_custom_font(font_path, font_flags)
+ window_title = "Dancestry " + VERSIONNUM
+ fullscreen = False
+ tcod.console_init_root(SCREEN_WIDTH, SCREEN_HEIGHT, window_title, fullscreen)
+ global libbie, lester
+ libbie = load("Libbie.Pickle")
+ lester = load("Lester.Pebble")
+ return
+ 
+def updatescreen():
+ tcod.console_set_default_foreground(0, tcod.white)
+ #displaytroll(1,1,libbie)
+ #displaytroll(40,1,lester)
+ draw(player_x,player_y,"@")
+ tcod.console_flush()
+ draw(player_x,player_y," ")
+ return
+
+def draw(x,y,thing):
+ #draws a foreground element.
+ #Have a separate function for background boxes.
+ tcod.console_put_char(0, x, y, thing, tcod.BKGND_NONE)
+ return
+
+def handle_keys():
+ global player_x, player_y
+ key = tcod.console_wait_for_keypress(True)
+ if tcod.console_is_key_pressed(tcod.KEY_UP):
+  player_y = player_y - 1
+ if tcod.console_is_key_pressed(tcod.KEY_DOWN):
+  player_y = player_y + 1
+ if tcod.console_is_key_pressed(tcod.KEY_LEFT):
+  player_x = player_x - 1
+ if tcod.console_is_key_pressed(tcod.KEY_RIGHT):
+  player_x = player_x + 1
+ elif key.vk == tcod.KEY_ESCAPE:
+  return True
 
 def save(grub):
  save = open(grub["firname"] + "." + grub["surname"] + ".troll", "wt")
@@ -74,12 +123,12 @@ def CreateTroll():
  }
  return t0
 
-def displaytroll(t0):
- print(t0["firname"] + " " + t0["surname"] + ", " + t0["blood"] + " " + t0["sex"] + ", " + t0["caste"] + ", " + t0["powers"]) 
- print(t0["sea"])
- print(t0["height"] + ", " + t0["build"] + " build, " + t0["hair"] + " hair, " + t0["skin"] + " skin")
- print("LHorn: " + t0["hornL"])
- print("RHorn: " + t0["hornR"])
+def displaytroll(x,y,t0):
+ draw(x,y,t0["firname"] + " " + t0["surname"] + ", " + t0["blood"] + " " + t0["sex"] + ", " + t0["caste"] + ", " + t0["powers"]) 
+ draw(x,y,t0["sea"])
+ draw(x,y,t0["height"] + ", " + t0["build"] + " build, " + t0["hair"] + " hair, " + t0["skin"] + " skin")
+ draw(x,y,"LHorn: " + t0["hornL"])
+ draw(x,y,"RHorn: " + t0["hornR"])
  return
  
 main()
