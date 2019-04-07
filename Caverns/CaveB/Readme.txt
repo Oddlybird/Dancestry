@@ -1,0 +1,1 @@
+This cave is for any produced trolls to be placed into.
