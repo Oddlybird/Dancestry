@@ -18,6 +18,7 @@ Future goals: (approximate)
 
 0.0.x - menu and format upgrades
 
+
 =
 Approximate version history:
 =
@@ -28,6 +29,8 @@ V. 0.1.3: 2019-04-06 - 2019-04-
 -- Keyboard interface and menu capability
 
 -- Displayed trolls have a background color based on their blood code
+
+-- getcaste(b) currently unused, but present.
 
 -- Readme updated, version history added
 
