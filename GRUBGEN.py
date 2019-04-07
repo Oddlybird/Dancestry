@@ -45,45 +45,55 @@ def main():
 def onprogramload():
  SCREEN_WIDTH = 100
  SCREEN_HEIGHT = 50
- VERSIONNUM = "0.1.2"
+ VERSIONNUM = "0.1.4"
  font_path = 'terminal8x12_gs_tc.png'
  font_flags = tcod.FONT_TYPE_GREYSCALE | tcod.FONT_LAYOUT_TCOD
  tcod.console_set_custom_font(font_path, font_flags)
  window_title = "Dancestry " + VERSIONNUM
  fullscreen = False
  tcod.console_init_root(SCREEN_WIDTH, SCREEN_HEIGHT, window_title, fullscreen)
- global libbie, lester, btncurrent
+ global libbie, lester, troll3, btncurrent, screencurrent
  libbie = load("Libbie.Pickle")
  lester = load("Lester.Pebble")
+ troll3 = CreateTroll()
  btncurrent = 1
+ screencurrent = "showparents"
  return
  
 def updatescreen():
  tcod.console_clear(0)
  tcod.console_set_default_foreground(0, tcod.Color(250,250,200))
  tcod.console_set_default_background(0, tcod.black)
- displaytroll(1,1,libbie)
- displaytroll(36,1,lester)
+ 
+ if screencurrent == "showparents":
+  displaytroll(1,1,libbie)
+  displaytroll(36,1,lester)
+ if screencurrent == "maketroll":
+  displaytroll(1,1,libbie)
+  displaytroll(36,1,lester)
+  displaytroll(18,25,troll3)
+  
  drawmenu()
  tcod.console_flush()
  return
- 
+
 def drawmenu():
  tcod.console_print_frame(0, 71, 0, 29, 50, True, 13, "MENU")
  tcod.console_set_color_control(0, tcod.white, tcod.Color(60,60,60))
+ txtcol = tcod.Color(50,50,0)
  #Can add a tcod.Color(rrr,ggg,bbb) for:  drawbtn(x,y,"label",background,foreground)
- drawbtn(73,2,"Btn 1", btnselect(1), tcod.Color(50,50,0)) 
- drawbtn(73,6,"Btn 2", btnselect(2), tcod.Color(50,50,0)) 
- drawbtn(73,10,"Btn 3", btnselect(3), tcod.Color(50,50,0)) 
- drawbtn(73,14,"Btn 4", btnselect(4), tcod.Color(50,50,0)) 
- drawbtn(73,18,"Btn 5", btnselect(5), tcod.Color(50,50,0)) 
- drawbtn(73,22,"Btn 6", btnselect(6), tcod.Color(50,50,0)) 
- drawbtn(73,26,"Btn 7", btnselect(7), tcod.Color(50,50,0)) 
- drawbtn(73,30,"Btn 8", btnselect(8), tcod.Color(50,50,0)) 
- drawbtn(73,34,"       E X I T    ", btnselect(9), tcod.Color(50,50,0)) 
-
- #tcod.console_rect(0, 72, 1, 27, 2, False, tcod.BKGND_SET) 
- #draw(76,2,"Menu location")
+ drawbtn(73,2, "     SHOW TROLLS    ", btnselect(1), txtcol) 
+ drawbtn(73,6, "   ANOTHER  BUTTON  ", btnselect(2), txtcol) 
+ drawbtn(73,10,"     SAVE TROLL     ", btnselect(3), txtcol) 
+ drawbtn(73,14,"       Btn   4      ", btnselect(4), txtcol) 
+ drawbtn(73,18,"       Btn   5      ", btnselect(5), txtcol) 
+ drawbtn(73,22,"       Btn   6      ", btnselect(6), txtcol) 
+ drawbtn(73,26,"       Btn   7      ", btnselect(7), txtcol) 
+ drawbtn(73,30,"       Btn   8      ", btnselect(8), txtcol) 
+ drawbtn(73,34,"       Btn   9      ", btnselect(9), txtcol) 
+ drawbtn(73,38,"       Btn  10      ", btnselect(10), txtcol) 
+ drawbtn(73,42,"       Btn  11      ", btnselect(11), txtcol) 
+ drawbtn(73,46,"       E X I T      ", btnselect(12), txtcol) 
  #reset defaults
  tcod.console_set_color_control(0, tcod.black, tcod.white)
  return
@@ -95,6 +105,22 @@ def btnselect(x):
   btncol = tcod.Color(200,200,0)
  if x != btncurrent:
   btncol = tcod.Color(120,120,0)
+ if x == 4: #Currently Unused Button
+  btncol = tcod.Color(50,50,0)
+ if x == 5: #Currently Unused Button
+  btncol = tcod.Color(50,50,0)
+ if x == 6: #Currently Unused Button
+  btncol = tcod.Color(50,50,0)
+ if x == 7: #Currently Unused Button
+  btncol = tcod.Color(50,50,0)
+ if x == 8: #Currently Unused Button
+  btncol = tcod.Color(50,50,0)
+ if x == 9: #Currently Unused Button
+  btncol = tcod.Color(50,50,0)
+ if x == 10: #Currently Unused Button
+  btncol = tcod.Color(50,50,0)
+ if x == 11: #Currently Unused Button
+  btncol = tcod.Color(50,50,0)
  #if btnstate[x] == "UNUSED":
  # btncol = tcod.Color(50,50,0)
  return btncol
@@ -121,30 +147,49 @@ def draw(x,y,thing):
  tcod.console_print(0, x, y, thing)
  return
 
-def handle_keys():
+def usedbuttons(dir):
  global btncurrent
+ while btnselect(btncurrent) == tcod.Color(50,50,0):
+  if dir == "+":
+   btncurrent = btncurrent + 1
+  if dir == "-":
+   btncurrent = btncurrent - 1
+  if btncurrent == 13:
+   btncurrent = 1
+  if btncurrent == 0:
+   btncurrent = 12
+ return
+
+def handle_keys():
+ global btncurrent, screencurrent
  key = tcod.console_wait_for_keypress(True)
  if tcod.console_is_key_pressed(tcod.KEY_UP):
   btncurrent = btncurrent - 1
+  usedbuttons("-")
  if tcod.console_is_key_pressed(tcod.KEY_DOWN):
   btncurrent = btncurrent + 1
+  usedbuttons("+")
  #if tcod.console_is_key_pressed(tcod.KEY_LEFT):
  #if tcod.console_is_key_pressed(tcod.KEY_RIGHT):
- if btncurrent == 10:
+ if btncurrent == 13:
   btncurrent = 1
  if btncurrent == 0:
-  btncurrent = 9
+  btncurrent = 12
  if tcod.console_is_key_pressed(tcod.KEY_ENTER):
   #This is the loop for when someone chooses a button.
   if btncurrent == 1:
-   #code that makes the button do something
-   return False
+      screencurrent = "showparents"
+      return False
   if btncurrent == 2:
-   #code that makes the button do something
-   return False
+      screencurrent = "maketroll"
+      global troll3
+      troll3 = CreateTroll()
+      updatescreen() 
+      return False
   if btncurrent == 3:
-   #code that makes the button do something
-   return False
+      save(troll3)
+      draw(73,20,"Saved")  
+      return False
   if btncurrent == 4:
    #code that makes the button do something
    return False
@@ -161,6 +206,15 @@ def handle_keys():
    #code that makes the button do something
    return False
   if btncurrent == 9:
+   #code that makes the button do something
+   return False
+  if btncurrent == 10:
+   #code that makes the button do something
+   return False
+  if btncurrent == 11:
+   #code that makes the button do something
+   return False
+  if btncurrent == 12:
    return True
   #the loop for when someone chooses a button is over.
  #elif key.vk == tcod.KEY_ESCAPE:
@@ -168,7 +222,7 @@ def handle_keys():
   return True
 
 def save(grub):
- save = open(grub["firname"] + "." + grub["surname"] + ".troll", "wt")
+ save = open("Caverns/CaveB/" +grub["firname"] + "." + grub["surname"] + ".troll", "wt")
  save.write("#SaveVersion4#" + "\n")
  y = json.dumps(grub, indent=4)
  save.write(y)
@@ -177,7 +231,7 @@ def save(grub):
 
 def load(filename):
  trollobj = CreateTroll()
- load = open(filename + ".troll", "rt")
+ load = open("Caverns/AncestralCave/" + filename + ".troll", "rt")
  if load.readline() == "#SaveVersion4#\n": 
   y = load.read()
   trollobj = json.loads(y)
@@ -209,7 +263,7 @@ def displaytroll(x,y,t0):
  #recolor
  colbg = bloodtorgb(t0["blood"])
  colfg = pastel(colbg)
- rectolor(x, y, 34, 39, colbg, colfg)
+ rectolor(x, y, 34, 20, colbg, colfg)
  string1 = t0["firname"] + " " + t0["surname"] + ", " + t0["blood"] + " " + t0["sex"]
  string2 = t0["caste"] + ", " + t0["powers"] 
  string3 = t0["sea"]
@@ -218,7 +272,7 @@ def displaytroll(x,y,t0):
  string6 = t0["skin"] + " skin"
  string7 = "LHorn: " + t0["hornL"]
  string8 = "RHorn: " + t0["hornR"]
- tcod.console_print_frame(0, x, y, 35, 40, True, 13, string1)
+ tcod.console_print_frame(0, x, y, 35, 21, True, 13, string1)
  draw(x+2,y+1,string2)
  draw(x+2,y+2,string3)
  draw(x+2,y+3,string4)
@@ -227,7 +281,7 @@ def displaytroll(x,y,t0):
  draw(x+2,y+6,string7)
  draw(x+2,y+7,string8)
  return
-
+ 
 def bloodtorgb(b):
  #gives you the darker color associated with the code "b" which is a 3 letter string.
  rgb1 = 0
