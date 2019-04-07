@@ -250,7 +250,7 @@ def bloodtorgb(b):
   rgb3 = 120
   capitals = capitals + 1
 
-#Mutant Fixing : No capital letters = make them neon.
+ #Mutant Fixing : No capital letters = make them neon.
  if capitals == 0:
   if rgb1 != 0:
    rgb1 = rgb1+140
@@ -258,17 +258,89 @@ def bloodtorgb(b):
    rgb2 = rgb2+140
   if rgb3 != 0:
    rgb3 = rgb3+140
-#Make dark grubs brighter.
+ #Make dark grubs brighter.
  if rgb1+rgb2+rgb3 < 100:
   rgb1 = rgb1*2
   rgb2 = rgb2*2
   rgb3 = rgb3*2
-#Vantases are special.
+ #Vantases are special.
  if b[0] + b[1] == "rb":
   rgb1 = 255
   rgb2 = 0
   rgb3 = 0
+ 
+ #Modulate color by 3rd letter.
+ if len(b) == 3:
+  caste = "?"
+  if rgb1 > 0 and rgb2 > 0:
+   caste = "low"
+  if rgb1 > 0 and rgb2 == 0 and rgb3 == 0:
+   caste = "low"
+  if rgb1 == 0 and rgb2 > 0 and rgb3 == 0:
+   caste = "low"
+  if rgb2 > 0 and rgb3 > 0:
+   caste = "mid"
+  if rgb1 == 0 and rgb2 == 0 and rgb3 > 0:
+   caste = "mid"
+  if rgb1 == 0 and rgb2 > 0 and rgb3 == 0:
+   caste = "mid"
+  if rgb3 > 0 and rgb1 > 0:
+   caste = "high"
+  if rgb1 > 0 and rgb2 == 0 and rgb3 == 0:
+   caste = "high"
+  if rgb1 == 0 and rgb2 == 0 and rgb3 > 0:
+   caste = "high"
+
+  if caste == "low":
+   if b[2] == "g":
+    if rgb2>rgb1:
+     rgb1 = rgb1-25 #g loses red
+    if rgb1>rgb2:
+     rgb2 = rgb2+25 #g gains green
+   if b[2] == "r":
+    if rgb2>rgb1:
+     rgb2 = rgb2-25 #r loses green
+    if rgb1>rgb2:
+     rgb1 = rgb1+25 #r gains red
   
+  if caste == "mid":
+   if b[2] == "b":
+    if rgb3>rgb2:
+     rgb2 = rgb2-25 #b loses green
+    if rgb2>rgb3:
+     rgb3 = rgb3+25 #b gains blue
+   if b[2] == "g":
+    if rgb3>rgb2:
+     rgb3 = rgb3-25 #g loses blue
+    if rgb2>rgb3:
+     rgb2 = rgb2+25 #g gains green   
+
+  if caste == "high":
+   if b[2] == "r":
+    if rgb1>rgb3:
+     rgb3 = rgb3-25 #r loses blue
+    if rgb3>rgb1:
+     rgb1 = rgb1+25 #r gains red
+   if b[2] == "b":
+    if rgb1>rgb3:
+     rgb1 = rgb1-25 #b loses red
+    if rgb3>rgb1:
+     rgb3 = rgb3+25 #b gains blue 
+
+#Return things to normal color ranges.
+ if rgb1 > 255:
+  rgb1 = 255
+ if rgb2 > 255:
+  rgb2 = 255
+ if rgb3 > 255:
+  rgb3 = 255  
+ if rgb1 <0:
+  rgb1 = 0
+ if rgb2 <0:
+  rgb2 = 0
+ if rgb3 <0:
+  rgb3 = 0
+
  finalcolor = tcod.Color(rgb1,rgb2,rgb3)
  return finalcolor
 
