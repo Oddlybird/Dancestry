@@ -219,21 +219,57 @@ def displaytroll(x,y,t0):
  draw(x+2,y+5,string6)
  draw(x+2,y+6,string7)
  draw(x+2,y+7,string8)
- #recolor
+ #set some defaults
  colbg = tcod.Color(0,0,0)
  colfg = tcod.Color(255,255,255)
- 
- if t0["blood"] == "RGg":
-  colbg = tcod.Color(255,255,0)
-  colfg = tcod.Color(50,50,0)
- if t0["blood"] == "Br":
-  colbg = tcod.Color(255,0,255)
-  colfg = tcod.Color(50,0,50)
+ #recolor
+ colbg = bloodtorgb(t0["blood"])
+ #colfg = pastelized version of that, using pastel function
  rectolor(x, y, 35, 39, colbg, colfg)
  return
 
-def bloodtoRGB():
- #gives you the darker color associated with any valid blood code.
- return
+def bloodtorgb(b):
+ #gives you the darker color associated with the code "b" which is a 3 letter string.
+ rgb1 = 0
+ rgb2 = 0
+ rgb3 = 0
+ capitals = 0
+ if b[0] == "r" or b[1] == "r": #recessive colors
+  rgb1 = 60
+ if b[0] == "g" or b[1] == "g":
+  rgb2 = 60
+ if b[0] == "b" or b[1] == "b":
+  rgb3 = 60
+ if b[0] == "R" or b[1] == "R": #dominant colors
+  rgb1 = 120
+  capitals = capitals + 1
+ if b[0] == "G" or b[1] == "G":
+  rgb2 = 120
+  capitals = capitals + 1
+ if b[0] == "B" or b[1] == "B":
+  rgb3 = 120
+  capitals = capitals + 1
+
+#Mutant Fixing : No capital letters = make them neon.
+ if capitals == 0:
+  if rgb1 != 0:
+   rgb1 = rgb1+140
+  if rgb2 != 0:
+   rgb2 = rgb2+140
+  if rgb3 != 0:
+   rgb3 = rgb3+140
+#Make dark grubs brighter.
+ if rgb1+rgb2+rgb3 < 100:
+  rgb1 = rgb1*2
+  rgb2 = rgb2*2
+  rgb3 = rgb3*2
+#Vantases are special.
+ if b[0] + b[1] == "rb":
+  rgb1 = 255
+  rgb2 = 0
+  rgb3 = 0
+  
+ finalcolor = tcod.Color(rgb1,rgb2,rgb3)
+ return finalcolor
 
 main()
