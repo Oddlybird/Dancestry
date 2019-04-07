@@ -18,8 +18,9 @@ Future goals: (approximate)
 
 0.0.x - menu and format upgrades
 
-
+==============================
 Approximate version history:
+==============================
 
 
 V. 0.1.3: 2019-04-06 - 2019-04-
