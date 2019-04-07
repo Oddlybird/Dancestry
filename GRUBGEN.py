@@ -2,6 +2,7 @@ import random
 import json
 import libtcodpy as tcod
 
+
 class Horn:
  #Horns are stored in trolls as just the code part.  Use this class when manipulating.
  #create a horn by going horntemp = Horn("21RIn.f point"), or horntemp = Horn(troll.hornL)
@@ -42,50 +43,128 @@ def main():
  return
 
 def onprogramload():
- SCREEN_WIDTH = 80
+ SCREEN_WIDTH = 100
  SCREEN_HEIGHT = 50
  VERSIONNUM = "0.1.2"
- global player_x, player_y
- player_x = SCREEN_WIDTH // 2
- player_y = SCREEN_HEIGHT // 2
  font_path = 'terminal8x12_gs_tc.png'
  font_flags = tcod.FONT_TYPE_GREYSCALE | tcod.FONT_LAYOUT_TCOD
  tcod.console_set_custom_font(font_path, font_flags)
  window_title = "Dancestry " + VERSIONNUM
  fullscreen = False
  tcod.console_init_root(SCREEN_WIDTH, SCREEN_HEIGHT, window_title, fullscreen)
- global libbie, lester
+ global libbie, lester, btncurrent
  libbie = load("Libbie.Pickle")
  lester = load("Lester.Pebble")
+ btncurrent = 1
  return
  
 def updatescreen():
+ tcod.console_clear(0)
  tcod.console_set_default_foreground(0, tcod.white)
+ tcod.console_set_default_background(0, tcod.black)
  displaytroll(1,1,libbie)
- displaytroll(40,1,lester)
- draw(player_x,player_y,"@")
+ displaytroll(36,1,lester)
+ drawmenu()
  tcod.console_flush()
- draw(player_x,player_y," ")
  return
+ 
+def drawmenu():
+ tcod.console_print_frame(0, 71, 0, 29, 50, True, 13, "MENU")
+ tcod.console_set_color_control(0, tcod.white, tcod.Color(60,60,60))
+ #Can add a tcod.Color(rrr,ggg,bbb) for:  drawbtn(x,y,"label",background,foreground)
+ drawbtn(73,2,"Btn 1", btnselect(1)) 
+ drawbtn(73,6,"Btn 2", btnselect(2)) 
+ drawbtn(73,10,"Btn 3", btnselect(3)) 
+ drawbtn(73,14,"Btn 4", btnselect(4)) 
+ drawbtn(73,18,"Btn 5", btnselect(5)) 
+ drawbtn(73,22,"Btn 6", btnselect(6)) 
+ drawbtn(73,26,"Btn 7", btnselect(7)) 
+ drawbtn(73,30,"Btn 8", btnselect(8)) 
+ drawbtn(73,34,"       E X I T    ", btnselect(9)) 
 
+ #tcod.console_rect(0, 72, 1, 27, 2, False, tcod.BKGND_SET) 
+ #draw(76,2,"Menu location")
+ #reset defaults
+ tcod.console_set_color_control(0, tcod.black, tcod.white)
+ return
+ 
+def btnselect(x):
+ global btnstate
+ btncol = tcod.Color(255,0,0)
+ if x == btncurrent:
+  btncol = tcod.Color(255,255,225)
+ if x != btncurrent:
+  btncol = tcod.Color(205,205,275)
+ #if btnstate[x] == "UNUSED":
+ # btncol = tcod.Color(50,50,0)
+ return btncol
+ 
+def drawbtn(x, y, label = "", btncolor = tcod.Color(255,255,225), txtcolor = tcod.Color(50,50,0)):
+ rectolor(x,y,24,2, btncolor, txtcolor) 
+ draw(x+2,y+1,label)
+ return 
+
+def rectolor(x, y, ww, hh, btncolor = tcod.Color(255,255,225), txtcolor = tcod.Color(50,50,0)):
+ h = 0
+ w = 0
+ while h <= hh:
+   while w <= ww:
+     tcod.console_set_char_background(0, x+w, y+h, btncolor, tcod.BKGND_SET)
+     tcod.console_set_char_foreground(0, x+w, y+h, txtcolor)
+     w = w + 1
+   w = 0
+   h = h + 1
+ return 
+ 
 def draw(x,y,thing):
- #draws a foreground element.
- #Have a separate function for background boxes.
+ #draws foreground text, no color specified.
  tcod.console_print(0, x, y, thing)
  return
 
 def handle_keys():
- global player_x, player_y
+ global btncurrent
  key = tcod.console_wait_for_keypress(True)
  if tcod.console_is_key_pressed(tcod.KEY_UP):
-  player_y = player_y - 1
+  btncurrent = btncurrent - 1
  if tcod.console_is_key_pressed(tcod.KEY_DOWN):
-  player_y = player_y + 1
- if tcod.console_is_key_pressed(tcod.KEY_LEFT):
-  player_x = player_x - 1
- if tcod.console_is_key_pressed(tcod.KEY_RIGHT):
-  player_x = player_x + 1
- elif key.vk == tcod.KEY_ESCAPE:
+  btncurrent = btncurrent + 1
+ #if tcod.console_is_key_pressed(tcod.KEY_LEFT):
+ #if tcod.console_is_key_pressed(tcod.KEY_RIGHT):
+ if btncurrent == 10:
+  btncurrent = 1
+ if btncurrent == 0:
+  btncurrent = 9
+ if tcod.console_is_key_pressed(tcod.KEY_ENTER):
+  #This is the loop for when someone chooses a button.
+  if btncurrent == 1:
+   #code that makes the button do something
+   return False
+  if btncurrent == 2:
+   #code that makes the button do something
+   return False
+  if btncurrent == 3:
+   #code that makes the button do something
+   return False
+  if btncurrent == 4:
+   #code that makes the button do something
+   return False
+  if btncurrent == 5:
+   #code that makes the button do something
+   return False
+  if btncurrent == 6:
+   #code that makes the button do something
+   return False
+  if btncurrent == 7:
+   #code that makes the button do something
+   return False
+  if btncurrent == 8:
+   #code that makes the button do something
+   return False
+  if btncurrent == 9:
+   return True
+  #the loop for when someone chooses a button is over.
+ #elif key.vk == tcod.KEY_ESCAPE:
+ #reenable the above line to make hitting escape close the program.
   return True
 
 def save(grub):
@@ -132,14 +211,29 @@ def displaytroll(x,y,t0):
  string6 = t0["skin"] + " skin"
  string7 = "LHorn: " + t0["hornL"]
  string8 = "RHorn: " + t0["hornR"]
- draw(x,y,string1) 
- draw(x,y+1,string2)
- draw(x,y+2,string3)
- draw(x,y+3,string4)
- draw(x,y+4,string5)
- draw(x,y+5,string6)
- draw(x,y+6,string7)
- draw(x,y+7,string8)
- return
+ tcod.console_print_frame(0, x, y, 35, 40, True, 13, string1)
+ draw(x+2,y+1,string2)
+ draw(x+2,y+2,string3)
+ draw(x+2,y+3,string4)
+ draw(x+2,y+4,string5)
+ draw(x+2,y+5,string6)
+ draw(x+2,y+6,string7)
+ draw(x+2,y+7,string8)
+ #recolor
+ colbg = tcod.Color(0,0,0)
+ colfg = tcod.Color(255,255,255)
  
+ if t0["blood"] == "RGg":
+  colbg = tcod.Color(255,255,0)
+  colfg = tcod.Color(50,50,0)
+ if t0["blood"] == "Br":
+  colbg = tcod.Color(255,0,255)
+  colfg = tcod.Color(50,0,50)
+ rectolor(x, y, 35, 39, colbg, colfg)
+ return
+
+def bloodtoRGB():
+ #gives you the darker color associated with any valid blood code.
+ return
+
 main()
