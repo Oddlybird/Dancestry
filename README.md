@@ -23,8 +23,18 @@ Future goals: (approximate)
 Approximate version history:
 =
 
+V. 0.1.4: 2019-04-07
 
-V. 0.1.3: 2019-04-06 - 2019-04-
+-- Can swap between Parent and Generate Grub screens
+
+-- Can create non-random troll on Grub screen
+
+-- Can save Grub to file, in folder
+
+-- Bug : Program will crash if Libbie or Lester are absent.
+
+
+V. 0.1.3: 2019-04-06 - 2019-04-07
 
 -- Keyboard interface and menu capability
 
