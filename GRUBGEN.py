@@ -1,7 +1,7 @@
 import random
 import json
 import libtcodpy as tcod
-
+#getcaste(b) is a function you can use to get the plaintext of a caste.  Put in the bloodcode.
 
 class Horn:
  #Horns are stored in trolls as just the code part.  Use this class when manipulating.
@@ -60,7 +60,7 @@ def onprogramload():
  
 def updatescreen():
  tcod.console_clear(0)
- tcod.console_set_default_foreground(0, tcod.white)
+ tcod.console_set_default_foreground(0, tcod.Color(250,250,200))
  tcod.console_set_default_background(0, tcod.black)
  displaytroll(1,1,libbie)
  displaytroll(36,1,lester)
@@ -72,15 +72,15 @@ def drawmenu():
  tcod.console_print_frame(0, 71, 0, 29, 50, True, 13, "MENU")
  tcod.console_set_color_control(0, tcod.white, tcod.Color(60,60,60))
  #Can add a tcod.Color(rrr,ggg,bbb) for:  drawbtn(x,y,"label",background,foreground)
- drawbtn(73,2,"Btn 1", btnselect(1)) 
- drawbtn(73,6,"Btn 2", btnselect(2)) 
- drawbtn(73,10,"Btn 3", btnselect(3)) 
- drawbtn(73,14,"Btn 4", btnselect(4)) 
- drawbtn(73,18,"Btn 5", btnselect(5)) 
- drawbtn(73,22,"Btn 6", btnselect(6)) 
- drawbtn(73,26,"Btn 7", btnselect(7)) 
- drawbtn(73,30,"Btn 8", btnselect(8)) 
- drawbtn(73,34,"       E X I T    ", btnselect(9)) 
+ drawbtn(73,2,"Btn 1", btnselect(1), tcod.Color(50,50,0)) 
+ drawbtn(73,6,"Btn 2", btnselect(2), tcod.Color(50,50,0)) 
+ drawbtn(73,10,"Btn 3", btnselect(3), tcod.Color(50,50,0)) 
+ drawbtn(73,14,"Btn 4", btnselect(4), tcod.Color(50,50,0)) 
+ drawbtn(73,18,"Btn 5", btnselect(5), tcod.Color(50,50,0)) 
+ drawbtn(73,22,"Btn 6", btnselect(6), tcod.Color(50,50,0)) 
+ drawbtn(73,26,"Btn 7", btnselect(7), tcod.Color(50,50,0)) 
+ drawbtn(73,30,"Btn 8", btnselect(8), tcod.Color(50,50,0)) 
+ drawbtn(73,34,"       E X I T    ", btnselect(9), tcod.Color(50,50,0)) 
 
  #tcod.console_rect(0, 72, 1, 27, 2, False, tcod.BKGND_SET) 
  #draw(76,2,"Menu location")
@@ -92,9 +92,9 @@ def btnselect(x):
  global btnstate
  btncol = tcod.Color(255,0,0)
  if x == btncurrent:
-  btncol = tcod.Color(255,255,225)
+  btncol = tcod.Color(200,200,0)
  if x != btncurrent:
-  btncol = tcod.Color(205,205,275)
+  btncol = tcod.Color(120,120,0)
  #if btnstate[x] == "UNUSED":
  # btncol = tcod.Color(50,50,0)
  return btncol
@@ -104,7 +104,7 @@ def drawbtn(x, y, label = "", btncolor = tcod.Color(255,255,225), txtcolor = tco
  draw(x+2,y+1,label)
  return 
 
-def rectolor(x, y, ww, hh, btncolor = tcod.Color(255,255,225), txtcolor = tcod.Color(50,50,0)):
+def rectolor(x, y, ww, hh, btncolor = tcod.Color(255,255,225), txtcolor = tcod.Color(0,0,0)):
  h = 0
  w = 0
  while h <= hh:
@@ -203,6 +203,13 @@ def CreateTroll():
  return t0
 
 def displaytroll(x,y,t0):
+ #set some defaults
+ colbg = tcod.Color(0,0,0)
+ colfg = tcod.Color(255,255,255)
+ #recolor
+ colbg = bloodtorgb(t0["blood"])
+ colfg = pastel(colbg)
+ rectolor(x, y, 34, 39, colbg, colfg)
  string1 = t0["firname"] + " " + t0["surname"] + ", " + t0["blood"] + " " + t0["sex"]
  string2 = t0["caste"] + ", " + t0["powers"] 
  string3 = t0["sea"]
@@ -219,13 +226,6 @@ def displaytroll(x,y,t0):
  draw(x+2,y+5,string6)
  draw(x+2,y+6,string7)
  draw(x+2,y+7,string8)
- #set some defaults
- colbg = tcod.Color(0,0,0)
- colfg = tcod.Color(255,255,255)
- #recolor
- colbg = bloodtorgb(t0["blood"])
- #colfg = pastelized version of that, using pastel function
- rectolor(x, y, 35, 39, colbg, colfg)
  return
 
 def bloodtorgb(b):
@@ -271,62 +271,25 @@ def bloodtorgb(b):
  
  #Modulate color by 3rd letter.
  if len(b) == 3:
-  caste = "?"
-  if rgb1 > 0 and rgb2 > 0:
-   caste = "low"
-  if rgb1 > 0 and rgb2 == 0 and rgb3 == 0:
-   caste = "low"
-  if rgb1 == 0 and rgb2 > 0 and rgb3 == 0:
-   caste = "low"
-  if rgb2 > 0 and rgb3 > 0:
-   caste = "mid"
-  if rgb1 == 0 and rgb2 == 0 and rgb3 > 0:
-   caste = "mid"
-  if rgb1 == 0 and rgb2 > 0 and rgb3 == 0:
-   caste = "mid"
-  if rgb3 > 0 and rgb1 > 0:
-   caste = "high"
-  if rgb1 > 0 and rgb2 == 0 and rgb3 == 0:
-   caste = "high"
-  if rgb1 == 0 and rgb2 == 0 and rgb3 > 0:
-   caste = "high"
-
-  if caste == "low":
-   if b[2] == "g":
-    if rgb2>rgb1:
-     rgb1 = rgb1-25 #g loses red
-    if rgb1>rgb2:
-     rgb2 = rgb2+25 #g gains green
+   if b[2] == "R":
+    rgb1 = rgb1 + 50
+    rgb2 = rgb2 - 25
+    rgb3 = rgb3 - 25
+   if b[2] == "G":
+    rgb1 = rgb1 - 25
+    rgb2 = rgb2 + 50
+    rgb3 = rgb3 - 25
+   if b[2] == "B":
+    rgb1 = rgb1 - 25
+    rgb2 = rgb2 - 25
+    rgb3 = rgb3 + 50
    if b[2] == "r":
-    if rgb2>rgb1:
-     rgb2 = rgb2-25 #r loses green
-    if rgb1>rgb2:
-     rgb1 = rgb1+25 #r gains red
-  
-  if caste == "mid":
-   if b[2] == "b":
-    if rgb3>rgb2:
-     rgb2 = rgb2-25 #b loses green
-    if rgb2>rgb3:
-     rgb3 = rgb3+25 #b gains blue
+    rgb1 = rgb1 + 25
    if b[2] == "g":
-    if rgb3>rgb2:
-     rgb3 = rgb3-25 #g loses blue
-    if rgb2>rgb3:
-     rgb2 = rgb2+25 #g gains green   
-
-  if caste == "high":
-   if b[2] == "r":
-    if rgb1>rgb3:
-     rgb3 = rgb3-25 #r loses blue
-    if rgb3>rgb1:
-     rgb1 = rgb1+25 #r gains red
+    rgb2 = rgb2 + 25
    if b[2] == "b":
-    if rgb1>rgb3:
-     rgb1 = rgb1-25 #b loses red
-    if rgb3>rgb1:
-     rgb3 = rgb3+25 #b gains blue 
-
+    rgb3 = rgb3 + 25
+ 
 #Return things to normal color ranges.
  if rgb1 > 255:
   rgb1 = 255
@@ -344,4 +307,76 @@ def bloodtorgb(b):
  finalcolor = tcod.Color(rgb1,rgb2,rgb3)
  return finalcolor
 
+def getcaste(b):
+ caste = "?"
+ #Dense What If Forest : Divine place on hemospectrum,
+ #use this only for initial placement.  Adjust by third letter later.
+ if b[0] == "R":
+   if b[1] == "R":
+    caste = "Maroon" #RR Maroon
+   if b[1] == "G":
+    caste = "Gold" #RG Gold
+   if b[1] == "B":   
+    caste = "Violet" #RB Violet
+   if b[1] == "r":
+    caste = "Maroon" #Rr Maroon
+   if b[1] == "g":
+    caste = "Bronze" #Rg Bronze
+   if b[1] == "b":   
+    caste = "Tyrian" #Rb Tyrian
+ if b[0] == "G":
+   if b[1] == "G":
+    caste = "Olive" #GG Olive
+   if b[1] == "B":   
+    caste = "Teal" #GB Teal
+   if b[1] == "r":
+    caste = "Lime" #Gr Lime
+   if b[1] == "g":
+    caste = "Olive" #Gg Olive
+   if b[1] == "b":   
+    caste = "Jade" #Gb Jade
+ if b[0] == "B":
+   if b[1] == "B":   
+    caste = "Blue" #BB Bloo
+   if b[1] == "r":
+    caste = "Indigo" #Br Indigo
+   if b[1] == "g":
+    caste = "Cerulean" #Gb Ceru
+   if b[1] == "b":   
+    caste = "Blue" #Bb Bloo
+ if b[0] == "r":
+   if b[1] == "r":
+    caste = "Maroon" #rr maroon
+   if b[1] == "g":
+    caste = "Bronze" #rg Bronze
+   if b[1] == "b":   
+    caste = "Mutant" #rb vantas
+ if b[0] == "g":
+   if b[1] == "g":
+    caste = "Olive" #gg Olive
+   if b[1] == "b":   
+    caste = "Jade" #gb Jade
+ if b[0] == "b":
+   if b[1] == "b":   
+    caste = "Blue" #bb Bloo
+ return caste
+
+def pastel(oldcolor):
+ #This currently does not function, for unknown reasons.
+ #When it starts working, replace the crimson color with a pale offwhite. 
+ newcolor = tcod.color_lerp(oldcolor,tcod.Color(255,0,0),0.5)
+ return newcolor
+
+
+
+
+
+
+
+
+
+
+
+
+ 
 main()
