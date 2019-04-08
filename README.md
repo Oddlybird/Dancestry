@@ -31,6 +31,8 @@ V. 0.1.5: 2019-04-07
 
 -- Can view contents of Ancestral Cave in-program.
 
+-- Spent a few hours dicking around with blood code combos.  Reverted changes.
+
 
 V. 0.1.4: 2019-04-07
 
