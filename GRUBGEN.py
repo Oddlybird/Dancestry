@@ -94,6 +94,8 @@ def updatescreen():
             displaycol = bloodtorgb(bloodcol)
             rectolor(w,h,14,1, displaycol)
             draw(w+1,h+1,displayname)
+ if screencurrent == "bloodpage":
+    bloodpage()
  drawmenu()
  tcod.console_flush()
  return
@@ -107,7 +109,7 @@ def drawmenu():
  drawbtn(73,6, "     MAKE TROLL     ", btnselect(2), txtcol) 
  drawbtn(73,10,"     SAVE TROLL     ", btnselect(3), txtcol) 
  drawbtn(73,14,"    LOADING AREA    ", btnselect(4), txtcol) 
- drawbtn(73,18,"       Btn   5      ", btnselect(5), txtcol) 
+ drawbtn(73,18,"    BLOOD COLORS    ", btnselect(5), txtcol) 
  drawbtn(73,22,"       Btn   6      ", btnselect(6), txtcol) 
  drawbtn(73,26,"       Btn   7      ", btnselect(7), txtcol) 
  drawbtn(73,30,"       Btn   8      ", btnselect(8), txtcol) 
@@ -126,7 +128,7 @@ def btnselect(x):
   btncol = tcod.Color(200,200,0)
  if x != btncurrent:
   btncol = tcod.Color(120,120,0)
- if x == 5 or x == 6 or x == 7 or x == 8 or x == 9 or x == 10 or x == 11: #Unused Buttons
+ if x == 6 or x == 7 or x == 8 or x == 9 or x == 10 or x == 11: #Unused Buttons
   btncol = tcod.Color(50,50,0)
  return btncol
  
@@ -199,8 +201,8 @@ def handle_keys():
       screencurrent = "loadingzone"
       return False
   if btncurrent == 5:
-   #code that makes the button do something
-   return False
+      screencurrent = "bloodpage"
+      return False
   if btncurrent == 6:
    #code that makes the button do something
    return False
@@ -298,6 +300,25 @@ def displaytroll(x,y,t0):
  draw(x+2,y+7,string8)
  return
  
+def bloodpage():
+ #all the display stuff for this page goes here since it's spammy
+ z = ["rb","rrb","RRR","RR","Rr","RRr","Rrr","rrr","rr","rrg","RRg","Rrg","RRG","Rgb","Rg","Rgg","RGr","RG","rgg","rg","RGB","RGb","RGg","RGG","Grr","Gr","Grg","Grb","GGr","GG","Gg","GGg","Ggg","GGG","ggg","gg","GGb","Ggb","GGB","Gb","Gbb","gbb","gb","GBg","GBr","GB","GBb","GBB","Bgg","Bgb","Bg","BBg","BB","Bb","BBb","Bbb","BBB","bbb","bb","BBr","Brb","Brg","Br","RBB","Brr","rbb","RBb","RBg","RB","RBr","Rbb","Rb","RRB","RRb","Rrb"]
+ h = -1
+ w = 1
+ numtotal = 0
+ for x in z:
+   numtotal = numtotal + 1
+   if numtotal == 16 or numtotal == 31 or numtotal == 46 or numtotal == 61 or numtotal == 76 or numtotal == 90:
+     w = w + 8
+     h = -1
+   h = h + 3
+   displayname = x
+   displaycol = bloodtorgb(x)
+   rectolor(w,h,6,1, displaycol)
+   draw(w+1,h+1,displayname)
+ return
+
+ 
 def bloodtorgb(b):
  #gives you the darker color associated with the code "b" which is a 3 letter string.
  rgb1 = 0
@@ -320,21 +341,27 @@ def bloodtorgb(b):
   rgb3 = 120
   capitals = capitals + 1
 
- #Mutant Fixing : No capital letters = make them neon.
+ #Mutant Fixing : No capital letters = ***slightly*** brighter.
  if capitals == 0:
   if rgb1 != 0:
-   rgb1 = rgb1+140
+   rgb1 = rgb1+30
+  if rgb1 > 210:
+   rgb1 = rgb1-20
   if rgb2 != 0:
-   rgb2 = rgb2+140
+   rgb2 = rgb2+30
+  if rgb2 > 220:
+   rgb2 = rgb2-20
   if rgb3 != 0:
-   rgb3 = rgb3+140
+   rgb3 = rgb3+30
+  if rgb3 > 240:
+   rgb3 = rgb3-20
  #Make dark grubs brighter.
  if rgb1+rgb2+rgb3 < 100:
   rgb1 = rgb1*2
   rgb2 = rgb2*2
   rgb3 = rgb3*2
  #Vantases are special.
- if b[0] + b[1] == "rb":
+ if b == "rb":
   rgb1 = 255
   rgb2 = 0
   rgb3 = 0
