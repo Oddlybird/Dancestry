@@ -29,6 +29,8 @@ V. 0.1.5: 2019-04-07
 
 -- Will not save over existing trolls if there is already one with that name (appends a number instead)
 
+-- Can view contents of Ancestral Cave in-program.
+
 
 V. 0.1.4: 2019-04-07
 
