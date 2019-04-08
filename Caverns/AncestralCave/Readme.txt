@@ -11,22 +11,22 @@ Here are some details to help make your own:
     "blood": "--",
     "caste": "--",
 Blood codes and castes: 
-	Pure Caste Only	Pretty Close		More  mutations, still probably OK.			Mucky...
-Maroon: 	RR, 		RRr, Rrr, Rr, rr 		RRR, RRG, RRB^, RRr, RRg, RRb^, Rrr, Rrg, rrr, rrg, rrb^, rr	/
-Bronze:	Rg,		Rgg,			rgg, rg,						Rgb^
-Gold:	RG,		RGr, RGg			RGG,						RGB, RGb^
-Lime:	Gr,		Grr, Grg			/						Grb^
-Olive:	GG,		Gg, GGg, Ggg, GGr, GGb, Ggb	GGG, GGB, ggg, gg					/
-Jade:	Gb		Gbb			gbb, gb						/
-Teal:	GB		GBg, GBb			GBB						GBr^
-Cerulean:	Bg		Bgg, Bgb			/ 						/
-Blue:	BB		Bb, BBb, Bbb, BBr, BBg.	BBB, bbb, bb.					/	
-Indigo:	Br^		Brr^^, Brb^		/						Brg^
-Violet:	RB^^		RBr^^, RBb^^		RBB						RBg^
-Tyrian:	Rb^^		Rbb^^			/						/
-VANTAS:	rb*^		rbb^^			/						/
+	Pure Caste Only	Pretty Close		More  mutations, still probably OK.				Mucky...
+Maroon:	RR, 	RRr, Rrr, Rr, rr 		RRR, RRG, RRB^, RRr, RRg, RRb^, Rrr, Rrg, rrr, rrg, rrb^, rr	/
+Bronze:	Rg,	Rgg,				rgg, rg,							Rgb^
+Gold:	RG,	RGr, RGg			RGG,								RGB, RGb^
+Lime:	Gr,	Grr, Grg			/								Grb^
+Olive:	GG,	Gg, GGg, Ggg, GGr, GGb, Ggb, 	GGG, GGB, ggg, gg						/
+Jade:	Gb	Gbb				gbb, gb								/
+Teal:	GB	GBg, GBb			GBB								GBr^
+Cerulean:Bg	Bgg, Bgb			/ 								/
+Blue:	BB	Bb, BBb, Bbb, BBr, BBg.		BBB, bbb, bb.							/	
+Indigo:	Br^	Brr^^, Brb^			/								Brg^
+Violet:	RB^^	RBr^^, RBb^^			RBB								RBg^
+Tyrian:	Rb^^	Rbb^^				/								/
+VANTAS:	rb*^	rbb^^				/								/
 ^ = some seadweller traits possible.  "Beachdweller".
-^^ = full seadweller
+^^ = full seadweller by default
 * Vantas is currently treated as being between maroon and tyrian, because this is the most rare and least likely blood code.  If you wish to modify this, he would also work well as a "rrg", "rrr", "rrb", "rbb", etc.
 
 
