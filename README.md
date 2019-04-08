@@ -23,6 +23,14 @@ Future goals: (approximate)
 Approximate version history:
 =
 
+V. 0.1.6b: 2019-04-08
+
+-- Enabled moving selection point off of the main menu.
+
+-- Having trouble making button-grid navicable via btn object or function
+
+-- Organized functions by which module they Would go in if I figure out how to do that.
+
 V. 0.1.6a: 2019-04-08
 
 -- Created blood color page, rearranged codes by hue, rewrote reference in ancestral cave readme.
