@@ -23,6 +23,12 @@ Future goals: (approximate)
 Approximate version history:
 =
 
+V. 0.1.6a: 2019-04-08
+
+-- Created blood color page, rearranged codes by hue, rewrote reference in ancestral cave readme.
+
+-- Updated Ancestral Cave's Readme.txt with info about making your own trolls by hand
+
 V. 0.1.5: 2019-04-07
 
 -- No more crashes if files are not where expected (loads default/null troll instead)
