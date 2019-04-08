@@ -3,8 +3,11 @@ import json
 import os
 import libtcodpy as tcod
 #getcaste(b) is a function you can use to get the plaintext of a caste.  Put in the bloodcode.
+#Will be tagging each function / class / etc
+#If I ever figure out modules, that will be which modules they go in.
 
-class Horn:
+ 
+class Horn:  #Trolldeets
  #Horns are stored in trolls as just the code part.  Use this class when manipulating.
  #create a horn by going horntemp = Horn("21RIn.f point"), or horntemp = Horn(troll.hornL)
  code = "21RIn.f point"
@@ -34,7 +37,7 @@ class Horn:
 #have Donations (A particular donation by 2 trolls)
 #have Slurries (An array of Donations, with some meta-data)
 
-def main(): 
+def main(): #main / interface
  onprogramload()
  while not tcod.console_is_window_closed():
   updatescreen()
@@ -43,7 +46,7 @@ def main():
     break
  return
 
-def onprogramload():
+def onprogramload(): #main / interface
  SCREEN_WIDTH = 100
  SCREEN_HEIGHT = 50
  VERSIONNUM = "0.1.5"
@@ -61,7 +64,7 @@ def onprogramload():
  screencurrent = "showparents"
  return
  
-def updatescreen():
+def updatescreen(): #interface
  tcod.console_clear(0)
  tcod.console_set_default_foreground(0, tcod.Color(250,250,200))
  tcod.console_set_default_background(0, tcod.black)
@@ -74,33 +77,14 @@ def updatescreen():
     displaytroll(36,1,lester)
     displaytroll(18,25,troll3)
  if screencurrent == "loadingzone":
-    z = os.listdir("Caverns/AncestralCave/")
-    h = -1
-    w = 1
-    numtotal = 0
-    for x in z:
-      temp = x
-      if len(temp) > 20 and len(temp) < 30:
-       if temp[6] == "." and temp[13] == ".":
-            numtotal = numtotal + 1
-            if numtotal == 21 or numtotal == 41 or numtotal == 61 or numtotal == 81:
-              w = w + 15
-              h = -1
-            h = h + 2
-            displayname = temp[0:6] + " " + temp[7:13]
-            bloodcol = temp[14:17]
-            if bloodcol[2] == ".":
-               bloodcol = temp[14:16]
-            displaycol = bloodtorgb(bloodcol)
-            rectolor(w,h,14,1, displaycol)
-            draw(w+1,h+1,displayname)
+    loadingzone()
  if screencurrent == "bloodpage":
     bloodpage()
  drawmenu()
  tcod.console_flush()
  return
 
-def drawmenu():
+def drawmenu(): #interface
  tcod.console_print_frame(0, 71, 0, 29, 50, True, 13, "MENU")
  tcod.console_set_color_control(0, tcod.white, tcod.Color(60,60,60))
  txtcol = tcod.Color(50,50,0)
@@ -121,7 +105,8 @@ def drawmenu():
  tcod.console_set_color_control(0, tcod.black, tcod.white)
  return
  
-def btnselect(x):
+def btnselect(x): #interface
+ #mainmenu only
  global btnstate
  btncol = tcod.Color(255,0,0)
  if x == btncurrent:
@@ -132,12 +117,12 @@ def btnselect(x):
   btncol = tcod.Color(50,50,0)
  return btncol
  
-def drawbtn(x, y, label = "", btncolor = tcod.Color(255,255,225), txtcolor = tcod.Color(50,50,0)):
+def drawbtn(x, y, label = "", btncolor = tcod.Color(255,255,225), txtcolor = tcod.Color(50,50,0)): #interface
  rectolor(x,y,24,2, btncolor, txtcolor) 
  draw(x+2,y+1,label)
  return 
 
-def rectolor(x, y, ww, hh, btncolor = tcod.Color(255,255,225), txtcolor = tcod.Color(0,0,0)):
+def rectolor(x, y, ww, hh, btncolor = tcod.Color(255,255,225), txtcolor = tcod.Color(0,0,0)): #interface
  h = 0
  w = 0
  while h <= hh:
@@ -149,12 +134,13 @@ def rectolor(x, y, ww, hh, btncolor = tcod.Color(255,255,225), txtcolor = tcod.C
    h = h + 1
  return 
  
-def draw(x,y,thing):
+def draw(x,y,thing): #interface
  #draws foreground text, no color specified.
  tcod.console_print(0, x, y, thing)
  return
 
-def usedbuttons(dir):
+def usedbuttons(dir): #interface
+#mainmenu only
  global btncurrent
  while btnselect(btncurrent) == tcod.Color(50,50,0):
   if dir == "+":
@@ -167,21 +153,34 @@ def usedbuttons(dir):
    btncurrent = 12
  return
 
-def handle_keys():
+def handle_keys(): #interface
  global btncurrent, screencurrent
  key = tcod.console_wait_for_keypress(True)
  if tcod.console_is_key_pressed(tcod.KEY_UP):
-  btncurrent = btncurrent - 1
-  usedbuttons("-")
+  if btncurrent < 9000:
+    btncurrent = btncurrent - 1
+    usedbuttons("-")
  if tcod.console_is_key_pressed(tcod.KEY_DOWN):
-  btncurrent = btncurrent + 1
-  usedbuttons("+")
- #if tcod.console_is_key_pressed(tcod.KEY_LEFT):
- #if tcod.console_is_key_pressed(tcod.KEY_RIGHT):
+  if btncurrent < 9000:
+    btncurrent = btncurrent + 1
+    usedbuttons("+")
+ if tcod.console_is_key_pressed(tcod.KEY_LEFT):
+  if btncurrent < 9000:
+    btncurrent = 9001
+#  if btncurrent > 9000:
+    #submenu stuff
+ if tcod.console_is_key_pressed(tcod.KEY_RIGHT):
+  if btncurrent > 9000:
+    btncurrent = 1
+#  if btncurrent < 9000:
+    #Submenu stuff.
+
+ #Makes the main menu loop top to bottom and vice versa.
  if btncurrent == 13:
   btncurrent = 1
  if btncurrent == 0:
   btncurrent = 12
+
  if tcod.console_is_key_pressed(tcod.KEY_ENTER):
   #This is the loop for when someone chooses a button.
   if btncurrent == 1:
@@ -202,6 +201,7 @@ def handle_keys():
       return False
   if btncurrent == 5:
       screencurrent = "bloodpage"
+	  #note : Change to 'eugenics' page once that's functional.
       return False
   if btncurrent == 6:
    #code that makes the button do something
@@ -223,12 +223,16 @@ def handle_keys():
    return False
   if btncurrent == 12:
    return True
+  if btncurrent > 9000:
+   #If the main menu is not selected, Enter doesnt activate that.
+   #Create a sub-menu here based off which menu the cursor is in.
+   return False
   #the loop for when someone chooses a button is over.
  #elif key.vk == tcod.KEY_ESCAPE:
  #reenable the above line to make hitting escape close the program.
   return True
 
-def save(grub):
+def save(grub): #interface
  saveloc = "Caverns/CaveB/" +grub["firname"] + "." + grub["surname"] + "." + grub["blood"] + ".troll"
  c = 1
  int(c)
@@ -243,7 +247,7 @@ def save(grub):
  save.close
  return
 
-def load(filename):
+def load(filename): #interface
  trollobj = CreateTroll()
  savedtroll = "Caverns/AncestralCave/" + filename + ".troll"
  if os.path.exists(savedtroll):
@@ -255,27 +259,11 @@ def load(filename):
     draw(18,45,"WRONG SAVETYPE")
   load.close
  return trollobj
-
-def CreateTroll():
- t0 = {
- "firname": "FIRNAM", #sixletters
- "surname": "SURNAM", #sixletters
- "sex": "N",          #M/N/F
- "blood": "Rg",       #RGBrgb
- "caste": "unclassified",
- "sea": "Landdweller", # Landdweller, Seadweller, Beachdweller. replace with more detailed phenotype info :  gilltype, headgills, ribgills, earfins, webbed, glow, pawfeet, tail, wing, hairstreaks
- "powers": "none",  #psychic, voodoo, eldritch, none.  specify type later.
- "hornL": "21RIn.f point", #see horn notes.
- "hornR": "21RIn.f point",
- "height": "tall",  #replace with exact height in inches later.
- "build": "medium", #more detailed data later
- "hair": "short",   #more detailed data later.  medium/long.
- "skin": "grey"    #freckles, stripes, birthmarks, vitiligo, melanism, albinism, etc.
- }
- return t0
-
-def displaytroll(x,y,t0):
+ 
+def displaytroll(x,y,t0): #interface
  #set some defaults
+ #called when screencurrent = "showparents"
+ #called when screencurrent = "maketroll"
  colbg = tcod.Color(0,0,0)
  colfg = tcod.Color(255,255,255)
  #recolor
@@ -300,7 +288,8 @@ def displaytroll(x,y,t0):
  draw(x+2,y+7,string8)
  return
  
-def bloodpage():
+def bloodpage(): #interface
+ #screencurrent = bloodpage
  #all the display stuff for this page goes here since it's spammy
  z = ["rb","rrb","RRR","RR","Rr","RRr","Rrr","rrr","rr","rrg","RRg","Rrg","RRG","Rgb","Rg","Rgg","RGr","RG","rgg","rg","RGB","RGb","RGg","RGG","Grr","Gr","Grg","Grb","GGr","GG","Gg","GGg","Ggg","GGG","ggg","gg","GGb","Ggb","GGB","Gb","Gbb","gbb","gb","GBg","GBr","GB","GBb","GBB","Bgg","Bgb","Bg","BBg","BB","Bb","BBb","Bbb","BBB","bbb","bb","BBr","Brb","Brg","Br","RBB","Brr","rbb","RBb","RBg","RB","RBr","Rbb","Rb","RRB","RRb","Rrb"]
  h = -1
@@ -318,9 +307,30 @@ def bloodpage():
    draw(w+1,h+1,displayname)
  return
 
+def loadingzone():
+ z = os.listdir("Caverns/AncestralCave/")
+ h = -1
+ w = 1
+ numtotal = 0
+ for arb in z:
+   temp = arb
+   if len(temp) > 20 and len(temp) < 30:
+    if temp[6] == "." and temp[13] == ".":
+         numtotal = numtotal + 1
+         if numtotal == 21 or numtotal == 41 or numtotal == 61 or numtotal == 81:
+           w = w + 15
+           h = -1
+         h = h + 2
+         displayname = temp[0:6] + " " + temp[7:13]
+         bloodcol = temp[14:17]
+         if bloodcol[2] == ".":
+            bloodcol = temp[14:16]
+         displaycol = bloodtorgb(bloodcol)
+         rectolor(w,h,14,1, displaycol)
+         draw(w+1,h+1,displayname)
  
-def bloodtorgb(b):
- #gives you the darker color associated with the code "b" which is a 3 letter string.
+def bloodtorgb(b): #interface, because this is the display color.
+ #gives you the darker color associated with the code "b" which is a 2-3 letter string.
  rgb1 = 0
  rgb2 = 0
  rgb3 = 0
@@ -404,7 +414,31 @@ def bloodtorgb(b):
  finalcolor = tcod.Color(rgb1,rgb2,rgb3)
  return finalcolor
 
-def getcaste(b):
+def pastel(oldcolor): #interface
+ #This currently does not function, for unknown reasons.
+ #When it starts working, replace the crimson color with a pale offwhite. 
+ newcolor = tcod.color_lerp(oldcolor,tcod.Color(255,0,0),0.5)
+ return newcolor
+
+def CreateTroll(): #trolldeets
+ t0 = {
+ "firname": "FIRNAM", #sixletters
+ "surname": "SURNAM", #sixletters
+ "sex": "N",          #M/N/F
+ "blood": "Rg",       #RGBrgb
+ "caste": "unclassified",
+ "sea": "Landdweller", # Landdweller, Seadweller, Beachdweller. replace with more detailed phenotype info :  gilltype, headgills, ribgills, earfins, webbed, glow, pawfeet, tail, wing, hairstreaks
+ "powers": "none",  #psychic, voodoo, eldritch, none.  specify type later.
+ "hornL": "21RIn.f point", #see horn notes.
+ "hornR": "21RIn.f point",
+ "height": "tall",  #replace with exact height in inches later.
+ "build": "medium", #more detailed data later
+ "hair": "short",   #more detailed data later.  medium/long.
+ "skin": "grey"    #freckles, stripes, birthmarks, vitiligo, melanism, albinism, etc.
+ }
+ return t0
+
+def getcaste(b): #trolldeets
  caste = "?"
  #Dense What If Forest : Divine place on hemospectrum,
  #use this only for initial placement.  Adjust by third letter later.
@@ -457,12 +491,6 @@ def getcaste(b):
    if b[1] == "b":   
     caste = "Blue" #bb Bloo
  return caste
-
-def pastel(oldcolor):
- #This currently does not function, for unknown reasons.
- #When it starts working, replace the crimson color with a pale offwhite. 
- newcolor = tcod.color_lerp(oldcolor,tcod.Color(255,0,0),0.5)
- return newcolor
 
 
 
