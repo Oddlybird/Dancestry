@@ -23,6 +23,13 @@ Future goals: (approximate)
 Approximate version history:
 =
 
+V. 0.1.5: 2019-04-07
+
+-- No more crashes if files are not where expected (loads default/null troll instead)
+
+-- Will not save over existing trolls if there is already one with that name (appends a number instead)
+
+
 V. 0.1.4: 2019-04-07
 
 -- Can swap between Parent and Generate Grub screens
