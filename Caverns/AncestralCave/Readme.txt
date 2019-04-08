@@ -10,24 +10,18 @@ Here are some details to help make your own:
 
     "blood": "--",
     "caste": "--",
-Blood codes and castes: 
-	Pure Caste Only	Pretty Close		More  mutations, still probably OK.				Mucky...
-Maroon:	RR, 	RRr, Rrr, Rr, rr 		RRR, RRG, RRB^, RRr, RRg, RRb^, Rrr, Rrg, rrr, rrg, rrb^, rr	/
-Bronze:	Rg,	Rgg,				rgg, rg,							Rgb^
-Gold:	RG,	RGr, RGg			RGG,								RGB, RGb^
-Lime:	Gr,	Grr, Grg			/								Grb^
-Olive:	GG,	Gg, GGg, Ggg, GGr, GGb, Ggb, 	GGG, GGB, ggg, gg						/
-Jade:	Gb	Gbb				gbb, gb								/
-Teal:	GB	GBg, GBb			GBB								GBr^
-Cerulean:Bg	Bgg, Bgb			/ 								/
-Blue:	BB	Bb, BBb, Bbb, BBr, BBg.		BBB, bbb, bb.							/	
-Indigo:	Br^	Brr^^, Brb^			/								Brg^
-Violet:	RB^^	RBr^^, RBb^^			RBB								RBg^
-Tyrian:	Rb^^	Rbb^^				/								/
-VANTAS:	rb*^	rbb^^				/								/
+On-spectrum:  RR (Maroon), Rg (Bronze), RG (gold), Gr (lime), GG (Olive), Jade (Gb), Teal (GB), Cerulean (Bg), Blue (BB), Indigo (Br), Violet (RB), Tyrian (Rb), Vantas Red (rb).
+
+Approximate smooth spectrum: 
+rb (Vantas), rrb, RRR, RR (maroon), Rr, RRr, Rrr, rrr, rr, rrg, RRg, Rrg, RRG, Rgb, Rg(bronze), Rgg, RGr, RG (gold), rgg, rg, RGB, RGb, RGg, RGG, Grr, Gr(lime), Grb, GGr, GG(olive), Gg, Ggg, Ggg, GGG, ggg, gg, GGb, Ggb, GGB, Gb(jade), Gbb, gbb, gb, GBg, GBr, GB(teal), GBb, GBB, Bgg, Bgb, Bg(cerulean), BBg, BB(blue), Bb, BBb, Bbb, BBB, bbb, bb, BBr, Brb, Brg, Br(Indigo), RBB, Brr, rbb, RBb, RBg, RB(violet), RBr, Rbb, Rb(tyrian), and the very cullworthy ones between tyrian and maroon, RRB, RRb, rrb.
+
+Most hues are land-dwellers by default.
+Seadwellers by default: RB, Brr, RBr, RBb, Rbb, rbb.
+Beachdwellers (often mixed): Br, Brb, Rgb, RGB, RGb, Grb, GBr, Brg, RBg, rb, RRB, RRb, rrb.
+
 ^ = some seadweller traits possible.  "Beachdweller".
-^^ = full seadweller by default
-* Vantas is currently treated as being between maroon and tyrian, because this is the most rare and least likely blood code.  If you wish to modify this, he would also work well as a "rrg", "rrr", "rrb", "rbb", etc.
+^^ = full seadweller
+* Vantas is currently treated as being between maroon and tyrian, because this is the most rare and least likely blood code.
 
 
     "sea": "Beachdweller",
