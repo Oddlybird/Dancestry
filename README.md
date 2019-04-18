@@ -8,7 +8,7 @@ Future goals: (approximate)
 
 0.6.0 - Create grub from Parents + Slurry
 
-0.5.0 - Create fully random grub from slurry
+0.5.0 - Create fully random grub from just slurry
 
 0.3.0 - Functional default slurry
 
@@ -22,6 +22,13 @@ Future goals: (approximate)
 =
 Approximate version history:
 =
+
+V. 0.1.6c: 2019-04-18
+
+-- began planning slurry format, created =bloodlines= and =donations= caverns(currently unused)
+
+-- Planned menus
+
 
 V. 0.1.6b: 2019-04-08
 
