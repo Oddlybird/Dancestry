@@ -7,12 +7,14 @@ import libtcodpy as tcod
 #If I ever figure out modules, that will be which modules they go in.
 #tags so far:  #trolldeets, #interface,
 #screens:  showparents, maketroll, loadingzone, bloodpage, donationpage, 
+#screens are named ""page, and their scrpage objects are named page""
 #to activate a new main menu button, go to btnselect(), drawmenu(), 
   
 #have Trolls (one contributor)
 #have Donations (A particular donation by 2 trolls)
 #have Slurries (An array of Donations, with some meta-data)
 
+ 
 class Horn:  #Trolldeets
  #Horns are stored in trolls as just the code part.  Use this class when manipulating.
  #create a horn by going hornvariable = Horn("21RIn.f point"), or hornvariable = Horn(troll.hornL)
@@ -38,7 +40,14 @@ class Horn:  #Trolldeets
   #use by going descriptionstring = horntemp.desc() 
   description = ""
   return description
- 
+class scrpage: #interface.  An item to be used to define the shape of menus.
+   name = "name"
+   submenu = False
+   excmenu = False 
+   maxbtn = 0
+   minbtn = 0
+
+#class Troll: #trolldeets.  just so I can pass them around easier...   Maybe?
 def CreateTroll(): #trolldeets
  t0 = {
  "firname": "FIRNAM", #sixletters
@@ -56,10 +65,17 @@ def CreateTroll(): #trolldeets
  "skin": "grey"    #freckles, stripes, birthmarks, vitiligo, melanism, albinism, etc.
  }
  return t0
-
 def CreateDonation(p1,p2): #trolldeets
  #All data is partially formatted into a troll-like state.
  
+ #Errorchecking code to give a default set of trolls if needed : Currently nonfunctional.
+ #if p1["firname"] + P1["surname"] == "FIRNAMSURNAM":
+ # global libbie
+ # p1 = libbie
+ #if p2["firname"] + P2["surname"] == "FIRNAMSURNAM":
+ # global lester
+ # p1 = lester
+
  #Record Donators
  strDonator1 = p1["firname"][0] + "." + p1["surname"]
  strDonator2 = p2["firname"][0] + "." + p2["surname"]
@@ -87,7 +103,6 @@ def CreateDonation(p1,p2): #trolldeets
  "blood": strBlood
  }
  return t1
- 
 def getcaste(b): #trolldeets
  caste = "?"
  #Dense What If Forest : Divine place on hemospectrum,
@@ -144,8 +159,7 @@ def getcaste(b): #trolldeets
 
 
 
-
-
+#Initialization and main loop.
 def main(): #main / interface
  onprogramload()
  while not tcod.console_is_window_closed():
@@ -154,54 +168,78 @@ def main(): #main / interface
   if exit:
     break
  return
-
-def onprogramload(): #main / interface
+def onprogramload(): #main / interface.  Contains global variables.
  SCREEN_WIDTH = 100
  SCREEN_HEIGHT = 50
- VERSIONNUM = "0.1.6d"
+ VERSIONNUM = "0.1.7"
  font_path = 'terminal8x12_gs_tc.png'
  font_flags = tcod.FONT_TYPE_GREYSCALE | tcod.FONT_LAYOUT_TCOD
  tcod.console_set_custom_font(font_path, font_flags)
  window_title = "Dancestry " + VERSIONNUM
  fullscreen = False
  tcod.console_init_root(SCREEN_WIDTH, SCREEN_HEIGHT, window_title, fullscreen)
- global libbie, lester, troll3, btncurrent, screencurrent
+ global libbie, lester, troll3, pail, btncurrent, screencurrent
  libbie = load("Libbie.Pickle.RGg")
  lester = load("Lester.Pebble.Brb")
  troll3 = CreateTroll()
+ pail = CreateDonation(libbie,lester)
  btncurrent = 1
- screencurrent = "showparents"
+ screencurrent = scrpage()
+ global pageloadtroll, pagedonation, pagemaketroll, pageblood
+ #screens: maketroll, loadingzone, bloodpage, donationpage, 
+ 
+ pageloadtroll = scrpage()
+ pageloadtroll.name = "loadingzone"
+ pageloadtroll.minbtn = 101
+ pageloadtroll.maxbtn = 180
+ pageloadtroll.excmenu = True
+
+ pagedonation = scrpage()
+ pagedonation.name = "donationpage"
+ pagedonation.minbtn = 51
+ pagedonation.maxbtn = 59
+ pagedonation.submenu = True
+
+ pagemaketroll = scrpage()
+ pagemaketroll.name = "maketroll"
+ pagemaketroll.minbtn = 51
+ pagemaketroll.maxbtn = 51
+ pagemaketroll.submenu = True
+
+ pageblood = scrpage()
+ pageblood.name = "bloodpage"
+ pageblood.minbtn = 101
+ pageblood.maxbtn = 101
+ pageblood.excmenu = True
+  
  return
  
-def updatescreen(): #interface
+#Show what needs to be shown.
+def updatescreen(): #interface.  Choose which page to show.
  tcod.console_clear(0)
  tcod.console_set_default_foreground(0, tcod.Color(250,250,200))
  tcod.console_set_default_background(0, tcod.black)
  
- if screencurrent == "showparents":
-    displaytroll(1,6,libbie)
-    displaytroll(36,6,lester)
- if screencurrent == "maketroll":
-    displaytroll(1,6,libbie)
-    displaytroll(36,6,lester)
-    displaytroll(18,28,troll3)
- if screencurrent == "loadingzone":
+ if screencurrent.name == "showparents":
+    showparentspage()
+ if screencurrent.name == "maketroll":
+    trollcreationpage()
+ if screencurrent.name == "loadingzone":
     loadingzone()
- if screencurrent == "bloodpage":
+ if screencurrent.name == "bloodpage":
     bloodpage()
- if screencurrent == "donationpage":
+ if screencurrent.name == "donationpage":
     donationpage()
  drawmenu()
  tcod.console_flush()
  return
-
-def drawmenu(): #interface
+def drawmenu(): #interface.  Contains Labels for all main and submenu buttons.
  tcod.console_print_frame(0, 71, 0, 29, 50, True, 13, "MENU")
  tcod.console_set_color_control(0, tcod.white, tcod.Color(60,60,60))
  txtcol = tcod.Color(50,50,0)
  #Can add a tcod.Color(rrr,ggg,bbb) for:  drawbtn(x,y,"label",background,foreground)
- drawbtn(73,2, "     SHOW TROLL     ", btnselect(1), txtcol) 
- drawbtn(73,6, "     MAKE TROLL     ", btnselect(2), txtcol) 
+ drawbtn(73,2, "     MAKE TROLL     ", btnselect(1), txtcol) 
+ drawbtn(73,6, "     FOR   RENT     ", btnselect(2), txtcol) 
  drawbtn(73,10,"     SAVE TROLL     ", btnselect(3), txtcol) 
  drawbtn(73,14,"    LOADING AREA    ", btnselect(4), txtcol) 
  drawbtn(73,18,"    BLOOD COLORS    ", btnselect(5), txtcol) 
@@ -215,113 +253,123 @@ def drawmenu(): #interface
  #reset defaults
  tcod.console_set_color_control(0, tcod.black, tcod.white)
  
- if screencurrent == "donationpage":
-  drawsmallbtn(1,1, "   SHOW TROLL   ", btnselect(50), txtcol) 
-  drawsmallbtn(1,2, "   SHOW TROLL   ", btnselect(51), txtcol) 
-  drawsmallbtn(1,3, "   SHOW TROLL   ", btnselect(52), txtcol) 
-  drawsmallbtn(1,4, "   SHOW TROLL   ", btnselect(53), txtcol) 
-  drawsmallbtn(1,5, "   SHOW TROLL   ", btnselect(54), txtcol) 
-  drawsmallbtn(50,1, "   SHOW TROLL   ", btnselect(55), txtcol) 
-  drawsmallbtn(50,2, "   SHOW TROLL   ", btnselect(56), txtcol) 
-  drawsmallbtn(50,3, "   SHOW TROLL   ", btnselect(57), txtcol) 
-  drawsmallbtn(50,4, "   SHOW TROLL   ", btnselect(58), txtcol) 
-  drawsmallbtn(50,5, "   SHOW TROLL   ", btnselect(59), txtcol) 
+ if screencurrent.name == "donationpage":
+  drawsmallbtn(1,1,  "    Create Donation   ", btnselect(51), txtcol) 
+  drawsmallbtn(1,3,  "                      ", btnselect(52), txtcol) 
+  drawsmallbtn(1,5,  "                      ", btnselect(53), txtcol) 
+  drawsmallbtn(25,1, "                      ", btnselect(54), txtcol) 
+  drawsmallbtn(25,3, "                      ", btnselect(55), txtcol) 
+  drawsmallbtn(25,5, "                      ", btnselect(56), txtcol) 
+  drawsmallbtn(49,1, "                      ", btnselect(57), txtcol) 
+  drawsmallbtn(49,3, "                      ", btnselect(58), txtcol) 
+  drawsmallbtn(49,5, "                      ", btnselect(59), txtcol) 
   
  return
- 
-def btnselect(x): #interface
+
+#make the menu buttons work.
+def btnselect(x): #interface - controls which buttons are highlightable.
  #mainmenu and main submenu only
- #NOTE: here is where you add new buttons, by removing them from the unused button list.
- global btnstate
+ global btnstate, pagedonation, pageloadtroll, pageblood, pagemaketroll
  btncol = tcod.Color(255,0,0)
  if x == btncurrent:
   btncol = tcod.Color(200,200,0)
  if x != btncurrent:
   btncol = tcod.Color(120,120,0)
+  
  #unused main menu buttons.
- if x == 7 or x == 8 or x == 9 or x == 10 or x == 11: #Unused Buttons
+ if x == 2 or x == 7 or x == 8 or x == 9 or x == 10 or x == 11: #Unused Buttons
   btncol = tcod.Color(50,50,0)
- #these buttons are near the range of the submenu.
- if x == 52 or x == 53 or x == 54 or x == 55 or x == 56 or x == 57 or x == 58 or x == 59: #Unused Buttons
-  btncol = tcod.Color(50,50,0)
+
+ #submenu buttons
+ #A set of 20 or so working submenu buttons.
+ if screencurrent.name == "donationpage": 
+  if x == 54 or x == 55 or x == 56 or x == 57 or x == 58 or x == 59 or x == 60: #Unused Buttons
+   btncol = tcod.Color(50,50,0)
+  if x == 61 or x == 62 or x == 63 or x == 64 or x == 65 or x == 66 or x == 67 or x == 68 or x == 69 or x == 70: #Unused Buttons
+   btncol = tcod.Color(50,50,0)
+ if screencurrent.name == "maketroll": 
+  if x == 54 or x == 55 or x == 56 or x == 57 or x == 58 or x == 59 or x == 60: #Unused Buttons
+   btncol = tcod.Color(50,50,0)
+  if x == 61 or x == 62 or x == 63 or x == 64 or x == 65 or x == 66 or x == 67 or x == 68 or x == 69 or x == 70: #Unused Buttons
+   btncol = tcod.Color(50,50,0)
+ #just a ridiculous number of buttons.
+ if screencurrent.name == "loadingzone":
+  if x > screencurrent.maxbtn:
+   btncol = tcod.Color(50,50,0)
  return btncol
- 
 def usedbuttons(dir): #interface
 #mainmenu only
- global btncurrent
- while btnselect(btncurrent) == tcod.Color(50,50,0):
-  if dir == "+":
-   btncurrent = btncurrent + 1
-  if dir == "-":
-   btncurrent = btncurrent - 1
-  #loop main menu
-  if btncurrent == 13:
-   btncurrent = 1
-  if btncurrent == 0:
-   btncurrent = 12
-  #loop submenu.
-  if btncurrent == 60:
-   btncurrent = 50
-  if btncurrent == 49:
-   btncurrent = 59
+ global btncurrent, currentscreen
+ if btncurrent < 25: #mainmenu
+     if dir == "+":
+      btncurrent = btncurrent + 1
+      while btnselect(btncurrent) == tcod.Color(50,50,0):
+       btncurrent = btncurrent + 1
+     if dir == "-":
+      btncurrent = btncurrent - 1
+      while btnselect(btncurrent) == tcod.Color(50,50,0):
+       btncurrent = btncurrent - 1
+     #loop main menu
+     if btncurrent > 12:
+      btncurrent = 1
+     if btncurrent < 1:
+      btncurrent = 12
+ #loop submenu.
+ if btncurrent > 25:
+     if dir == "+":
+      btncurrent = btncurrent + 1
+     if dir == "-":
+      btncurrent = btncurrent - 1
+     if btncurrent == screencurrent.maxbtn + 1:
+      btncurrent = screencurrent.minbtn
+     if btncurrent == screencurrent.minbtn - 1:
+      btncurrent = screencurrent.maxbtn
  return
-
-def handle_keys(): #interface
- global btncurrent, screencurrent
+def handle_keys(): #interface - button functions, and loops as needed.
+ global btncurrent, screencurrent, pageblood, pagedonation, pageloadtroll, pagemaketroll
+ global pail, troll3, libbie, lester
  key = tcod.console_wait_for_keypress(True)
  if tcod.console_is_key_pressed(tcod.KEY_UP):
   if btncurrent < 9000:
-    btncurrent = btncurrent - 1
     usedbuttons("-")
  if tcod.console_is_key_pressed(tcod.KEY_DOWN):
   if btncurrent < 9000:
-    btncurrent = btncurrent + 1
     usedbuttons("+")
  if tcod.console_is_key_pressed(tcod.KEY_LEFT):
   if btncurrent < 25:
-    btncurrent = 50
+    if screencurrent.name == "donationpage":
+     btncurrent = 51
+    if screencurrent.name == "loadingzone":
+     btncurrent = screencurrent.maxbtn
 #  if btncurrent > 25:
-    #submenu stuff
+    #submenu stuff  Pressing left while on a submenu
  if tcod.console_is_key_pressed(tcod.KEY_RIGHT):
   if btncurrent > 25:
     btncurrent = 1
 #  if btncurrent < 25:
-    #Submenu stuff.
-
- #Makes the main menu loop top to bottom and vice versa.
- if btncurrent == 13:
-  btncurrent = 1
- if btncurrent == 0:
-  btncurrent = 12
- if btncurrent == 49:
-  btncurrent = 59
- if btncurrent == 60:
-  btncurrent = 50
-
+    #Pressing right while on the main menu
+    
  if tcod.console_is_key_pressed(tcod.KEY_ENTER):
   #This is the loop for when someone chooses a button.
   if btncurrent == 1:
-      screencurrent = "showparents"
+      screencurrent = pagemaketroll
       return False
   if btncurrent == 2:
-      screencurrent = "maketroll"
-      global troll3
-      troll3 = CreateTroll()
-      updatescreen() 
+      #screencurrent = ""
       return False
   if btncurrent == 3:
       save(troll3)
       draw(73,20,"Saved")  
       return False
   if btncurrent == 4:
-      screencurrent = "loadingzone"
+      screencurrent = pageloadtroll
       return False
   if btncurrent == 5:
-      screencurrent = "bloodpage"
+      screencurrent = pageblood
 	  #note : Change to 'eugenics' page once that's functional.
       return False
   if btncurrent == 6:
-      screencurrent = "donationpage"
+      screencurrent = pagedonation
       return False
   if btncurrent == 7:
    #code that makes the button do something
@@ -341,6 +389,18 @@ def handle_keys(): #interface
   if btncurrent == 12:
    return True
   if btncurrent > 25:
+   if screencurrent.name == "donationpage":
+    if btncurrent == 51:
+      pail = CreateDonation(libbie,lester)
+      return False
+    return False
+   if screencurrent.name == "maketroll":
+    if btncurrent == 51:
+      troll3 = CreateTroll(libbie, lester)
+      updatescreen()
+      return False
+    return False
+
    #If the main menu is not selected, Enter doesnt activate that.
    #Create a sub-menu here based off which menu the cursor is in.
    return False
@@ -349,7 +409,8 @@ def handle_keys(): #interface
  #reenable the above line to make hitting escape close the program.
   return True
 
-def save(grub): #interface
+#save and load to file.
+def save(grub): #interface         Save Troll
  saveloc = "Caverns/CaveB/" +grub["firname"] + "." + grub["surname"] + "." + grub["blood"] + ".troll"
  c = 1
  int(c)
@@ -363,7 +424,7 @@ def save(grub): #interface
  save.write(y)
  save.close
  return
-def load(filename): #interface*
+def load(filename): #interface*    Load Troll
  trollobj = CreateTroll()
  savedtroll = "Caverns/AncestralCave/" + filename + ".troll"
  if os.path.exists(savedtroll):
@@ -375,13 +436,14 @@ def load(filename): #interface*
     draw(18,45,"WRONG SAVETYPE")
   load.close
  return trollobj
- 
+
+#menu-related boxen. 
 def drawbtn(x, y, label = "", btncolor = tcod.Color(255,255,225), txtcolor = tcod.Color(50,50,0)): #interface
  rectolor(x,y,24,2, btncolor, txtcolor) 
  draw(x+2,y+1,label)
  return 
 def drawsmallbtn(x, y, label = "", btncolor = tcod.Color(255,255,225), txtcolor = tcod.Color(50,50,0)): #interface
- rectolor(x,y,15,0, btncolor, txtcolor) 
+ rectolor(x,y,21,0, btncolor, txtcolor) 
  draw(x,y,label)
  return 
 def rectolor(x, y, ww, hh, btncolor = tcod.Color(255,255,225), txtcolor = tcod.Color(0,0,0)): #interface
@@ -399,6 +461,47 @@ def draw(x,y,thing): #interface
  #draws foreground text, no color specified.
  tcod.console_print(0, x, y, thing)
  return
+
+#items that get printed to screen a Lot.  Like trolls, donations, blood colors...
+def displaytroll(x,y,t0): #interface -- prints a standard-format window display to the screen.
+ #set some defaults
+ #called when screencurrent.name = "showparents"
+ #called when screencurrent.name = "maketroll"
+ colbg = tcod.Color(0,0,0)
+ colfg = tcod.Color(255,255,255)
+ #recolor
+ colbg = bloodtorgb(t0["blood"])
+ colfg = pastel(colbg)
+ rectolor(x, y, 34, 20, colbg, colfg)
+ string1 = t0["firname"] + " " + t0["surname"] + ", " + t0["blood"] + " " + t0["sex"]
+ string2 = t0["caste"] + ", " + t0["powers"] 
+ string3 = t0["sea"]
+ string4 = t0["height"] + ", " + t0["build"] + " build" 
+ string5 = t0["hair"] + " hair"
+ string6 = t0["skin"] + " skin"
+ string7 = "LHorn: " + t0["hornL"]
+ string8 = "RHorn: " + t0["hornR"]
+ tcod.console_print_frame(0, x, y, 35, 21, True, 13, string1)
+ draw(x+2,y+1,string2)
+ draw(x+2,y+2,string3)
+ draw(x+2,y+3,string4)
+ draw(x+2,y+4,string5)
+ draw(x+2,y+5,string6)
+ draw(x+2,y+6,string7)
+ draw(x+2,y+7,string8)
+ return
+def displaydonation(x,y,t0): #interface -- prints a standard-format window display to the screen.
+ colbg = tcod.Color(0,0,0)
+ colfg = tcod.Color(255,255,255)
+ #recolor
+ colbg = bloodtorgb(t0["blood"])
+ colfg = pastel(colbg)
+ #called when screen = donationpage
+ rectolor(x, y, 34, 20, colbg, colfg)
+ string1 = t0["donator1"] + " / " + t0["donator2"]
+ string2 = t0["blood"]
+ tcod.console_print_frame(0, x, y, 35, 21, True, 13, string1)
+ draw(x+2,y+1,string2)
 def bloodtorgb(b): #interface, because this is the display color only / specifically.
  #gives you the darker color associated with the code "b" which is a 2-3 letter string.
  rgb1 = 0
@@ -488,50 +591,10 @@ def pastel(oldcolor): #interface (currently nonfunctional)
  #When it starts working, replace the crimson color with a pale offwhite. 
  newcolor = tcod.color_lerp(oldcolor,tcod.Color(255,0,0),0.5)
  return newcolor
-
-def displaytroll(x,y,t0): #interface
- #set some defaults
- #called when screencurrent = "showparents"
- #called when screencurrent = "maketroll"
- colbg = tcod.Color(0,0,0)
- colfg = tcod.Color(255,255,255)
- #recolor
- colbg = bloodtorgb(t0["blood"])
- colfg = pastel(colbg)
- rectolor(x, y, 34, 20, colbg, colfg)
- string1 = t0["firname"] + " " + t0["surname"] + ", " + t0["blood"] + " " + t0["sex"]
- string2 = t0["caste"] + ", " + t0["powers"] 
- string3 = t0["sea"]
- string4 = t0["height"] + ", " + t0["build"] + " build" 
- string5 = t0["hair"] + " hair"
- string6 = t0["skin"] + " skin"
- string7 = "LHorn: " + t0["hornL"]
- string8 = "RHorn: " + t0["hornR"]
- tcod.console_print_frame(0, x, y, 35, 21, True, 13, string1)
- draw(x+2,y+1,string2)
- draw(x+2,y+2,string3)
- draw(x+2,y+3,string4)
- draw(x+2,y+4,string5)
- draw(x+2,y+5,string6)
- draw(x+2,y+6,string7)
- draw(x+2,y+7,string8)
- return
-
-def displaydonation(x,y,t0): #interface
- colbg = tcod.Color(0,0,0)
- colfg = tcod.Color(255,255,255)
- #recolor
- colbg = bloodtorgb(t0["blood"])
- colfg = pastel(colbg)
- #called when screen = donationpage
- rectolor(x, y, 34, 20, colbg, colfg)
- string1 = t0["donator1"] + " / " + t0["donator2"]
- string2 = t0["blood"]
- tcod.console_print_frame(0, x, y, 35, 21, True, 13, string1)
- draw(x+2,y+1,string2)
  
+#The display for individual screens.
 def bloodpage(): #interface - page of blood color examples
- #screencurrent = bloodpage
+ #screencurrent.name = bloodpage
  #all the display stuff for this page goes here since it's spammy
  z = ["rb","rrb","RRR","RR","Rr","RRr","Rrr","rrr","rr","rrg","RRg","Rrg","RRG","Rgb","Rg","Rgg","RGr","RG","rgg","rg","RGB","RGb","RGg","RGG","Grr","Gr","Grg","Grb","GGr","GG","Gg","GGg","Ggg","GGG","ggg","gg","GGb","Ggb","GGB","Gb","Gbb","gbb","gb","GBg","GBr","GB","GBb","GBB","Bgg","Bgb","Bg","BBg","BB","Bb","BBb","Bbb","BBB","bbb","bb","BBr","Brb","Brg","Br","RBB","Brr","rbb","RBb","RBg","RB","RBr","Rbb","Rb","RRB","RRb","Rrb"]
  h = -1
@@ -548,37 +611,55 @@ def bloodpage(): #interface - page of blood color examples
    rectolor(w,h,6,1, displaycol)
    draw(w+1,h+1,displayname)
  return
-
 def donationpage(): #interface - page to interact with creating donations
- displaytroll(1,6,libbie)
- displaytroll(36,6,lester)
- pail = CreateDonation(libbie,lester)
- displaydonation(18,28,pail)
+ global libbie, lester, pail
+ displaytroll(1,7,libbie)
+ displaytroll(36,7,lester)
+ displaydonation(18,29,pail)
  return
-
-def loadingzone(): #interface - displays loadable trolls
+def loadingzone(): #interface - page to load trolls from file
+ global pageloadtroll
  z = os.listdir("Caverns/AncestralCave/")
+ tcod.console_set_default_foreground(0, tcod.Color(250,250,200))
  h = -1
  w = 1
  numtotal = 0
  for arb in z:
-   temp = arb
-   if len(temp) > 20 and len(temp) < 30:
-    if temp[6] == "." and temp[13] == ".":
-         numtotal = numtotal + 1
-         if numtotal == 21 or numtotal == 41 or numtotal == 61 or numtotal == 81:
-           w = w + 15
-           h = -1
-         h = h + 2
-         displayname = temp[0:6] + " " + temp[7:13]
-         bloodcol = temp[14:17]
-         if bloodcol[2] == ".":
-            bloodcol = temp[14:16]
-         displaycol = bloodtorgb(bloodcol)
-         rectolor(w,h,14,1, displaycol)
-         draw(w+1,h+1,displayname)
- 
-
+    temp = arb
+    if len(temp) > 20 and len(temp) < 30:
+     if temp[6] == "." and temp[13] == ".":
+          numtotal = numtotal + 1
+          if numtotal == 21 or numtotal == 41 or numtotal == 61 or numtotal == 81:
+            w = w + 15
+            h = -1
+          h = h + 2		    
+          displayname = temp[0:6] + " " + temp[7:13]
+          bloodcol = temp[14:17]
+          if bloodcol[2] == ".":
+             bloodcol = temp[14:16]
+          displaycol = bloodtorgb(bloodcol)
+          rectolor(w,h,14,1,displaycol)
+          if btncurrent != numtotal + 100:
+           tcod.console_set_default_foreground(0, tcod.Color(10,10,10))
+           draw(w+1,h+1,displayname)
+           tcod.console_set_default_foreground(0, tcod.Color(250,250,200))
+          if btncurrent == numtotal + 100:
+           draw(w+1,h+1,displayname)
+ pageloadtroll.maxbtn = numtotal + 100
+ if pageloadtroll.maxbtn > 180:
+  pageloadtroll.maxbtn = 180
+ pageloadtroll.minbtn = 101
+ screencurrent = pageloadtroll
+		 
+def showparentspage(): #interface -- page to display 2 current parents
+ displaytroll(1,7,libbie)
+ displaytroll(36,7,lester)
+ return
+def trollcreationpage(): #interface -- may be combined with showparents.
+ displaytroll(1,7,libbie)
+ displaytroll(36,7,lester)
+ displaytroll(18,29,troll3)
+ return
 
 
 
