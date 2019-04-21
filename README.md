@@ -23,6 +23,12 @@ Future goals: (approximate)
 Approximate version history:
 =
 
+V. 0.1.6d: 2019-04-20
+
+-- Submenus enabled, most displays moved down slightly to make room.
+
+-- Basic donation format begun, display page created.
+
 V. 0.1.6c: 2019-04-18
 
 -- began planning slurry format, created =bloodlines= and =donations= caverns(currently unused)
