@@ -23,6 +23,16 @@ Future goals: (approximate)
 Approximate version history:
 =
 
+V. 0.1.7:  2019-04-20
+
+-- Able to select items on left menus in donation page and loading page
+
+-- Code sorted, re-organized, generalized.  Menus are more scaleable.
+
+-- Donation page largely functional; ready for donation format.
+
+-- Unable to load trolls from file, but it'll be quick to add.
+
 V. 0.1.6d: 2019-04-20
 
 -- Submenus enabled, most displays moved down slightly to make room.
