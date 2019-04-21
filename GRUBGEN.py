@@ -84,23 +84,44 @@ def CreateDonation(p1,p2): #trolldeets
  temp1 = p1["blood"]
  temp2 = p2["blood"]
  a = random.randint(0,len(temp1)-1)
- b = random.randint(0,len(temp2)-1)
- strBlood = temp1[a]
- strBlood = temp1[a] + temp2[b]
+ b = random.randint(1,len(temp1)-1)
+ c = random.randint(0,len(temp2)-1)
+ d = random.randint(1,len(temp2)-1)
+ strBlood = temp1[a] + temp1[b] + temp2[c] + temp2[d]
+ strBlood = bloodsort(strBlood)
   
  #str-sea = Phenotype shit comes later.
 
  #traits come later.
-
- #horn1L = horn(p1("hornL"))
- #horn2L = horn(p2("hornL"))
- #horn1R = horn(p1("hornR"))
- #horn2R = horn(p2("hornR"))
-
+ horn1L = p1["hornL"]
+ horn2L = p2["hornL"]
+ horn1R = p1["hornR"]
+ horn2R = p2["hornR"]
+ 
+ strhornlength  = horn1L[0] + horn2L[0] + horn1R[0] + horn2R[0]
+ strhorncurl    = horn1L[1] + horn2L[1] + horn1R[1] + horn2R[1]
+ strhornradial  = horn1L[2] + horn2L[2] + horn1R[2] + horn2R[2]
+ strhorndir     = horn1L[3] + horn2L[3] + horn1R[3] + horn2R[3]
+ strhornwide    = horn1L[4] + horn2L[4] + horn1R[4] + horn2R[4]
+ strhorntipAdir = horn1L[6] + horn2L[6] + horn1R[6] + horn2R[6]
+ strhorntip1    = horn1L[7:len(horn1L)] #tip type
+ strhorntip2    = horn2L[7:len(horn2L)] #tip type
+ strhorntip3    = horn1R[7:len(horn1R)] #tip type
+ strhorntip4    = horn2R[7:len(horn2R)] #tip type
  t1 = {
  "donator1": strDonator1,
  "donator2": strDonator2,
- "blood": strBlood
+ "blood": strBlood,
+ "hornlength": strhornlength,
+ "horncurl": strhorncurl,
+ "hornradial": strhornradial,
+ "horndir": strhorndir,
+ "hornwide": strhornwide,
+ "horntipAdir": strhorntipAdir,
+ "horntip1": strhorntip1,
+ "horntip2": strhorntip2,
+ "horntip3": strhorntip3,
+ "horntip4": strhorntip4 
  }
  return t1
 def getcaste(b): #trolldeets
@@ -156,8 +177,46 @@ def getcaste(b): #trolldeets
    if b[1] == "b":   
     caste = "Blue" #bb Bloo
  return caste
-
-
+def bloodsort(blood): #trolldeets.  Put in a group of letters.
+ a = 0   #count the number of letters stripped out
+ sorted = "" # sorted blood code
+ for arb in blood: #for each letter... 
+  if arb == "R":
+   sorted = sorted + "R"
+   a = a + 1
+  if a == len(blood):
+   break
+ for arb in blood: #for each letter... 
+  if arb == "G":
+   sorted = sorted + "G"
+   a = a + 1
+  if a == len(blood):
+   break
+ for arb in blood: #for each letter... 
+  if arb == "B":
+   sorted = sorted + "B"
+   a = a + 1
+  if a == len(blood):
+   break
+ for arb in blood: #for each letter... 
+  if arb == "r":
+   sorted = sorted + "r"
+   a = a + 1
+  if a == len(blood):
+   break
+ for arb in blood: #for each letter... 
+  if arb == "g":
+   sorted = sorted + "g"
+   a = a + 1
+  if a == len(blood):
+   break
+ for arb in blood: #for each letter... 
+  if arb == "b":
+   sorted = sorted + "b"
+   a = a + 1
+  if a == len(blood):
+   break
+ return sorted
 
 #Initialization and main loop.
 def main(): #main / interface
@@ -185,7 +244,8 @@ def onprogramload(): #main / interface.  Contains global variables.
  pail = CreateDonation(libbie,lester)
  btncurrent = 1
  screencurrent = scrpage()
- global pageloadtroll, pagedonation, pagemaketroll, pageblood
+ 
+ global pageloadtroll, pagedonation, pagemaketroll, pageblood 
  #screens: maketroll, loadingzone, bloodpage, donationpage, 
  
  pageloadtroll = scrpage()
@@ -400,12 +460,22 @@ def handle_keys(): #interface - button functions, and loops as needed.
       updatescreen()
       return False
     return False
-
-   #If the main menu is not selected, Enter doesnt activate that.
-   #Create a sub-menu here based off which menu the cursor is in.
+   #End "main menu" portion of Enter loop.
+   #Create a sub-menu here based off which other menu the cursor is in.
    return False
-  #the loop for when someone chooses a button is over.
- #elif key.vk == tcod.KEY_ESCAPE:
+  #the loop for when someone presses enter to choose a button is over.
+ if tcod.console_is_key_pressed(tcod.KEY_1):
+  if screencurrent.name == "pageloadtroll":
+   #load currently selected troll into slot 1.
+   return False
+  return False
+ if tcod.console_is_key_pressed(tcod.KEY_2):
+  if screencurrent.name == "pageloadtroll":
+   #load currently selected troll into slot 2.
+   return False
+  return False
+
+ elif key.vk == tcod.KEY_ESCAPE:
  #reenable the above line to make hitting escape close the program.
   return True
 
@@ -494,14 +564,20 @@ def displaydonation(x,y,t0): #interface -- prints a standard-format window displ
  colbg = tcod.Color(0,0,0)
  colfg = tcod.Color(255,255,255)
  #recolor
- colbg = bloodtorgb(t0["blood"])
+ bloodtemp = t0["blood"]
+ bloodtemp = bloodtemp[0:3]
+ colbg = bloodtorgb(bloodtemp)
  colfg = pastel(colbg)
  #called when screen = donationpage
- rectolor(x, y, 34, 20, colbg, colfg)
- string1 = t0["donator1"] + " / " + t0["donator2"]
- string2 = t0["blood"]
- tcod.console_print_frame(0, x, y, 35, 21, True, 13, string1)
- draw(x+2,y+1,string2)
+ rectolor(x, y, 69, 20, colbg, colfg)
+ string0 = t0["donator1"] + " / " + t0["donator2"]
+ string1 = "Blood: " + t0["blood"]
+ string2 = "Length: " + t0["hornlength"] + "  Width: " + t0["hornwide"] + "  Radial: " + t0["hornradial"] + "  Curl: " + t0["horncurl"] + "  Horndir: " + t0["horndir"]
+ string3 = "Tip dir: " + t0["horntipAdir"] + "  Tips:" + t0["horntip1"] + "," + t0["horntip2"] + "," + t0["horntip3"] + "," + t0["horntip4"]
+ tcod.console_print_frame(0, x, y, 70, 21, True, 13, string0)
+ draw(x+2,y+1,string1)
+ draw(x+2,y+2,string2)
+ draw(x+2,y+3,string3)
 def bloodtorgb(b): #interface, because this is the display color only / specifically.
  #gives you the darker color associated with the code "b" which is a 2-3 letter string.
  rgb1 = 0
@@ -615,14 +691,19 @@ def donationpage(): #interface - page to interact with creating donations
  global libbie, lester, pail
  displaytroll(1,7,libbie)
  displaytroll(36,7,lester)
- displaydonation(18,29,pail)
+ displaydonation(1,28,pail)
  return
 def loadingzone(): #interface - page to load trolls from file
+ tcod.console_print_frame(0, 1, 1, 35, 5, True, 13, "Instructions")
+ draw(3,2,"Arrow keys to navigate.")
+ draw(3,3,"Press 1 to load to slot 1.")  #currently nonfunctional
+ draw(3,4,"      2 to load to slot 2.")
+
  global pageloadtroll
  z = os.listdir("Caverns/AncestralCave/")
  tcod.console_set_default_foreground(0, tcod.Color(250,250,200))
- h = -1
- w = 1
+ h = 7
+ w = 7
  numtotal = 0
  for arb in z:
     temp = arb
@@ -631,7 +712,7 @@ def loadingzone(): #interface - page to load trolls from file
           numtotal = numtotal + 1
           if numtotal == 21 or numtotal == 41 or numtotal == 61 or numtotal == 81:
             w = w + 15
-            h = -1
+            h = 7
           h = h + 2		    
           displayname = temp[0:6] + " " + temp[7:13]
           bloodcol = temp[14:17]
@@ -650,7 +731,6 @@ def loadingzone(): #interface - page to load trolls from file
   pageloadtroll.maxbtn = 180
  pageloadtroll.minbtn = 101
  screencurrent = pageloadtroll
-		 
 def showparentspage(): #interface -- page to display 2 current parents
  displaytroll(1,7,libbie)
  displaytroll(36,7,lester)
