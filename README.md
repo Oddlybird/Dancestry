@@ -29,6 +29,10 @@ V. 0.1.7b: 2019-04-21
 
 -- arrow key navigation worked on, left and right keys not yet functional in submenus.
 
+-- Donations now include and display horn data
+
+-- Working on horn describer.
+
 V. 0.1.7:  2019-04-20
 
 -- Able to select items on left menus in donation page and loading page
