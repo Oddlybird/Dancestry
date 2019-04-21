@@ -23,6 +23,16 @@ Future goals: (approximate)
 Approximate version history:
 =
 
+V. 0.1.8: 2019-04-21
+
+-- expanded display dramatically
+
+-- added horn description function
+
+-- reformatted troll and donation displays to fit new window size
+
+-- added castenumber function, adjusted blood page display, adjusted caste order
+
 V. 0.1.7b: 2019-04-21
 
 -- Load troll system worked on, not yet functional
