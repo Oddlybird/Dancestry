@@ -23,6 +23,12 @@ Future goals: (approximate)
 Approximate version history:
 =
 
+V. 0.1.7b: 2019-04-21
+
+-- Load troll system worked on, not yet functional
+
+-- arrow key navigation worked on, left and right keys not yet functional in submenus.
+
 V. 0.1.7:  2019-04-20
 
 -- Able to select items on left menus in donation page and loading page
