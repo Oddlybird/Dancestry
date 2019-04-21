@@ -1,6 +1,7 @@
 import random
 import json
 import os
+import re
 import libtcodpy as tcod
 #getcaste(b) is a function you can use to get the plaintext of a caste.  Put in the bloodcode.
 #Will be tagging each function / class / etc
@@ -9,7 +10,7 @@ import libtcodpy as tcod
 #screens:  showparents, maketroll, loadingzone, bloodpage, donationpage, 
 #screens are named ""page, and their scrpage objects are named page""
 #to activate a new main menu button, go to btnselect(), drawmenu(), 
-  
+
 #have Trolls (one contributor)
 #have Donations (A particular donation by 2 trolls)
 #have Slurries (An array of Donations, with some meta-data)
@@ -37,9 +38,58 @@ class Horn:  #Trolldeets
   self.tipA = code[7:len(code)] #everthing else in string = the tip type.
  def desc(self):
   #convert the current features of the horn into a verbal description as in basic version.
-  #use by going descriptionstring = horntemp.desc() 
-  description = ""
-  return description
+  #use by going descriptionstring = horntemp.desc()
+  descr = ""
+  #Length, default 2
+  if self.length == "1":
+   descr = "short, "
+  if self.length == "3":
+   descr = "long, "
+  if self.length == "4":
+   descr = "very long, "
+  #Width, default n
+  if self.wide == "w":
+   descr = descr + "wide, "
+  #Direction, default Inwards
+  if self.dir == "F":
+   descr = descr + "forward"
+  if self.dir == "B":
+   descr = descr + "backswept "
+  if self.dir == "O":
+   descr = descr + "outward "
+  #curves, default = 2 (slightly curved)
+  if self.curl == "1":
+   descr = descr + "straight"
+  if self.curl == "3":
+   descr = descr + "curved"
+  if self.curl == "4":
+   descr = descr + "curled"
+  if self.curl == "5":
+   descr = descr + "curly"
+  if self.curl == "6":
+   descr = descr + "curled-around"
+  if self.curl == "7":
+   descr = descr + "wave-like"
+  #Tips, default forward
+#  if self.tipAdir == "s":
+#   descr = descr + "sideways" + self.tipA + "-tipped "
+#  if self.tipAdir == "b":
+#   descr = descr + "back" + self.tipA + "-tipped "
+#  if self.tipAdir == "f":
+  descr = descr + self.tipA + "-tipped "
+  #radial, default round
+  if self.radial == "O":
+   descr = descr + "oval horn"
+  if self.radial == "T":
+   descr = descr + "triangular horn"
+  if self.radial == "S":
+   descr = descr + "spiralling horn"
+  if self.radial == "R":
+   descr = descr + "horn"
+   #strip spaces
+   descr = re.sub(' +', ' ',descr)
+   descr = descr.strip()
+  return descr
 class scrpage: #interface.  An item to be used to define the shape of menus.
    name = "name"
    submenu = False
@@ -57,15 +107,15 @@ def CreateTroll(): #trolldeets
  "caste": "unclassified",
  "sea": "Landdweller", # Landdweller, Seadweller, Beachdweller. replace with more detailed phenotype info :  gilltype, headgills, ribgills, earfins, webbed, glow, pawfeet, tail, wing, hairstreaks, grubscars, 
  "powers": "none",  #psychic, voodoo, eldritch, none.  specify type later.  Make psychics eyes glow colors?
- "hornL": "21RIn.f point", #see horn notes.
- "hornR": "21RIn.f point",
+ "hornL": "22RIn.f point", #see horn notes.
+ "hornR": "22RIn.f point",
  "height": "tall",  #replace with exact height in inches later.
  "build": "medium", #more detailed data later
  "hair": "short",   #more detailed data later.  medium/long.
  "skin": "grey"    #freckles, stripes, birthmarks, vitiligo, melanism, albinism, etc.
  }
  return t0
-def CreateDonation(p1,p2): #trolldeets
+def CreateDonation(troll1,troll2): #trolldeets
  #All data is partially formatted into a troll-like state.
  
  #Errorchecking code to give a default set of trolls if needed : Currently nonfunctional.
@@ -76,6 +126,16 @@ def CreateDonation(p1,p2): #trolldeets
  # global lester
  # p1 = lester
 
+ #decide who is p1 based on hemism.
+ caste1 = troll1["blood"]
+ caste2 = troll2["blood"]
+ if caste1 == highercaste(caste1,caste2):
+  p1 = troll1
+  p2 = troll2
+ if caste2 == highercaste(caste1,caste2):
+  p2 = troll1
+  p1 = troll2
+ 
  #Record Donators
  strDonator1 = p1["firname"][0] + "." + p1["surname"]
  strDonator2 = p2["firname"][0] + "." + p2["surname"]
@@ -123,6 +183,8 @@ def CreateDonation(p1,p2): #trolldeets
  "horntip3": strhorntip3,
  "horntip4": strhorntip4 
  }
+ global pail
+ pail = t1
  return t1
 def getcaste(b): #trolldeets
  caste = "?"
@@ -177,6 +239,157 @@ def getcaste(b): #trolldeets
    if b[1] == "b":   
     caste = "Blue" #bb Bloo
  return caste
+def getcastenum(b): #trolldeets
+ b = b + "..."
+ caste = 0
+ if b[0] == "R":
+   if b[1] == "R":   #RR Maroon
+    if b[2] == "R":
+     caste = 2 #RRR
+    if b[2] == "G":
+     caste = 12 #RRG
+    if b[2] == "B":
+     caste = 72 #RRB
+    if b[2] == "r":
+     caste = 5 #RRr
+    if b[2] == "g":
+     caste = 10 #RRg
+    if b[2] == "b":
+     caste = 74 #RRb
+   if b[1] == "G":   #RG Gold
+    if b[2] == "G":
+     caste = 23 #RGG
+    if b[2] == "B":
+     caste = 20 #RGB
+    if b[2] == "r":
+     caste = 16 #RGr
+    if b[2] == "g":
+     caste = 22 #RGg
+    if b[2] == "b":
+     caste = 21 #RGb
+   if b[1] == "B":   #RB Violet
+    if b[2] == "B":
+     caste = 64 #RBB
+    if b[2] == "r":
+     caste = 70 #RBr
+    if b[2] == "g":
+     caste = 68 #RBg
+    if b[2] == "b":
+     caste = 67 #RBb
+   if b[1] == "r":   #Rr Maroon
+    if b[2] == "r":
+     caste = 6 #Rrr
+    if b[2] == "g":
+     caste = 11 #Rrg
+    if b[2] == "b":
+     caste = 75 #Rrb
+   if b[1] == "g":   #Rg Bronze
+    if b[2] == "g":
+     caste = 15 #Rgg
+    if b[2] == "b":
+     caste = 21 #Rgb
+   if b[1] == "b":   #Rb Tyrian
+    if b[2] == "b":
+     caste = 71 #Rbb
+ if b[0] == "G":
+   if b[1] == "G":   #GG Olive
+    if b[2] == "G":
+     caste = 33 #GGG
+    if b[2] == "B":
+     caste = 39 #GGB
+    if b[2] == "r":
+     caste = 28 #GGr
+    if b[2] == "g":
+     caste = 31 #GGg
+    if b[2] == "b":
+     caste = 37 #GGb
+   if b[1] == "B":   #GB Teal
+    if b[2] == "B":
+     caste = 48 #GBB
+    if b[2] == "r":
+     caste = 45 #GBr
+    if b[2] == "g":
+     caste = 44 #GBg
+    if b[2] == "b":
+     caste = 47 #GBb
+   if b[1] == "r":   #Gr Lime
+    if b[2] == "r":
+     caste = 24 #Grr
+    if b[2] == "g":
+     caste = 26 #Grg
+    if b[2] == "b":
+     caste = 27 #Grb
+   if b[1] == "g":   #Gg Olive
+    if b[2] == "g":
+     caste = 33 #Ggg
+    if b[2] == "b":
+     caste = 38 #Ggb
+   if b[1] == "b":   #Gb Jade
+    if b[2] == "b":
+     caste = 41 #Gbb
+ if b[0] == "B":
+   if b[1] == "B":   #BB Bloo
+    if b[2] == "B":
+     caste = 57 #BBB
+    if b[2] == "r":
+     caste = 60 #BBr
+    if b[2] == "g":
+     caste = 52 #BBg
+    if b[2] == "b":
+     caste = 55 #BBb
+   if b[1] == "r":   #Br Indigo
+    if b[2] == "r":
+     caste = 63 #Brr
+    if b[2] == "g":
+     caste = 62 #Brg
+    if b[2] == "b":
+     caste = 61 #Brb
+   if b[1] == "g":   #Gb Ceru
+    if b[2] == "g":
+     caste = 49 #Bgg
+    if b[2] == "b":
+     caste = 50 #Bgb
+   if b[1] == "b":   #Bb Bloo
+    if b[2] == "b":
+     caste = 56 #Bbb
+ if b[0] == "r":
+   if b[1] == "r":   #rr maroon
+    if b[2] == "r":
+     caste = 7 #rrr
+    if b[2] == "g":
+     caste = 9 #rrg
+    if b[2] == "b":
+     caste = 1 #rrb
+   if b[1] == "g":   #rg Bronze/gold?
+    if b[2] == "g":
+     caste = 18 #rgg
+    if b[2] == "b":
+     caste = 13 #rgb
+   if b[1] == "b":   #rb vantas 
+    if b[2] == "b":
+     caste = 71 #rbb
+ if b[0] == "g":
+   if b[1] == "g":  #gg Olive
+    if b[2] == "g":
+     caste = 34 #ggg
+    if b[2] == "b":
+     caste = 36 #ggb 
+   if b[1] == "b":  #gb Jade 
+    if b[2] == "b":
+     caste = 42 #gbb
+ if b[0] == "b":
+   if b[1] == "b": #bb Bloo
+    if b[2] == "b":
+     caste = 58 #bbb
+ return caste
+def highercaste(blood1, blood2): #trolldeets
+ #input two bloods, return the higher caste.
+ caste1 = getcastenum(blood1)
+ caste2 = getcastenum(blood2)
+ bloodhigher = blood1  #By default assume the first is higher.
+ if caste2 > caste1:   #..but if it's not, fix that.
+  bloodhigher = blood2   
+ return bloodhigher
 def bloodsort(blood): #trolldeets.  Put in a group of letters.
  a = 0   #count the number of letters stripped out
  sorted = "" # sorted blood code
@@ -228,7 +441,7 @@ def main(): #main / interface
     break
  return
 def onprogramload(): #main / interface.  Contains global variables.
- SCREEN_WIDTH = 100
+ SCREEN_WIDTH = 160
  SCREEN_HEIGHT = 50
  VERSIONNUM = "0.1.7"
  font_path = 'terminal8x12_gs_tc.png'
@@ -294,22 +507,22 @@ def updatescreen(): #interface.  Choose which page to show.
  tcod.console_flush()
  return
 def drawmenu(): #interface.  Contains Labels for all main and submenu buttons.
- tcod.console_print_frame(0, 71, 0, 29, 50, True, 13, "MENU")
+ tcod.console_print_frame(0, 131, 0, 29, 50, True, 13, "MENU")
  tcod.console_set_color_control(0, tcod.white, tcod.Color(60,60,60))
  txtcol = tcod.Color(50,50,0)
  #Can add a tcod.Color(rrr,ggg,bbb) for:  drawbtn(x,y,"label",background,foreground)
- drawbtn(73,2, "     MAKE TROLL     ", btnselect(1), txtcol) 
- drawbtn(73,6, "     FOR   RENT     ", btnselect(2), txtcol) 
- drawbtn(73,10,"     SAVE TROLL     ", btnselect(3), txtcol) 
- drawbtn(73,14,"    LOADING AREA    ", btnselect(4), txtcol) 
- drawbtn(73,18,"    BLOOD COLORS    ", btnselect(5), txtcol) 
- drawbtn(73,22,"      DONATION      ", btnselect(6), txtcol) 
- drawbtn(73,26,"       Btn   7      ", btnselect(7), txtcol) 
- drawbtn(73,30,"       Btn   8      ", btnselect(8), txtcol) 
- drawbtn(73,34,"       Btn   9      ", btnselect(9), txtcol) 
- drawbtn(73,38,"       Btn  10      ", btnselect(10), txtcol) 
- drawbtn(73,42,"       Btn  11      ", btnselect(11), txtcol) 
- drawbtn(73,46,"       E X I T      ", btnselect(12), txtcol) 
+ drawbtn(133,2, "     MAKE TROLL     ", btnselect(1), txtcol) 
+ drawbtn(133,6, "     FOR   RENT     ", btnselect(2), txtcol) 
+ drawbtn(133,10,"        SAVE        ", btnselect(3), txtcol) 
+ drawbtn(133,14,"    LOADING AREA    ", btnselect(4), txtcol) 
+ drawbtn(133,18,"    BLOOD COLORS    ", btnselect(5), txtcol) 
+ drawbtn(133,22,"      DONATION      ", btnselect(6), txtcol) 
+ drawbtn(133,26,"       Btn   7      ", btnselect(7), txtcol) 
+ drawbtn(133,30,"       Btn   8      ", btnselect(8), txtcol) 
+ drawbtn(133,34,"       Btn   9      ", btnselect(9), txtcol) 
+ drawbtn(133,38,"       Btn  10      ", btnselect(10), txtcol) 
+ drawbtn(133,42,"       Btn  11      ", btnselect(11), txtcol) 
+ drawbtn(133,46,"       E X I T      ", btnselect(12), txtcol) 
  #reset defaults
  tcod.console_set_color_control(0, tcod.black, tcod.white)
  
@@ -418,7 +631,11 @@ def handle_keys(): #interface - button functions, and loops as needed.
       #screencurrent = ""
       return False
   if btncurrent == 3:
+    if screencurrent == "maketroll":
       save(troll3)
+      draw(73,20,"Saved")  
+    if screencurrent == "donationpage":
+      savedon(pail)
       draw(73,20,"Saved")  
       return False
   if btncurrent == 4:
@@ -480,7 +697,7 @@ def handle_keys(): #interface - button functions, and loops as needed.
   return True
 
 #save and load to file.
-def save(grub): #interface         Save Troll
+def save(grub):        #interface     Save Troll
  saveloc = "Caverns/CaveB/" +grub["firname"] + "." + grub["surname"] + "." + grub["blood"] + ".troll"
  c = 1
  int(c)
@@ -494,7 +711,7 @@ def save(grub): #interface         Save Troll
  save.write(y)
  save.close
  return
-def load(filename): #interface*    Load Troll
+def load(filename):    #interface     Load Troll
  trollobj = CreateTroll()
  savedtroll = "Caverns/AncestralCave/" + filename + ".troll"
  if os.path.exists(savedtroll):
@@ -506,7 +723,34 @@ def load(filename): #interface*    Load Troll
     draw(18,45,"WRONG SAVETYPE")
   load.close
  return trollobj
-
+def savedon(donation): #interface     Save Donation
+ folder = "Caverns/CaveB/"
+ saveloc = folder + "." + donation["blood"] + "." + donation["donator1"] + "." + donation["donator2"] + ".donation"
+ c = 1
+ int(c)
+ while os.path.exists(saveloc):
+   c = c+1
+   d = str(c)
+   saveloc = folder + donation["blood"] + "." + donation["donator1"] + "." + donation["donator2"] + d + ".donation"
+ save = open(saveloc, "wt")
+ save.write("#SaveVersion4#" + "\n")
+ y = json.dumps(grub, indent=4)
+ save.write(y)
+ save.close
+ return
+def loaddon(filename): #interface     Load Donation
+ donation = CreateDonation()
+ saveddon = "Caverns/AncestralCave/" + filename + ".donation"
+ if os.path.exists(saveddon):
+  load = open(saveddon, "rt")
+  if load.readline() == "#SaveVersion4#\n": 
+     y = load.read()
+     donation = json.loads(y)
+  elif load.readline() != "#SaveVersion4#\n":
+    draw(18,45,"WRONG SAVETYPE")
+  load.close
+ return donation
+ 
 #menu-related boxen. 
 def drawbtn(x, y, label = "", btncolor = tcod.Color(255,255,225), txtcolor = tcod.Color(50,50,0)): #interface
  rectolor(x,y,24,2, btncolor, txtcolor) 
@@ -542,16 +786,20 @@ def displaytroll(x,y,t0): #interface -- prints a standard-format window display 
  #recolor
  colbg = bloodtorgb(t0["blood"])
  colfg = pastel(colbg)
- rectolor(x, y, 34, 20, colbg, colfg)
+ hornL1 = t0["hornL"]
+ hornL2 = Horn(hornL1)
+ hornR1 = t0["hornR"]
+ hornR2 = Horn(hornR1)
+ rectolor(x, y, 64, 20, colbg, colfg)
  string1 = t0["firname"] + " " + t0["surname"] + ", " + t0["blood"] + " " + t0["sex"]
  string2 = t0["caste"] + ", " + t0["powers"] 
  string3 = t0["sea"]
  string4 = t0["height"] + ", " + t0["build"] + " build" 
  string5 = t0["hair"] + " hair"
  string6 = t0["skin"] + " skin"
- string7 = "LHorn: " + t0["hornL"]
- string8 = "RHorn: " + t0["hornR"]
- tcod.console_print_frame(0, x, y, 35, 21, True, 13, string1)
+ string7 = "LHorn: " + hornL2.desc()
+ string8 = "RHorn: " + hornR2.desc()
+ tcod.console_print_frame(0, x, y, 65, 21, True, 13, string1)
  draw(x+2,y+1,string2)
  draw(x+2,y+2,string3)
  draw(x+2,y+3,string4)
@@ -569,15 +817,18 @@ def displaydonation(x,y,t0): #interface -- prints a standard-format window displ
  colbg = bloodtorgb(bloodtemp)
  colfg = pastel(colbg)
  #called when screen = donationpage
- rectolor(x, y, 69, 20, colbg, colfg)
+ rectolor(x, y, 64, 42, colbg, colfg)
  string0 = t0["donator1"] + " / " + t0["donator2"]
  string1 = "Blood: " + t0["blood"]
- string2 = "Length: " + t0["hornlength"] + "  Width: " + t0["hornwide"] + "  Radial: " + t0["hornradial"] + "  Curl: " + t0["horncurl"] + "  Horndir: " + t0["horndir"]
- string3 = "Tip dir: " + t0["horntipAdir"] + "  Tips:" + t0["horntip1"] + "," + t0["horntip2"] + "," + t0["horntip3"] + "," + t0["horntip4"]
- tcod.console_print_frame(0, x, y, 70, 21, True, 13, string0)
+ string2 = "Direction:    " + t0["horndir"] + "    Width:  " + t0["hornwide"] + "    Curl:    " + t0["horncurl"]
+ string3 = "Radial Shape: " + t0["hornradial"] + "    Length: " + t0["hornlength"] + "    Tip dir: " + t0["horntipAdir"]
+ string4 = "Tips:" + t0["horntip1"] + "," + t0["horntip2"] + "," + t0["horntip3"] + "," + t0["horntip4"]
+ tcod.console_print_frame(0, x, y, 65, 43, True, 13, string0)
  draw(x+2,y+1,string1)
- draw(x+2,y+2,string2)
- draw(x+2,y+3,string3)
+ tcod.console_print_frame(0, x+1, y+2, 63, 5, True, 13, "Horns") 
+ draw(x+2,y+3,string2)
+ draw(x+2,y+4,string3)
+ draw(x+2,y+5,string4)
 def bloodtorgb(b): #interface, because this is the display color only / specifically.
  #gives you the darker color associated with the code "b" which is a 2-3 letter string.
  rgb1 = 0
@@ -672,26 +923,26 @@ def pastel(oldcolor): #interface (currently nonfunctional)
 def bloodpage(): #interface - page of blood color examples
  #screencurrent.name = bloodpage
  #all the display stuff for this page goes here since it's spammy
- z = ["rb","rrb","RRR","RR","Rr","RRr","Rrr","rrr","rr","rrg","RRg","Rrg","RRG","Rgb","Rg","Rgg","RGr","RG","rgg","rg","RGB","RGb","RGg","RGG","Grr","Gr","Grg","Grb","GGr","GG","Gg","GGg","Ggg","GGG","ggg","gg","GGb","Ggb","GGB","Gb","Gbb","gbb","gb","GBg","GBr","GB","GBb","GBB","Bgg","Bgb","Bg","BBg","BB","Bb","BBb","Bbb","BBB","bbb","bb","BBr","Brb","Brg","Br","RBB","Brr","rbb","RBb","RBg","RB","RBr","Rbb","Rb","RRB","RRb","Rrb"]
- h = -1
- w = 1
+ z = ["rb","rrb","RRR","RR","Rr","RRr","Rrr","rrr","rr","rrg","RRg","Rrg","RRG","Rgb","Rg","Rgg","RGr","RG","rg","RGB","RGb","rgg","RGg","Grr","RGG","Gr","Grg","Grb","GGr","GG","Gg","GGg","Ggg","GGG","ggg","gg","ggb","GGb","Ggb","GGB","Gb","Gbb","gbb","gb","GBg","GBr","GB","GBb","GBB","Bgg","Bgb","Bg","BBg","BB","Bb","BBb","Bbb","BBB","bbb","bb","BBr","Brb","Brg","Br","RBB","Brr","rbb","RBb","RBg","RB","RBr","Rbb","Rb","RRB","RRb","Rrb"]
+ h = 4
+ w = 10
  numtotal = 0
  for x in z:
    numtotal = numtotal + 1
-   if numtotal == 16 or numtotal == 31 or numtotal == 46 or numtotal == 61 or numtotal == 76 or numtotal == 90:
-     w = w + 8
-     h = -1
+   if numtotal == 14 or numtotal == 27 or numtotal == 40 or numtotal == 53 or numtotal == 66 or numtotal == 89:
+     w = w + 18
+     h = 4
    h = h + 3
    displayname = x
    displaycol = bloodtorgb(x)
-   rectolor(w,h,6,1, displaycol)
+   rectolor(w,h,16,2, displaycol)
    draw(w+1,h+1,displayname)
  return
 def donationpage(): #interface - page to interact with creating donations
  global libbie, lester, pail
  displaytroll(1,7,libbie)
- displaytroll(36,7,lester)
- displaydonation(1,28,pail)
+ displaytroll(1,29,lester)
+ displaydonation(66,7,pail)
  return
 def loadingzone(): #interface - page to load trolls from file
  tcod.console_print_frame(0, 1, 1, 35, 5, True, 13, "Instructions")
@@ -731,17 +982,11 @@ def loadingzone(): #interface - page to load trolls from file
   pageloadtroll.maxbtn = 180
  pageloadtroll.minbtn = 101
  screencurrent = pageloadtroll
-def showparentspage(): #interface -- page to display 2 current parents
- displaytroll(1,7,libbie)
- displaytroll(36,7,lester)
- return
 def trollcreationpage(): #interface -- may be combined with showparents.
  displaytroll(1,7,libbie)
- displaytroll(36,7,lester)
- displaytroll(18,29,troll3)
+ displaytroll(1,29,lester)
+ displaytroll(66,17,troll3)
  return
 
 
-
- 
 main()
