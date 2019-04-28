@@ -23,6 +23,20 @@ Future goals: (approximate)
 Approximate version history:
 =
 
+V. 0.2.0: 2019-04-28
+
+-- Converted project to pycharm IDE
+
+-- Split project into multiple files (main/interface, trolldeets, name)
+
+-- began converting project from troll/donation/slurry model to troll/slurry model
+
+-- added basic name generator (needs tuning)
+
+-- added basic horn blender (needs tuning)
+
+-- moved some buttons
+
 V. 0.1.8: 2019-04-21
 
 -- expanded display dramatically
