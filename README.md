@@ -14,7 +14,7 @@ Future goals: (approximate)
 
 0.2.9 - functional Slurry Object
 
-0.2.0 - Functional Donation Object
+0.2.0 - begin grub creation
 
 0.0.x - menu and format upgrades
 
