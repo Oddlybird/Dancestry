@@ -23,6 +23,10 @@ Future goals: (approximate)
 Approximate version history:
 =
 
+V. 0.2.0a: 2019-04-29
+
+-- Fiddled with color definitions 
+
 V. 0.2.0: 2019-04-28
 
 -- Converted project to pycharm IDE
