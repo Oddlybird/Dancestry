@@ -80,46 +80,47 @@ def getvowel():
     return letter
 
 
-def qc(qcinput):
-    qcoutput = qcinput
+def qc(qcin):
+    # Quality Control
+    qcout = qcin
     a = 0
-    while a <= len(qcinput):
+    while a <= len(qcin):
         # first letters
         if a == 0:
             # #jl -> #ch
-            if qcinput[a] == "j" and qcinput[a+1] == "l":
-                qcoutput = setletter(a, "c", qcoutput)
-                qcoutput = setletter(a+1, "h", qcoutput)
+            if qcin[a] == "j" and qcin[a + 1] == "l":
+                qcout = setletter(a, "c", qcout)
+                qcout = setletter(a+1, "h", qcout)
         # three letter strings
-        if a <= len(qcinput) - 3:
+        if a <= len(qcin) - 3:
             # vowel + vowel + vowel -> vowel + r + vowel
-            if isvowel(qcinput[a]) and isvowel(qcinput[a+1]) and isvowel(qcinput[a+2]):
-                qcoutput = setletter(a+1, getliquid(), qcoutput)
+            if isvowel(qcin[a]) and isvowel(qcin[a + 1]) and isvowel(qcin[a + 2]):
+                qcout = setletter(a+1, getliquid(), qcout)
             # (c,k,x) + u + vowel -> qu + vowel
-            if qcinput[a] == "c" or qcinput[a] == "k" or qcinput[a] == "x":
-                if qcinput[a + 1] == "u" and isvowel(qcinput[a + 2]):
-                    qcoutput = setletter(a, "q", qcoutput)
+            if qcin[a] == "c" or qcin[a] == "k" or qcin[a] == "x":
+                if qcin[a + 1] == "u" and isvowel(qcin[a + 2]):
+                    qcout = setletter(a, "q", qcout)
         # two-letter strings
-        if a <= len(qcinput) - 2:
+        if a <= len(qcin) - 2:
             # fh -> ph
-            if qcinput[a:a + 1] == "fh":
-                qcoutput = setletter(a, "p", qcoutput)
+            if qcin[a:a + 1] == "fh":
+                qcout = setletter(a, "p", qcout)
             # sf -> ss
-            if qcinput[a:a + 1] == "sf":
-                qcoutput = setletter(a+1, "s", qcoutput)
+            if qcin[a:a + 1] == "sf":
+                qcout = setletter(a+1, "s", qcout)
             # (yh, ih) -> oh
-            if qcinput[a:a + 1] == "yh" or qcinput[a:a+1] == "ih":
-                qcoutput = setletter(a, "o", qcoutput)
+            if qcin[a:a + 1] == "yh" or qcin[a:a + 1] == "ih":
+                qcout = setletter(a, "o", qcout)
             # (yw, iw) -> yl, il
-            if qcinput[a:a + 1] == "yw" or qcinput[a:a+1] == "iw":
-                qcoutput = setletter(a+1, "l", qcoutput)
+            if qcin[a:a + 1] == "yw" or qcin[a:a + 1] == "iw":
+                qcout = setletter(a+1, "l", qcout)
             # (yh, ih) -> oh
-            if qcinput[a:a + 1] == "wz":
-                qcoutput = setletter(a+1, "h", qcoutput)
+            if qcin[a:a + 1] == "wz":
+                qcout = setletter(a+1, "h", qcout)
         a = a + 1
 
 #    scrabble = 0  # use this later
-    return qcoutput
+    return qcout
 
 
 def isvowel(suspectedv):

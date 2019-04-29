@@ -3,6 +3,7 @@ import os
 import trolldeets as deets
 import libtcodpy as tcod
 import names
+import colorgarbage as colg
 
 # getcaste(b) is a function you can use to get the plaintext of a caste.  Put in the blood-code.
 # Will be tagging each function / class / etc
@@ -223,7 +224,7 @@ def handle_keys():  # interface - button functions, and loops as needed.
             if screencurrent.name == "maketroll":
                 if btncurrent == 51:
                     troll3 = deets.createtroll()
-                    troll3 = deets.createtroll3(libbie,lester)
+                    troll3 = deets.createtroll3(libbie, lester)
                     # for now.  Replace this with a function that takes libbie,lester as input
                     # and combines them into a grub.
                     updatescreen()
@@ -259,7 +260,6 @@ def savetroll(grub):  # interface     Save Troll
         d = str(c)
         saveloc = "Caverns/CaveB/" + grub["firname"] + "." + grub["surname"] + "." + grub["blood"] + "." + d + ".troll"
     savedtroll = open(saveloc, "wt")
-    savedtroll.write("#SaveVersion4#" + "\n")
     y = json.dumps(grub, indent=4)
     savedtroll.write(y)
     savedtroll.close()
@@ -271,12 +271,11 @@ def loadtroll(filename):  # interface     Load Troll
     savedtroll = "Caverns/AncestralCave/" + filename + ".troll"
     if os.path.exists(savedtroll):
         loadedtroll = open(savedtroll, "rt")
-        if loadedtroll.readline() == "#SaveVersion4#\n":
-            y = loadedtroll.read()
-            trollobj = json.loads(y)
-        elif loadedtroll.readline() != "#SaveVersion4#\n":
-            draw(18, 45, "WRONG SAVE TYPE")
+        y = loadedtroll.read()
+        trollobj = json.loads(y)
         loadedtroll.close()
+    if trollobj["savetype"] != "5":
+        trollobj = deets.createtroll()
     return trollobj
 
 
@@ -319,8 +318,9 @@ def displaytroll(x, y, t0):  # interface -- prints a standard-format window disp
     # colbg = tcod.Color(0, 0, 0)
     # colfg = tcod.Color(255, 255, 255)
     # recolor
-    colbg = bloodtorgb(t0["blood"])
-    colfg = pastel(colbg)
+    (rgb1, rgb2, rgb3) = colg.bloodtorgb(t0["blood"])
+    colbg = tcod.Color(rgb1, rgb2, rgb3)
+    colfg = colg.pastel(rgb1, rgb2, rgb3)
     hornl1 = t0["hornL"]
     hornl2 = deets.Horn(hornl1)
     hornr1 = t0["hornR"]
@@ -334,6 +334,7 @@ def displaytroll(x, y, t0):  # interface -- prints a standard-format window disp
     string6 = t0["skin"] + " skin"
     string7 = "LHorn: " + hornl2.desc()
     string8 = "RHorn: " + hornr2.desc()
+    string13 = t0["donator1"] + " / " + t0["donator2"]
     tcod.console_print_frame(0, x, y, 65, 21, True, 13, string1)
     draw(x + 2, y + 1, string2)
     draw(x + 2, y + 2, string3)
@@ -342,124 +343,46 @@ def displaytroll(x, y, t0):  # interface -- prints a standard-format window disp
     draw(x + 2, y + 5, string6)
     draw(x + 2, y + 6, string7)
     draw(x + 2, y + 7, string8)
+    draw(x + 2, y + 12, string13)
     return
-
-
-def bloodtorgb(b):  # interface, because this is the display color only / specifically.
-    # gives you the darker color associated with the code "b" which is a 2-3 letter string.
-    rgb1 = 0
-    rgb2 = 0
-    rgb3 = 0
-    capitals = 0
-    if b[0] == "r" or b[1] == "r":  # recessive colors
-        rgb1 = 60
-    if b[0] == "g" or b[1] == "g":
-        rgb2 = 60
-    if b[0] == "b" or b[1] == "b":
-        rgb3 = 60
-    if b[0] == "R" or b[1] == "R":  # dominant colors
-        rgb1 = 120
-        capitals = capitals + 1
-    if b[0] == "G" or b[1] == "G":
-        rgb2 = 120
-        capitals = capitals + 1
-    if b[0] == "B" or b[1] == "B":
-        rgb3 = 120
-        capitals = capitals + 1
-
-    # Mutant Fixing : No capital letters = ***slightly*** brighter.
-    if capitals == 0:
-        if rgb1 != 0:
-            rgb1 = rgb1 + 30
-        if rgb1 > 210:
-            rgb1 = rgb1 - 20
-        if rgb2 != 0:
-            rgb2 = rgb2 + 30
-        if rgb2 > 220:
-            rgb2 = rgb2 - 20
-        if rgb3 != 0:
-            rgb3 = rgb3 + 30
-        if rgb3 > 240:
-            rgb3 = rgb3 - 20
-    # Make dark grubs brighter.
-    if rgb1 + rgb2 + rgb3 < 100:
-        rgb1 = rgb1 * 2
-        rgb2 = rgb2 * 2
-        rgb3 = rgb3 * 2
-    # Vantases are special.
-    if b == "rb":
-        rgb1 = 255
-        rgb2 = 0
-        rgb3 = 0
-
-    # Modulate color by 3rd letter.
-    if len(b) == 3:
-        if b[2] == "R":
-            rgb1 = rgb1 + 25
-            rgb2 = rgb2 - 25
-            rgb3 = rgb3 - 25
-        if b[2] == "G":
-            rgb1 = rgb1 - 25
-            rgb2 = rgb2 + 25
-            rgb3 = rgb3 - 25
-        if b[2] == "B":
-            rgb1 = rgb1 - 25
-            rgb2 = rgb2 - 25
-            rgb3 = rgb3 + 25
-        if b[2] == "r":
-            rgb1 = rgb1 + 25
-        if b[2] == "g":
-            rgb2 = rgb2 + 25
-        if b[2] == "b":
-            rgb3 = rgb3 + 25
-
-    # Return things to normal color ranges.
-    if rgb1 > 255:
-        rgb1 = 255
-    if rgb2 > 255:
-        rgb2 = 255
-    if rgb3 > 255:
-        rgb3 = 255
-    if rgb1 < 0:
-        rgb1 = 0
-    if rgb2 < 0:
-        rgb2 = 0
-    if rgb3 < 0:
-        rgb3 = 0
-
-    finalcolor = tcod.Color(rgb1, rgb2, rgb3)
-    return finalcolor
-
-
-def pastel(oldcolor):  # interface (currently nonfunctional)
-    # This currently does not function, for unknown reasons.
-    # When it starts working, replace the crimson color with a pale offwhite.
-    newcolor = tcod.color_lerp(oldcolor, tcod.Color(255, 0, 0), 0.5)
-    return newcolor
 
 
 # The display for individual screens.
 def bloodpage():  # interface - page of blood color examples
     # screencurrent.name = bloodpage
     # all the display stuff for this page goes here since it's spammy
-    z = ["rb", "rrb", "RRR", "RR", "Rr", "RRr", "Rrr", "rrr", "rr", "rrg", "RRg", "Rrg", "RRG", "Rgb", "Rg", "Rgg",
-         "RGr", "RG", "rg", "RGB", "RGb", "rgg", "RGg", "Grr", "RGG", "Gr", "Grg", "Grb", "GGr", "GG", "Gg", "GGg",
-         "Ggg", "GGG", "ggg", "gg", "ggb", "GGb", "Ggb", "GGB", "Gb", "Gbb", "gbb", "gb", "GBg", "GBr", "GB", "GBb",
-         "GBB", "Bgg", "Bgb", "Bg", "BBg", "BB", "Bb", "BBb", "Bbb", "BBB", "bbb", "bb", "BBr", "Brb", "Brg", "Br",
-         "RBB", "Brr", "rbb", "RBb", "RBg", "RB", "RBr", "Rbb", "Rb", "RRB", "RRb", "Rrb"]
-    h = 4
-    w = 10
+    z = [
+         "RR", "RRR", "RRr", "Rr", "Rrr", "R", "r", "rr", "rrr",
+         "RRg", "RGB", "Rrg", "Rg", "rgb",
+         "Rgg", "RRG", "RG", "RGG", "RGr", "RGg", "Grr", "rg", "rrg",
+         "rgg", "GGr", "Gr", "Grg",
+         "G", "g", "GG", "GGG", "GGg", "Gg", "Ggg", "gg", "ggg",
+         "GGb", "Gb", "Ggb",
+         "GGB", "GB", "GBB", "GBg", "GBb", "Gbb", "ggb", "gb", "Bgg",
+         "gbb", "BBg", "Bg", "Bgb",
+         "B", "b", "Bb", "Bbb", "bb", "bbb", "BB", "BBB", "BBb",
+         "BBr", "Br", "Brb",
+         "Brr", "rrb", "rbb",
+         "RRB", "RB", "RBB", "RBr", "RBb", "Rbb",
+         "Rrb", "Rb",
+         "rb", "RRb", "RGb", "RBg", "Rgb", "GBr", "Grb", "Brg",
+         ]
+    h = 1
+    w = 1
     numtotal = 0
     for x in z:
-        numtotal = numtotal + 1
-        if numtotal == 14 or numtotal == 27 or numtotal == 40 or numtotal == 53 or numtotal == 66 or numtotal == 89:
-            w = w + 18
-            h = 4
+        if numtotal == 15 or numtotal == 30 or numtotal == 45 or numtotal == 60 or numtotal == 75 or numtotal == 90:
+            w = w + 17
+            h = 1
         h = h + 3
         displayname = x
-        displaycol = bloodtorgb(x)
-        rectolor(w, h, 16, 2, displaycol)
+        (rgb1, rgb2, rgb3) = colg.bloodtorgb(x)
+        displaycol = tcod.Color(rgb1, rgb2, rgb3)
+        castename = deets.getcastefromcolor(displaycol.r, displaycol.g, displaycol.b)
+        rectolor(w, h, 15, 2, displaycol)
         draw(w + 1, h + 1, displayname)
+        draw(w + 5, h + 1, castename)
+        numtotal = numtotal + 1
     return
 
 
@@ -502,7 +425,7 @@ def loadingzone():  # interface - page to load trolls from file
                 bloodcol = temp[14:17]
                 if bloodcol[2] == ".":
                     bloodcol = temp[14:16]
-                displaycol = bloodtorgb(bloodcol)
+                displaycol = colg.bloodtorgb(bloodcol)
                 rectolor(w, h, 14, 1, displaycol)
                 if btncurrent != numtotal + 100:
                     tcod.console_set_default_foreground(0, tcod.Color(10, 10, 10))

@@ -1,12 +1,12 @@
 import random
 import re
 import names
-
+import colorsys
 
 class Horn:  # trolldeets
     # Horns are stored in trolls as just the code part.  Use this class when manipulating.
     # create a horn by going horn-variable = Horn("21RIn.f point"), or horn-variable = Horn(troll.hornL)
-    code = "21RIn.f point"
+    code = "21RIn.point"
     length = 2  # 1 = 0-1 handspans, 2 = 1-2 handspans, 3 = 2-3 handspans, 4 = 3+ handspans.
     curl = 1
     # 1 = straight, 2 = up to 45 degrees, 3 = 90 degrees +/- 45, 4 = 180 +/- 45,
@@ -15,10 +15,7 @@ class Horn:  # trolldeets
     dir = "I"
     # primary growth direction.  F = frontwards, B = backwards, O = outwards (usually up), I = inwards (usually up).
     wide = "n"  # n = normal width like terezi.  w = wide base, like nepeta.
-    tipAdir = "f"
-    # direction the tip is pointed.  f = front/straight, sollux equius vriska's pincher.  s = sideways.
-    # b = backwards, like the point on vriska's other horn that becomes a hook
-    tipA = "point"  # verbal description of the shape of the point.  Point, Cone, Spade, Pincher, Jagged, Round.
+    tipA = "point"  # shape of the point.  Point, Cone, Spade, Pincher, Jagged, Round, hook, ...
 
     def __init__(self, code):
         self.code = code
@@ -27,8 +24,7 @@ class Horn:  # trolldeets
         self.radial = code[2]
         self.dir = code[3]
         self.wide = code[4]
-        self.tipAdir = code[6]
-        self.tipA = code[7:len(code)]  # everything else in string = the tip type.
+        self.tipA = code[6:len(code)]  # everything else in string = the tip type.
 
     def desc(self):
         # convert the current features of the horn into a verbal description as in basic version.
@@ -64,12 +60,7 @@ class Horn:  # trolldeets
             descr = descr + "curled-around"
         if self.curl == "7":
             descr = descr + "wave-like"
-        # Tips, default forward
-        #  if self.tipAdir == "s":
-        #   descr = descr + "sideways" + self.tipA + "-tipped "
-        #  if self.tipAdir == "b":
-        #   descr = descr + "back" + self.tipA + "-tipped "
-        #  if self.tipAdir == "f":
+        # tip shape
         descr = descr + self.tipA + "-tipped "
         # radial, default round
         if self.radial == "O":
@@ -89,6 +80,7 @@ class Horn:  # trolldeets
 # class Troll: #trolldeets.  just so I can pass them around easier...   Maybe?
 def createtroll():  # trolldeets
     t0 = {
+        "savetype": "5",  # Save Version
         "firname": "FIRNAM",  # six letters
         "surname": "SURNAM",  # six letters
         "sex": "N",  # M/N/F
@@ -98,32 +90,33 @@ def createtroll():  # trolldeets
         # Landdweller, Seadweller, Beachdweller. replace with more detailed phenotype info :
         # gilltype, headgills, ribgills, earfins, webbed, glow, pawfeet, tail, wing, hairstreaks, grubscars,
         "powers": "none",  # psychic, voodoo, eldritch, none.  specify type later.  Make psychics eyes glow colors?
-        "hornL": "22RIn.f point",  # see horn notes.
-        "hornR": "22RIn.f point",
+        "hornL": "22RIn.point",  # see horn notes.
+        "hornR": "22RIn.point",
         "height": "tall",  # replace with exact height in inches later.
         "build": "medium",  # more detailed data later
         "hair": "short",  # more detailed data later.  medium/long.
-        "skin": "grey"  # freckles, stripes, birthmarks, vitiligo, melanism, albinism, etc.
+        "skin": "grey",   # freckles, stripes, birthmarks, vitiligo, melanism, albinism, etc.
+        "donator1": "?.?",  # higher caste donator
+        "donator2": "?.?"   # lower caste donator
     }
     return t0
 
 
 def createtroll3(troll1, troll2):  # trolldeets
     # All data is partially formatted into a troll-like state.
-
-    # error-checking code to give a default set of trolls if needed : Currently nonfunctional.
-    # if p1["firname"] + P1["surname"] == "FIRNAMSURNAM":
-    # global libbie
-    # p1 = libbie
-    # if p2["firname"] + P2["surname"] == "FIRNAMSURNAM":
-    # global lester
-    # p1 = lester
-
+    p1 = troll1
+    p2 = troll2
+    # error-checking code to give a default set of trolls if needed
+    troll3 = createtroll()
+    if p1 == troll3:
+        global lester
+        p1 = lester
+    if p2 == troll3:
+        global libbie
+        p2 = libbie
     # decide who is p1 based on hemism.
     caste1 = troll1["blood"]
     caste2 = troll2["blood"]
-    p1 = caste1
-    p2 = caste2
     if caste2 == highercaste(caste1, caste2):
         p2 = troll1
         p1 = troll2
@@ -150,26 +143,26 @@ def createtroll3(troll1, troll2):  # trolldeets
     hornl = hornblender(p1["hornL"], p2["hornL"], p1["hornR"], p2["hornR"])
     hornr = hornblender(p1["hornR"], p2["hornR"], p1["hornL"], p2["hornL"])
 
-#    "donator1": strdonator1,
-#    "donator2": strdonator2,
-
     firstname = names.newname()
     lastname = names.newname()
-    t1 = {
-        "firname": firstname,
-        "surname": lastname,
-        "sex": "N",  # M/N/F
-        "blood": strblood,
-        "caste": strcaste,
-        "sea": "Landdweller",
-        "powers": "none",  # psychic, voodoo, eldritch, none.  specify type later.  Make psychics eyes glow colors?
-        "hornL": hornl,  # see horn notes.
-        "hornR": hornr,
-        "height": "tall",  # replace with exact height in inches later.
-        "build": "medium",  # more detailed data later
-        "hair": "short",  # more detailed data later.  medium/long.
-        "skin": "grey"  # freckles, stripes, birthmarks, vitiligo, melanism, albinism, etc.
-    }
+
+    t1 = createtroll()
+    t1["firname"] = firstname
+    t1["surname"] = lastname
+#    t1["sex"] = ,
+    t1["blood"] = strblood
+    t1["caste"] = strcaste
+#    t1["sea"] = ,
+#    t1["powers"] = ,
+    t1["hornL"] = hornl
+    t1["hornR"] = hornr
+#    t1["height"] = ,
+#    t1["build"] = ,
+#    t1["hair"] = ,
+#    t1["skin"] = ,
+    t1["donator1"] = strdonator1
+    t1["donator2"] = strdonator2
+
     return t1
 
 
@@ -177,9 +170,9 @@ def hornblender(horn1, horn2, horn3, horn4):
     outhorn = ""
     a = 0
 
-    while a <= 8:
+    while a <= 7:
         # 6 is a dot, but you need the dot, so ...
-        if a < 8:
+        if a < 7:
             b = random.randint(1, 6)
             if b == 1 or b == 2:
                 outhorn = outhorn + horn1[a]
@@ -190,7 +183,7 @@ def hornblender(horn1, horn2, horn3, horn4):
             if b == 6:
                 outhorn = outhorn + horn4[a]
 
-        if a == 8:
+        if a == 7:
             # on the last loop, you need to append the point-type word.  So...
             b = random.randint(1, 6)
             if b == 1 or b == 2:
@@ -207,58 +200,142 @@ def hornblender(horn1, horn2, horn3, horn4):
     return outhorn
 
 
+def getcastefromcolor(r, g, b): #trolldeets
+    (h, s, v) = colorsys.rgb_to_hsv(r, g, b)
+    hue = h * 360
+    hue = round(hue, 3)
+    caste = "Cull"
+
+    if 0 <= hue < 15:
+        caste = "Maroon"
+    if 15 <= hue < 45:
+        caste = "Bronze"
+    if 45 <= hue < 75:
+        caste = "Gold"
+    if 75 <= hue < 105:
+        caste = "Lime"
+    if 105 <= hue < 135:
+        caste = "Olive"
+    if 135 <= hue < 165:
+        caste = "Jade"
+    if 165 <= hue < 195:
+        caste = "Teal"
+    if 195 <= hue < 225:
+        caste = "Ceru"
+    if 225 <= hue < 255:
+        caste = "Blue"
+    if 255 <= hue < 285:
+        caste = "Indigo"
+    if 285 <= hue < 320:
+        caste = "Violet"
+    if 320 <= hue < 330:
+        caste = "Tyrian"
+    if 330 <= hue < 360:
+        caste = "CULL"
+
+    if s < 0.5 and v > 0.8:
+        caste = "CULL"
+
+    if (r, g, b) == (255, 0, 0):
+        caste = "CULL"
+
+    return caste
+
+
 def getcaste(b):  # trolldeets
     caste = "?"
+
     # Dense What If Forest : Divine place on hemospectrum,
-    # use this only for initial placement.  Adjust by third letter later.
     if b[0] == "R":
-        if b[1] == "R":
-            caste = "Maroon"  # RR Maroon
-        if b[1] == "G":
-            caste = "Gold"  # RG Gold
-        if b[1] == "B":
-            caste = "Violet"  # RB Violet
-        if b[1] == "r":
-            caste = "Maroon"  # Rr Maroon
-        if b[1] == "g":
-            caste = "Bronze"  # Rg Bronze
-        if b[1] == "b":
-            caste = "Tyrian"  # Rb Tyrian
+        caste = "Maroon" #R
+        if len(b) > 1:
+            if b[1] == "R":
+                caste = "Maroon"  # RR Maroon
+                if len(b) > 2:
+                    if b[2] == "G":
+                        caste = "Gold" #RRG
+            if b[1] == "G":
+                caste = "Gold"  # RG Gold
+                if len(b) > 2:
+                    if b[2] == "G":
+                        caste = "Lime" #RGG
+                    if b[2] == "B":
+                        caste = "xBronze" #RGB
+                    if b[2] == "b":
+                        caste = "xGold" #RGb
+            if b[1] == "B":
+                caste = "Violet"  # RB Violet
+                if len(b) > 2:
+                    if b[2] == "B":
+                        caste = "Indigo" #RBB
+                    if b[2] == "g":
+                        caste = "xViolet" #RBg
+                    if b[2] == "b":
+                        caste = "Indigo" #RBb
+            if b[1] == "r":
+                caste = "Maroon"  # Rr Maroon
+                if len(b) > 2:
+                    if b[2] == "g":
+                        caste = "Bronze" #Rrg
+                    if b[2] == "b":
+                        caste = "xTyrian" #Rrb
+            if b[1] == "g":
+                caste = "Bronze"  # Rg Bronze
+                if len(b) > 2:
+                    if b[2] == "g":
+                        caste = "Gold"  # Rgg
+                    if b[2] == "b":
+                        caste = "xBronze"  # Rgb
+            if b[1] == "b":
+                caste = "Tyrian"  # Rb Tyrian
+                if len(b) > 2:
+                    if b[2] == "b":
+                        caste = "Violet" #Rbb
     if b[0] == "G":
-        if b[1] == "G":
-            caste = "Olive"  # GG Olive
-        if b[1] == "B":
-            caste = "Teal"  # GB Teal
-        if b[1] == "r":
-            caste = "Lime"  # Gr Lime
-        if b[1] == "g":
-            caste = "Olive"  # Gg Olive
-        if b[1] == "b":
-            caste = "Jade"  # Gb Jade
+        caste = "Olive" #G
+        if len(b) > 1:
+            if b[1] == "G":
+                caste = "Olive"  # GG Olive
+            if b[1] == "B":
+                caste = "Teal"  # GB Teal
+            if b[1] == "r":
+                caste = "Lime"  # Gr Lime
+            if b[1] == "g":
+                caste = "Olive"  # Gg Olive
+            if b[1] == "b":
+                caste = "Jade"  # Gb Jade
     if b[0] == "B":
-        if b[1] == "B":
-            caste = "Blue"  # BB Bloo
-        if b[1] == "r":
-            caste = "Indigo"  # Br Indigo
-        if b[1] == "g":
-            caste = "Cerulean"  # Gb Ceru
-        if b[1] == "b":
-            caste = "Blue"  # Bb Bloo
+        caste = "Bloo" #B
+        if len(b) > 1:
+            if b[1] == "B":
+                caste = "Blue"  # BB Bloo
+            if b[1] == "r":
+                caste = "Indigo"  # Br Indigo
+            if b[1] == "g":
+                caste = "Cerulean"  # Gb Ceru
+            if b[1] == "b":
+                caste = "Blue"  # Bb Bloo
     if b[0] == "r":
-        if b[1] == "r":
-            caste = "Maroon"  # rr maroon
-        if b[1] == "g":
-            caste = "Bronze"  # rg Bronze
-        if b[1] == "b":
-            caste = "Mutant"  # rb vantas
+        caste = "Maroon" #r
+        if len(b) > 1:
+            if b[1] == "r":
+                caste = "Maroon"  # rr maroon
+            if b[1] == "g":
+                caste = "Bronze"  # rg Bronze
+            if b[1] == "b":
+                caste = "Mutant"  # rb vantas
     if b[0] == "g":
-        if b[1] == "g":
-            caste = "Olive"  # gg Olive
-        if b[1] == "b":
-            caste = "Jade"  # gb Jade
+        caste = "olive" #g
+        if len(b) > 1:
+            if b[1] == "g":
+                caste = "Olive"  # gg Olive
+            if b[1] == "b":
+                caste = "Jade"  # gb Jade
     if b[0] == "b":
-        if b[1] == "b":
-            caste = "Blue"  # bb Bloo
+        caste = "bloo" #b
+        if len(b) > 1:
+            if b[1] == "b":
+                caste = "Blue"  # bb Bloo
     return caste
 
 
