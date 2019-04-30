@@ -25,7 +25,11 @@ Approximate version history:
 
 V. 0.2.0a: 2019-04-29
 
--- Fiddled with color definitions 
+-- Fiddled with color definitions using colorsys.py (downloaded)
+
+-- save file formatting changed, now using version 5
+
+-- enabled blood system based on chibs suggestion; documentation not updated yet
 
 V. 0.2.0: 2019-04-28
 
