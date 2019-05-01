@@ -23,6 +23,22 @@ Future goals: (approximate)
 Approximate version history:
 =
 
+V. 0.2.1: 2019-04-29
+
+-- Removed donation system
+
+-- enabled grub from slurry and grub from parents
+
+-- enabled grub name, blood code, gender, horns
+
+-- streamlined horn description code
+
+-- created random bloodcode and horn generators in slurry.py
+
+-- adjusted program to use tuples rather than tcod.Color objects, where possible
+
+-- added "hard-coded" trolls to slurry document
+
 V. 0.2.0a: 2019-04-29
 
 -- Fiddled with color definitions using colorsys.py (downloaded)
