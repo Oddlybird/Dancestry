@@ -64,8 +64,8 @@ def drawmenu():  # interface.  Contains Labels for all main and submenu buttons.
     tcod.console_set_color_control(0, tcod.white, tcod.Color(60, 60, 60))
     txtcol = (50, 50, 0)
     # Can add a tcod.Color(rrr,ggg,bbb) for:  drawbtn(x,y,"label",background,foreground)
-    drawbtn(133, 2, "      MAKE TROLL     ", btnselect(1), txtcol)
-    drawbtn(133, 6, "         SAVE        ", btnselect(2), txtcol)
+    drawbtn(133, 2,  "     MAKE TROLL     ", btnselect(1), txtcol)
+    drawbtn(133, 6,  "        SAVE        ", btnselect(2), txtcol)
     drawbtn(133, 10, "        NAME        ", btnselect(3), txtcol)
     drawbtn(133, 14, "    LOADING AREA    ", btnselect(4), txtcol)
     drawbtn(133, 18, "    BLOOD COLORS    ", btnselect(5), txtcol)
@@ -83,8 +83,8 @@ def drawmenu():  # interface.  Contains Labels for all main and submenu buttons.
         drawsmallbtn(1, 1,  "  Troll From Parents  ", btnselect(51), txtcol)
         drawsmallbtn(1, 3,  "  Troll From Slurry   ", btnselect(52), txtcol)
         drawsmallbtn(1, 5,  "        Save          ", btnselect(53), txtcol)
-        drawsmallbtn(25, 1, "                      ", btnselect(54), txtcol)
-        drawsmallbtn(25, 3, "                      ", btnselect(55), txtcol)
+        drawsmallbtn(25, 1, "   Load Into Slot 1   ", btnselect(54), txtcol)
+        drawsmallbtn(25, 3, "   Load Into Slot 2   ", btnselect(55), txtcol)
         drawsmallbtn(25, 5, "                      ", btnselect(56), txtcol)
         drawsmallbtn(49, 1, "                      ", btnselect(57), txtcol)
         drawsmallbtn(49, 3, "                      ", btnselect(58), txtcol)
@@ -116,7 +116,7 @@ def btnselect(x):  # interface - controls which buttons are highlightable.
             # Unused Buttons
             btncol = (50, 50, 0)
     if screencurrent.name == "maketroll":
-        if x == 54 or x == 55 or x == 56 or x == 57 or x == 58 or x == 59 or x == 60:  # Unused Buttons
+        if x == 56 or x == 57 or x == 58 or x == 59 or x == 60:  # Unused Buttons
             btncol = (50, 50, 0)
         if x == 61 or x == 62 or x == 63 or x == 64 or x == 65 or x == 66 or x == 67 or x == 68 or x == 69 or x == 70:
             # Unused Buttons
@@ -129,9 +129,9 @@ def btnselect(x):  # interface - controls which buttons are highlightable.
 
 
 def usedbuttons(direction):  # interface
-    # mainmenu only
     global btncurrent, screencurrent
-    if btncurrent < 25:  # mainmenu
+    # Main Menu
+    if btncurrent < 25:
         if direction == "+":
             btncurrent = btncurrent + 1
             while btnselect(btncurrent) == (50, 50, 0):
@@ -145,7 +145,7 @@ def usedbuttons(direction):  # interface
             btncurrent = 1
         if btncurrent < 1:
             btncurrent = 12
-    # loop submenu.
+    # Submenu.
     if btncurrent > 25:
         if direction == "+":
             btncurrent = btncurrent + 1
@@ -160,7 +160,7 @@ def usedbuttons(direction):  # interface
 
 def handle_keys():  # interface - button functions, and loops as needed.
     global btncurrent, screencurrent, pageblood, pagename, pageloadtroll, pagemaketroll
-    global troll3, libbie, lester
+    global troll1, troll2, troll3, libbie, lester
     key = tcod.console_wait_for_keypress(True)
     if tcod.console_is_key_pressed(tcod.KEY_UP):
         if btncurrent < 9000:
@@ -170,9 +170,9 @@ def handle_keys():  # interface - button functions, and loops as needed.
             usedbuttons("+")
     if tcod.console_is_key_pressed(tcod.KEY_LEFT):
         if btncurrent < 25:
-            if screencurrent.name == "maketroll":
+            if screencurrent == pagemaketroll:
                 btncurrent = 51
-            if screencurrent.name == "loadingzone":
+            if screencurrent == pageloadtroll:
                 btncurrent = screencurrent.maxbtn
     #  if btncurrent > 25:
     # submenu stuff  Pressing left while on a submenu
@@ -222,12 +222,14 @@ def handle_keys():  # interface - button functions, and loops as needed.
             return False
         if btncurrent == 12:
             return True
+        # End "main menu" portion of Enter loop.
         if btncurrent > 25:
+            # TROLLMAKE SCREEN BTNs
             if screencurrent.name == "maketroll":
                 if btncurrent == 51:
                     # Btn 1 : Troll from parents
                     troll3 = deets.trollobj()
-                    troll3 = deets.blendtroll(libbie, lester)
+                    troll3 = deets.blendtroll(troll1, troll2)
                     updatescreen()
                     return False
                 if btncurrent == 52:
@@ -241,19 +243,30 @@ def handle_keys():  # interface - button functions, and loops as needed.
                     savetroll(troll3)
                     draw(73, 20, "Saved")
                     return False
+                if btncurrent == 54:
+                    # Btn 4 : Load into troll 1
+                    troll1 = troll3
+                    updatescreen()
+                    return False
+                if btncurrent == 55:
+                    # Btn 5 : Load into troll 2
+                    troll2 = troll3
+                    updatescreen()
+                    return False
                 return False
-            # End "main menu" portion of Enter loop.
             # Create a sub-menu here based off which other menu the cursor is in.
             return False
         # the loop for when someone presses enter to choose a button is over.
     if tcod.console_is_key_pressed(tcod.KEY_1):
-        if screencurrent.name == "pageloadtroll":
+        if screencurrent == pageloadtroll or screencurrent == pagemaketroll:
             # load currently selected troll into slot 1.
+            troll1 = troll3
             return False
         return False
     if tcod.console_is_key_pressed(tcod.KEY_2):
-        if screencurrent.name == "pageloadtroll":
+        if screencurrent == pageloadtroll or screencurrent == pagemaketroll:
             # load currently selected troll into slot 2.
+            troll2 = troll3
             return False
         return False
 
@@ -264,13 +277,14 @@ def handle_keys():  # interface - button functions, and loops as needed.
 
 # save and load to file.
 def savetroll(grub):  # interface     Save Troll
-    saveloc = "Caverns/CaveB/" + grub["firname"] + "." + grub["surname"] + "." + grub["blood"] + ".troll"
+    castenum = deets.getcastenumstr(grub["blood"])
+    saveloc = "Caverns/CaveB/" + castenum + "." + grub["firname"] + "." + grub["surname"] + "." + grub["blood"] + ".troll"
     c = 1
     int(c)
     while os.path.exists(saveloc):
         c = c + 1
         d = str(c)
-        saveloc = "Caverns/CaveB/" + grub["firname"] + "." + grub["surname"] + "." + grub["blood"] + "." + d + ".troll"
+        saveloc = "Caverns/CaveB/" + castenum + "." + grub["firname"] + "." + grub["surname"] + "." + grub["blood"] + "." + d + ".troll"
     savedtroll = open(saveloc, "wt")
     y = json.dumps(grub, indent=4)
     savedtroll.write(y)
@@ -416,6 +430,7 @@ def bloodpage():  # interface - page of blood color examples
     return
 
 
+# The display function for various screens
 def namepage():
     x = 12
     y = 10
@@ -441,40 +456,33 @@ def loadingzone():  # interface - page to load trolls from file
     tcod.console_set_default_foreground(0, tcod.Color(250, 250, 200))
     castlist = [ "" ]
     h = 7
-    w = 7
+    w = 1
     numtotal = 0
     # First load them into the cast-list.
     for arb in z:
         temp = arb
-        if 20 < len(temp) < 30:
-            if temp[6] == "." and temp[13] == ".":
+        if 20 < len(temp) < 35:
+            if temp[3] == "." and temp[5] == "." and temp[12] == "." and temp[19] == ".":
                 castlist.insert(numtotal, temp)
                 numtotal = numtotal + 1
-    # Sort by hemism - in progress.
-#    bloodcol = temp[14:17]
-#    if bloodcol[2] == ".":
-#        bloodcol = temp[14:16]
-#        castenum = deets.getcastefromcolor(colg.bloodtorgb(bloodcol))
-
     numtotal = 0
-
 
     # Print out the data you now have
     for arb in castlist:
         temp = arb
-        if 20 < len(temp) < 30:
-            if temp[6] == "." and temp[13] == ".":
+        if 20 < len(temp) < 35:
+            if temp[3] == "." and temp[5] == "." and temp[12] == "." and temp[19] == ".":
                 numtotal = numtotal + 1
-                if numtotal == 21 or numtotal == 41 or numtotal == 61 or numtotal == 81:
-                    w = w + 15
+                if numtotal == 21 or numtotal == 41 or numtotal == 61 or numtotal == 81 or numtotal == 101 or numtotal == 121 or numtotal == 141:
+                    w = w + 16
                     h = 7
                 h = h + 2
-                displayname = temp[0:6] + " " + temp[7:13]
-                bloodcol = temp[14:17]
+                bloodcol = temp[20:23]
                 if bloodcol[2] == ".":
-                    bloodcol = temp[14:16]
+                    bloodcol = temp[20:22]
                 displaycol = colg.bloodtorgb(bloodcol)
-                rectolor(w, h, 14, 1, displaycol)
+                rectolor(w, h, 15, 1, displaycol)
+                displayname = temp[6] + "." + temp[13:19] + ", " + bloodcol
                 if btncurrent != numtotal + 100:
                     tcod.console_set_default_foreground(0, tcod.Color(10, 10, 10))
                     draw(w + 1, h + 1, displayname)
@@ -482,16 +490,18 @@ def loadingzone():  # interface - page to load trolls from file
                 if btncurrent == numtotal + 100:
                     draw(w + 1, h + 1, displayname)
     pageloadtroll.maxbtn = numtotal + 100
-    if pageloadtroll.maxbtn > 180:
-        pageloadtroll.maxbtn = 180
+    # pageloadtroll artificial maxbtn limiter
+    if pageloadtroll.maxbtn > 360:
+        pageloadtroll.maxbtn = 360
     pageloadtroll.minbtn = 101
     global screencurrent
     screencurrent = pageloadtroll
 
 
-def trollmakepage():  # interface -- may be combined with showparents.
-    displaytroll(1, 7, libbie)
-    displaytroll(1, 29, lester)
+def trollmakepage():  # interface
+    global troll1, troll2
+    displaytroll(1, 7, troll1)
+    displaytroll(1, 29, troll2)
     displaytroll(66, 17, troll3)
     return
 
@@ -500,7 +510,7 @@ def trollmakepage():  # interface -- may be combined with showparents.
 
 screen_width = 160
 screen_height = 50
-versionnum = "0.2.0"
+versionnum = "0.2.2"
 font_path = 'terminal8x12_gs_tc.png'
 font_flags = tcod.FONT_TYPE_GREYSCALE | tcod.FONT_LAYOUT_TCOD
 tcod.console_set_custom_font(font_path, font_flags)
@@ -509,14 +519,16 @@ fullscreen = False
 tcod.console_init_root(screen_width, screen_height, window_title, fullscreen)
 libbie = slurry.getpremadetroll(1)
 lester = slurry.getpremadetroll(2)
+troll1 = libbie
+troll2 = lester
 troll3 = deets.trollobj()
 btncurrent = 1
 
 screencurrent = ScrPage()
 # screens: maketroll, loadingzone, bloodpage, donationpage,
-pageloadtroll = ScrPage("loadingzone", 101, 180, False, True)
-pagemaketroll = ScrPage("maketroll", 51, 53, True, False)
-pageblood = ScrPage("bloodpage", 101, 101, False, True)
+pageloadtroll = ScrPage("loadingzone", 101, 360, False, True)  # There is an artificial maxbtn limiter in loadtroll()
+pagemaketroll = ScrPage("maketroll", 51, 55, True, False)
+pageblood = ScrPage("bloodpage", 101, 140, False, True)
 pagename = ScrPage("namepage", 101, 101, False, False)
 # Invoke Main
 main()

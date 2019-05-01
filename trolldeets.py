@@ -5,6 +5,7 @@ import colorsys
 import colorgarbage as colg
 import slurry
 
+
 # This file contains basic formatting information,
 # Functions that are used to combine info from a slurry,
 # Functions that manipulate / interact with troll data
@@ -85,12 +86,12 @@ class Horn:  # trolldeets
 # class Troll: #trolldeets.  just so I can pass them around easier...   Maybe?
 def trollobj():  # trolldeets
     t0 = {
-        "savetype": "5",  # Save Version
+        "savetype": "6",  # Save Version
         "firname": "FIRNAM",  # six letters
         "surname": "SURNAM",  # six letters
         "sex": "N",  # M/N/F
         "blood": "Rg",  # RGB rgb
-        "caste": "unclassified",
+        "caste": "?",
         "sea": "Landdweller",
         # Landdweller, Seadweller, Beachdweller. replace with more detailed phenotype info :
         # gilltype, headgills, ribgills, earfins, webbed, glow, pawfeet, tail, wing, hairstreaks, grubscars,
@@ -113,7 +114,9 @@ def slurrytroll(blood=""):
     strdonator2 = "?.?"
 
     # Blood + Caste:
-    strblood = slurry.premadeblood()
+    strblood = blood
+    if len(blood) < 2:
+        strblood = slurry.premadeblood()
     strcaste = getcaste(strblood)
 
     # str-sea = Phenotype shit comes later.
@@ -156,24 +159,24 @@ def slurrytroll(blood=""):
     return t1
 
 
-def blendtroll(troll1, troll2):  # trolldeets
+def blendtroll(trolla, trollb):  # trolldeets
     # Start by making sure the donators are ready to read.
-    p1 = troll1
-    p2 = troll2
+    global trollblank
     # error-checking code to give a default set of trolls if needed
-    troll3 = trollobj()  # set troll3 = default troll
-    if p1 == troll3:        # if p1 = default ...
-        p1 = slurry.getpremadetroll(1)
-    if p2 == troll3:        # if p2 = default ...
-        p2 = slurry.getpremadetroll(2)
+    if trolla == trollblank:      # if p1 = default ...
+        trolla = slurry.getpremadetroll(1)
+    if trollb == trollblank:        # if p2 = default ...
+        trollb = slurry.getpremadetroll(2)
     # decide who is p1 based on hemism.
     # by default, guess p1 is higher.
-    caste1 = troll1["blood"]
-    caste2 = troll2["blood"]
+    caste1 = trolla["blood"]
+    caste2 = trollb["blood"]
+    p1 = trolla
+    p2 = trollb
     if caste2 == highercaste(caste1, caste2):
         # if p2 is higher, swap them.
-        p2 = troll1
-        p1 = troll2
+        p2 = trolla
+        p1 = trollb
 
     # Record Donators
     strdonator1 = p1["firname"][0] + "." + p1["surname"]
@@ -235,7 +238,7 @@ def blendtroll(troll1, troll2):  # trolldeets
 def hornblender(horn1, horn2, horn3, horn4):
     outhorn = ""
     a = 0
-
+    # Pick one of the parents' horn genes at random for each horn.
     while a <= 6:
         # 6 is a dot, but you need the dot, so ...
         if a < 6:
@@ -263,7 +266,28 @@ def hornblender(horn1, horn2, horn3, horn4):
         # increment loop
         a = a + 1
 
-    return outhorn
+    a = 0
+    outhorn2 = ""
+    while a < 2:
+        b = random.randint(1, 12)
+        temp1 = int(outhorn[a])
+        temp2 = int(outhorn[a])
+        if b == 1 or b == 2:
+            temp2 = int(horn1[a])
+        if b == 3 or b == 4:
+            temp2 = int(horn2[a])
+        if b == 5:
+            temp2 = int(horn3[a])
+        if b == 6:
+            temp2 = int(horn4[a])
+        temp3 = (temp1 + temp2) // 2
+        temp4 = str(temp3)
+        outhorn2 = outhorn2 + temp4
+        a = a + 1
+
+    outhorn2 = outhorn2 + outhorn[2:len(outhorn)]
+
+    return outhorn2
 
 
 def hornaverager(hornl, hornr):
@@ -383,6 +407,33 @@ def getsex(blood):
         sex = "N"
     if x > 6:
         sex = "F"
+
+    (rgb1, rgb2, rgb3) = colg.bloodtorgb(blood)
+    hue = colg.rgbtohue(rgb1, rgb2, rgb3)
+
+    x = random.randint(1, 100)
+    # jades (hue 150) are more likely to be female.
+    if 140 < hue < 160 and x < 25:
+        if sex == "N":
+            sex = "F"
+        if sex == "M":
+            sex = "N"
+    if 145 < hue < 155 and x < 75:
+        if sex == "N":
+            sex = "F"
+        if sex == "M":
+            sex = "N"
+    # tyrians (330) are more likely to be female.
+    if 320 < hue < 340 and x < 25:
+        if sex == "N":
+            sex = "F"
+        if sex == "M":
+            sex = "N"
+    if 325 < hue < 335 and x < 75:
+        if sex == "N":
+            sex = "F"
+        if sex == "M":
+            sex = "N"
     return sex
 
 
@@ -490,7 +541,22 @@ def getcastenum(b):  # trolldeets
     hue = h * 360
     hue = round(hue)
     val = v / 100
-    caste = round(hue + val, 4)
+    caste = round(hue + val, 2)
+    return caste
+
+
+def getcastenumstr(b):  # trolldeets
+    (cr, cg, cb) = colg.bloodtorgb(b)
+    (h, s, v) = colorsys.rgb_to_hsv(cr, cg, cb)
+    hue = h * 360
+    hue = round(hue)
+    if hue >= 345:
+        hue = hue - 360
+    hue = hue + 15
+    val = v / 100
+    caste = round(hue + val, 1)
+    caste = str(caste)
+    caste = caste.zfill(5)
     return caste
 
 
@@ -588,3 +654,7 @@ def bloodsort_orig(blood):  # trolldeets.  Put in a group of letters.
         if a == len(blood):
             break
     return sortedblood
+
+
+
+trollblank = trollobj()
