@@ -79,7 +79,7 @@ def drawmenu():  # interface.  Contains Labels for all main and submenu buttons.
     # reset defaults
     tcod.console_set_color_control(0, tcod.black, tcod.white)
 
-    if screencurrent.name == "maketroll":
+    if screencurrent == pagemaketroll:
         drawsmallbtn(1, 1,  "  Troll From Parents  ", btnselect(51), txtcol)
         drawsmallbtn(1, 3,  "  Troll From Slurry   ", btnselect(52), txtcol)
         drawsmallbtn(1, 5,  "        Save          ", btnselect(53), txtcol)
@@ -89,6 +89,17 @@ def drawmenu():  # interface.  Contains Labels for all main and submenu buttons.
         drawsmallbtn(49, 1, "                      ", btnselect(57), txtcol)
         drawsmallbtn(49, 3, "                      ", btnselect(58), txtcol)
         drawsmallbtn(49, 5, "                      ", btnselect(59), txtcol)
+
+    if screencurrent == pageblood:
+        drawsmallbtn(1, 1,  "     Full Spectrum    ", btnselect(51), txtcol)
+        drawsmallbtn(1, 2,  "     Mini Spectrum    ", btnselect(52), txtcol)
+        drawsmallbtn(1, 3,  "   Random Spectrum    ", btnselect(53), txtcol)
+        drawsmallbtn(25, 1, "        Rusts         ", btnselect(54), txtcol)
+        drawsmallbtn(25, 2, "        Greens        ", btnselect(55), txtcol)
+        drawsmallbtn(25, 3, "        Blues         ", btnselect(56), txtcol)
+        drawsmallbtn(50, 1, "       Purples        ", btnselect(57), txtcol)
+        drawsmallbtn(50, 2, "                      ", btnselect(58), txtcol)
+        drawsmallbtn(50, 3, "                      ", btnselect(59), txtcol)
 
     return
 
@@ -121,8 +132,14 @@ def btnselect(x):  # interface - controls which buttons are highlightable.
         if x == 61 or x == 62 or x == 63 or x == 64 or x == 65 or x == 66 or x == 67 or x == 68 or x == 69 or x == 70:
             # Unused Buttons
             btncol = (50, 50, 0)
+    if screencurrent == pageblood:
+        if x == 58 or x == 59 or x == 60:  # Unused Buttons
+            btncol = (50, 50, 0)
+        if x == 61 or x == 62 or x == 63 or x == 64 or x == 65 or x == 66 or x == 67 or x == 68 or x == 69 or x == 70:
+            # Unused Buttons
+            btncol = (50, 50, 0)
     # just a ridiculous number of buttons.
-    if screencurrent.name == "loadingzone":
+    if screencurrent == pageloadtroll:
         if x > screencurrent.maxbtn:
             btncol = (50, 50, 0)
     return btncol
@@ -160,7 +177,7 @@ def usedbuttons(direction):  # interface
 
 def handle_keys():  # interface - button functions, and loops as needed.
     global btncurrent, screencurrent, pageblood, pagename, pageloadtroll, pagemaketroll
-    global troll1, troll2, troll3, libbie, lester
+    global troll1, troll2, troll3, libbie, lester, spectrum
     key = tcod.console_wait_for_keypress(True)
     if tcod.console_is_key_pressed(tcod.KEY_UP):
         if btncurrent < 9000:
@@ -170,7 +187,7 @@ def handle_keys():  # interface - button functions, and loops as needed.
             usedbuttons("+")
     if tcod.console_is_key_pressed(tcod.KEY_LEFT):
         if btncurrent < 25:
-            if screencurrent == pagemaketroll:
+            if screencurrent == pagemaketroll or screencurrent == pageblood:
                 btncurrent = 51
             if screencurrent == pageloadtroll:
                 btncurrent = screencurrent.maxbtn
@@ -235,7 +252,7 @@ def handle_keys():  # interface - button functions, and loops as needed.
                 if btncurrent == 52:
                     # Btn 2 : Troll from slurry
                     troll3 = deets.trollobj()
-                    troll3 = deets.slurrytroll()
+                    troll3 = deets.slurrytroll(spectrum)
                     updatescreen()
                     return False
                 if btncurrent == 53:
@@ -251,6 +268,51 @@ def handle_keys():  # interface - button functions, and loops as needed.
                 if btncurrent == 55:
                     # Btn 5 : Load into troll 2
                     troll2 = troll3
+                    updatescreen()
+                    return False
+                return False
+            # TROLLMAKE SCREEN BTNs
+            if screencurrent == pageblood:
+                if btncurrent == 51:
+                    # Btn 1 : Full Spectrum
+                    spectrum = slurry.spectrumfull
+                    spectrum.sort(key=deets.getcastenumstr,)
+                    updatescreen()
+                    return False
+                if btncurrent == 52:
+                    # Btn 2 : Mini Spectrum
+                    spectrum = slurry.spectrummini
+                    spectrum.sort(key=deets.getcastenumstr,)
+                    updatescreen()
+                    return False
+                if btncurrent == 53:
+                    # Btn 3 : Rando Spectrum
+                    spectrum = slurry.spectrumrand()
+                    spectrum.sort(key=deets.getcastenumstr,)
+                    updatescreen()
+                    return False
+                if btncurrent == 54:
+                    # Btn 4 : rustblood
+                    spectrum = slurry.spectrumrust
+                    spectrum.sort(key=deets.getcastenumstr,)
+                    updatescreen()
+                    return False
+                if btncurrent == 55:
+                    # Btn 5 : greenblood
+                    spectrum = slurry.spectrumgreens
+                    spectrum.sort(key=deets.getcastenumstr,)
+                    updatescreen()
+                    return False
+                if btncurrent == 56:
+                    # Btn 6 : blueblood
+                    spectrum = slurry.spectrumblues
+                    spectrum.sort(key=deets.getcastenumstr,)
+                    updatescreen()
+                    return False
+                if btncurrent == 57:
+                    # Btn 7: purples
+                    spectrum = slurry.spectrumpurples
+                    spectrum.sort(key=deets.getcastenumstr,)
                     updatescreen()
                     return False
                 return False
@@ -380,29 +442,8 @@ def displaytroll(x, y, t0):  # interface -- prints a standard-format window disp
 # The display for individual screens.
 def bloodpage():  # interface - page of blood color examples
     # screencurrent.name = bloodpage
-    # all the display stuff for this page goes here since it's spammy
-    z = [
-        "RR", "RRr", "RRR", "RRg", "RRG", "RrB", "Rrb",
-        "Rr", "Rrr", "RrR", "Rrg", "RrG", "rrB", "rrb",
-        "rr", "rrr", "rrR", "rrg", "rrG", "rGR", "rGr", "rGB",
-        "rG", "RGB", "RGb", "RGg", "RGG", "RgR", "Rgr", "RgB", "Rgb",
-        "Rg", "Rgg", "RgG", "rgR", "rgr", "rgB", "rgb",
-        "rg", "rgg", "rgG", "GGR", "GGr", "GGG", "GGg",
-        "GG", "GGb", "GGB", "GgR", "Ggr", "GgG", "Ggg",
-        "Gg", "Ggb", "GgB", "ggR", "ggr", "ggG", "ggg",
-        "gg", "ggb", "ggB", "GbG", "Gbg", "GbR", "Gbr",
-        "Gb", "Gbb", "GbB", "GBG", "GBg", "GBR", "GBr",
-        "GB", "GBb", "GBB", "gBG", "gBg", "gBR", "gBr",
-        "gB", "gBb", "gBB", "gbG", "gbg", "gbR", "gbr",
-        "gb", "gbb", "gbB", "BBG", "BBg", "BBB", "BBb",
-        "BB", "BBr", "BBR", "BbG", "Bbg", "BbB",
-        "Bb", "Bbb", "Bbr", "BbR", "bbG", "bbg", "bbb",
-        "bb", "bbB", "bbr", "bbR", "rBB", "rBb", "rBg",
-        "rB", "rBG", "rBr", "rBR", "RBB", "RBb", "RBG", "RBg",
-        "RB", "RBr", "RBR", "RbB", "Rbb", "RbG",
-        "Rb", "Rbr", "RbR", "rbB", "rbb", "rbg",
-        "rb", "rbG", "rbr", "rbR", "RRB", "RRb",
-        ]
+    global spectrum
+    z = spectrum
     h = 1
     w = 1
     numtotal = 0
@@ -522,13 +563,14 @@ lester = slurry.getpremadetroll(2)
 troll1 = libbie
 troll2 = lester
 troll3 = deets.trollobj()
+spectrum = slurry.spectrumfull
 btncurrent = 1
 
 screencurrent = ScrPage()
 # screens: maketroll, loadingzone, bloodpage, donationpage,
 pageloadtroll = ScrPage("loadingzone", 101, 360, False, True)  # There is an artificial maxbtn limiter in loadtroll()
 pagemaketroll = ScrPage("maketroll", 51, 55, True, False)
-pageblood = ScrPage("bloodpage", 101, 140, False, True)
+pageblood = ScrPage("bloodpage", 51, 57, True, False)
 pagename = ScrPage("namepage", 101, 101, False, False)
 # Invoke Main
 main()

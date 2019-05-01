@@ -155,3 +155,137 @@ def premadeblood():
 
 def eugenics(t0):
     return t0
+
+
+spectrumfull = [
+   "RR", "RRr", "RRR", "RRg", "RRG", "RrB", "Rrb",
+   "Rr", "Rrr", "RrR", "Rrg", "RrG", "rrB", "rrb",
+    "rr", "rrr", "rrR", "rrg", "rrG", "rGR", "rGr", "rGB",
+    "rG", "RGB", "RGb", "RGg", "RGG", "RgR", "Rgr", "RgB", "Rgb",
+    "Rg", "Rgg", "RgG", "rgR", "rgr", "rgB", "rgb",
+    "rg", "rgg", "rgG", "GGR", "GGr", "GGG", "GGg",
+    "GG", "GGb", "GGB", "GgR", "Ggr", "GgG", "Ggg",
+    "Gg", "Ggb", "GgB", "ggR", "ggr", "ggG", "ggg",
+    "gg", "ggb", "ggB", "GbG", "Gbg", "GbR", "Gbr",
+    "Gb", "Gbb", "GbB", "GBG", "GBg", "GBR", "GBr",
+    "GB", "GBb", "GBB", "gBG", "gBg", "gBR", "gBr",
+    "gB", "gBb", "gBB", "gbG", "gbg", "gbR", "gbr",
+    "gb", "gbb", "gbB", "BBG", "BBg", "BBB", "BBb",
+    "BB", "BBr", "BBR", "BbG", "Bbg", "BbB",
+    "Bb", "Bbb", "Bbr", "BbR", "bbG", "bbg", "bbb",
+    "bb", "bbB", "bbr", "bbR", "rBB", "rBb", "rBg",
+    "rB", "rBG", "rBr", "rBR", "RBB", "RBb", "RBG", "RBg",
+    "RB", "RBr", "RBR", "RbB", "Rbb", "RbG",
+    "Rb", "Rbr", "RbR", "rbB", "rbb", "rbg",
+    "rb", "rbG", "rbr", "rbR", "RRB", "RRb",
+    ]
+
+spectrumshort = [
+    "RR", "Rr", "rr", "Rg", "RG", "rG", "rg",
+    "GG", "Gg", "gg", "Gb", "GB", "gB", "gb",
+    "BB", "Bb", "bb", "rB", "RB", "Rb", "rb"
+    ]
+
+spectrummini = [
+    "RR", "rr", "RG", "rg",
+    "GG", "gg", "GB", "gb",
+    "BB", "bb", "RB", "rb"
+    ]
+
+spectrumlow = [
+   "RR", "RRr", "RRR", "RRg", "RRG", "RrB", "Rrb", "RRB", "RRb",
+   "Rr", "Rrr", "RrR", "Rrg", "RrG", "rrB", "rrb",
+    "rr", "rrr", "rrR", "rrg", "rrG", "rGR", "rGr", "rGB",
+    "rG", "RGB", "RGb", "RGg", "RGG", "RgR", "Rgr", "RgB", "Rgb",
+    "Rg", "Rgg", "RgG", "rgR", "rgr", "rgB", "rgb",
+    "rg", "rgg", "rgG",
+    ]
+
+spectrummid = [
+    "GG", "GGb", "GGB", "GgR", "Ggr", "GgG", "Ggg", "GGG", "GGg",
+    "Gg", "Ggb", "GgB", "ggR", "ggr", "ggG", "ggg", "GGR", "GGr",
+    "gg", "ggb", "ggB", "GbG", "Gbg", "GbR", "Gbr",
+    "Gb", "Gbb", "GbB", "GBG", "GBg", "GBR", "GBr",
+    "GB", "GBb", "GBB", "gBG", "gBg", "gBR", "gBr",
+    "gB", "gBb", "gBB", "gbG", "gbg", "gbR", "gbr",
+    "gb", "gbb", "gbB",
+    ]
+
+spectrumhigh = [
+    "BBB", "BBb", "BB", "BBr", "BBR", "BbG", "Bbg", "BbB",
+    "Bb", "Bbb", "Bbr", "BbR", "bbG", "bbg", "bbb", "BBG", "BBg",
+    "bb", "bbB", "bbr", "bbR", "rBB", "rBb", "rBg",
+    "rB", "rBG", "rBr", "rBR", "RBB", "RBb", "RBG", "RBg",
+    "RB", "RBr", "RBR", "RbB", "Rbb", "RbG",
+    "Rb", "Rbr", "RbR", "rbB", "rbb", "rbg",
+    "rb", "rbG", "rbr", "rbR",
+    ]
+
+spectrumrust = [
+   "RR", "RRr", "RRR", "RRg", "RRG", "RrB", "Rrb", "RRB", "RRb",
+   "Rr", "Rrr", "RrR", "Rrg", "RrG", "rrB", "rrb",
+    "rr", "rrr", "rrR", "rrg", "rrG", "rGR", "rGr", "rGB",
+    "rG", "RGB", "RGb", "RGg", "RGG", "RgR", "Rgr", "RgB", "Rgb",
+    "Rg",
+    ]
+
+spectrumgreens = [
+    "Rgg", "RgG", "rgR", "rgr", "rgB", "rgb", "rg", "rgg", "rgG",
+    "GG", "GGb", "GGB", "GgR", "Ggr", "GgG", "Ggg", "GGG", "GGg",
+    "Gg", "Ggb", "GgB", "ggR", "ggr", "ggG", "ggg", "GGR", "GGr",
+    "gg", "ggb", "ggB", "GbG", "Gbg", "GbR", "Gbr",
+    "Gb",
+    ]
+
+spectrumblues = [
+    "Gbb", "GbB", "GBG", "GBg", "GBR", "GBr",
+    "GB", "GBb", "GBB", "gBG", "gBg", "gBR", "gBr",
+    "gB", "gBb", "gBB", "gbG", "gbg", "gbR", "gbr",
+    "gb", "gbb", "gbB",
+    "BBB", "BBb", "BB", "BBr", "BBR", "BbG", "Bbg", "BbB",
+    "Bb", "BBG", "BBg",
+    ]
+
+spectrumpurples = [
+    "bbG", "bbg", "bbb", "Bbb", "Bbr", "BbR",
+    "bb", "bbB", "bbr", "bbR", "rBB", "rBb", "rBg",
+    "rB", "rBG", "rBr", "rBR", "RBB", "RBb", "RBG", "RBg",
+    "RB", "RBr", "RBR", "RbB", "Rbb", "RbG",
+    "Rb", "Rbr", "RbR", "rbB", "rbb", "rbg",
+    "rb", "rbG", "rbr", "rbR",
+    ]
+
+def spectrumrand():
+    spectrum = [
+        premadeblood(), premadeblood(), premadeblood(), premadeblood(), premadeblood(),
+        premadeblood(), premadeblood(), premadeblood(), premadeblood(), premadeblood(),
+        premadeblood(), premadeblood(), premadeblood(), premadeblood(), premadeblood(),
+        premadeblood(), premadeblood(), premadeblood(), premadeblood(), premadeblood(),
+        premadeblood(), premadeblood(), premadeblood(), premadeblood(), premadeblood(),
+        premadeblood(), premadeblood(), premadeblood(), premadeblood(), premadeblood(),
+        premadeblood(), premadeblood(), premadeblood(), premadeblood(), premadeblood(),
+        premadeblood(), premadeblood(), premadeblood(), premadeblood(), premadeblood(),
+        premadeblood(), premadeblood(), premadeblood(), premadeblood(), premadeblood(),
+        premadeblood(), premadeblood(), premadeblood(), premadeblood(), premadeblood(),
+        premadeblood(), premadeblood(), premadeblood(), premadeblood(), premadeblood(),
+        premadeblood(), premadeblood(), premadeblood(), premadeblood(), premadeblood(),
+        premadeblood(), premadeblood(), premadeblood(), premadeblood(), premadeblood(),
+        premadeblood(), premadeblood(), premadeblood(), premadeblood(), premadeblood(),
+        premadeblood(), premadeblood(), premadeblood(), premadeblood(), premadeblood(),
+        premadeblood(), premadeblood(), premadeblood(), premadeblood(), premadeblood(),
+        premadeblood(), premadeblood(), premadeblood(), premadeblood(), premadeblood(),
+        premadeblood(), premadeblood(), premadeblood(), premadeblood(), premadeblood(),
+        premadeblood(), premadeblood(), premadeblood(), premadeblood(), premadeblood(),
+        premadeblood(), premadeblood(), premadeblood(), premadeblood(), premadeblood(),
+        premadeblood(), premadeblood(), premadeblood(), premadeblood(), premadeblood(),
+        premadeblood(), premadeblood(), premadeblood(), premadeblood(), premadeblood(),
+        premadeblood(), premadeblood(), premadeblood(), premadeblood(), premadeblood(),
+        premadeblood(), premadeblood(), premadeblood(), premadeblood(), premadeblood(),
+        premadeblood(), premadeblood(), premadeblood(), premadeblood(), premadeblood(),
+        premadeblood(), premadeblood(), premadeblood(), premadeblood(), premadeblood(),
+        premadeblood(), premadeblood(), premadeblood(), premadeblood(), premadeblood(),
+        premadeblood(), premadeblood(), premadeblood(), premadeblood(), premadeblood(),
+        premadeblood(), premadeblood(), premadeblood(), premadeblood(), premadeblood(),
+        premadeblood(), premadeblood(), premadeblood(), premadeblood(), premadeblood(),
+    ]
+    return spectrum

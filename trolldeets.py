@@ -108,15 +108,19 @@ def trollobj():  # trolldeets
     return t0
 
 
-def slurrytroll(blood=""):
+def slurrytroll(spectrum):
     # Record Donators
     strdonator1 = "?.?"
     strdonator2 = "?.?"
 
     # Blood + Caste:
-    strblood = blood
-    if len(blood) < 2:
+    a = 0
+    while a == 0:
         strblood = slurry.premadeblood()
+        for arb in spectrum:
+            if arb == strblood:
+                a = a + 1
+
     strcaste = getcaste(strblood)
 
     # str-sea = Phenotype shit comes later.
