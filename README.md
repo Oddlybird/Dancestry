@@ -7,6 +7,10 @@ Original version written in freebasic in late 2017.  Being adapted to Python in 
 Approximate version history:
 =
 
+V. 0.2.2a: 2019-05-01
+
+-- Make From Slurry will only produce trolls whose blood codes are on the current spectrum selected in blood page.  Make From Parents is unchanged.  Current spectrums are full (350some distinct gradient colors), mini (12 colors), random (randomly generate 360 colors), rust, greens, blues, and purples.
+
 V. 0.2.2: 2019-05-01
 
 -- Can load currently-generated troll into slot 1 or 2, and produce descendants thereof
