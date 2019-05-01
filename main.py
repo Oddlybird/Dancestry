@@ -4,6 +4,7 @@ import trolldeets as deets
 import libtcodpy as tcod
 import names
 import colorgarbage as colg
+import slurry
 
 # getcaste(b) is a function you can use to get the plaintext of a caste.  Put in the blood-code.
 # Will be tagging each function / class / etc
@@ -14,8 +15,9 @@ import colorgarbage as colg
 # to activate a new main menu button, go to btnselect(), drawmenu(),
 
 # have Trolls (one contributor)
-# have Donations (A particular donation by 2 trolls)
-# have Slurries (An array of Donations, with some meta-data)
+# have Slurries (An array of trolls + genes, with some meta-data)
+
+# Pass colors around ONLY as tuples.  Only use tcod.Color when giving a command directly to tcod.
 
 
 class ScrPage:  # interface.  An item to be used to define the shape of menus.
@@ -60,7 +62,7 @@ def updatescreen():  # interface.  Choose which page to show.
 def drawmenu():  # interface.  Contains Labels for all main and submenu buttons.
     tcod.console_print_frame(0, 131, 0, 29, 50, True, 13, "MENU")
     tcod.console_set_color_control(0, tcod.white, tcod.Color(60, 60, 60))
-    txtcol = tcod.Color(50, 50, 0)
+    txtcol = (50, 50, 0)
     # Can add a tcod.Color(rrr,ggg,bbb) for:  drawbtn(x,y,"label",background,foreground)
     drawbtn(133, 2, "      MAKE TROLL     ", btnselect(1), txtcol)
     drawbtn(133, 6, "         SAVE        ", btnselect(2), txtcol)
@@ -78,9 +80,9 @@ def drawmenu():  # interface.  Contains Labels for all main and submenu buttons.
     tcod.console_set_color_control(0, tcod.black, tcod.white)
 
     if screencurrent.name == "maketroll":
-        drawsmallbtn(1, 1,  "    Create Troll      ", btnselect(51), txtcol)
-        drawsmallbtn(1, 3,  "                      ", btnselect(52), txtcol)
-        drawsmallbtn(1, 5,  "                      ", btnselect(53), txtcol)
+        drawsmallbtn(1, 1,  "  Troll From Parents  ", btnselect(51), txtcol)
+        drawsmallbtn(1, 3,  "  Troll From Slurry   ", btnselect(52), txtcol)
+        drawsmallbtn(1, 5,  "        Save          ", btnselect(53), txtcol)
         drawsmallbtn(25, 1, "                      ", btnselect(54), txtcol)
         drawsmallbtn(25, 3, "                      ", btnselect(55), txtcol)
         drawsmallbtn(25, 5, "                      ", btnselect(56), txtcol)
@@ -91,38 +93,38 @@ def drawmenu():  # interface.  Contains Labels for all main and submenu buttons.
     return
 
 
-# make the menu buttons work.
+# make the menu buttons selectable
 def btnselect(x):  # interface - controls which buttons are highlightable.
     # main menu and main submenu only
     global btncurrent, pagename, pageloadtroll, pageblood, pagemaketroll
-    btncol = tcod.Color(255, 0, 0)
+    btncol = (255, 0, 0)
     if x == btncurrent:
-        btncol = tcod.Color(200, 200, 0)
+        btncol = (200, 200, 0)
     if x != btncurrent:
-        btncol = tcod.Color(120, 120, 0)
+        btncol = (120, 120, 0)
 
     # unused main menu buttons.
     if x == 6 or x == 7 or x == 8 or x == 9 or x == 10 or x == 11:  # Unused Buttons
-        btncol = tcod.Color(50, 50, 0)
+        btncol = (50, 50, 0)
 
     # submenu buttons
     # A set of 20 or so working submenu buttons.
     if screencurrent.name == "donationpage":
         if x == 54 or x == 55 or x == 56 or x == 57 or x == 58 or x == 59 or x == 60:  # Unused Buttons
-            btncol = tcod.Color(50, 50, 0)
+            btncol = (50, 50, 0)
         if x == 61 or x == 62 or x == 63 or x == 64 or x == 65 or x == 66 or x == 67 or x == 68 or x == 69 or x == 70:
             # Unused Buttons
-            btncol = tcod.Color(50, 50, 0)
+            btncol = (50, 50, 0)
     if screencurrent.name == "maketroll":
         if x == 54 or x == 55 or x == 56 or x == 57 or x == 58 or x == 59 or x == 60:  # Unused Buttons
-            btncol = tcod.Color(50, 50, 0)
+            btncol = (50, 50, 0)
         if x == 61 or x == 62 or x == 63 or x == 64 or x == 65 or x == 66 or x == 67 or x == 68 or x == 69 or x == 70:
             # Unused Buttons
-            btncol = tcod.Color(50, 50, 0)
+            btncol = (50, 50, 0)
     # just a ridiculous number of buttons.
     if screencurrent.name == "loadingzone":
         if x > screencurrent.maxbtn:
-            btncol = tcod.Color(50, 50, 0)
+            btncol = (50, 50, 0)
     return btncol
 
 
@@ -132,11 +134,11 @@ def usedbuttons(direction):  # interface
     if btncurrent < 25:  # mainmenu
         if direction == "+":
             btncurrent = btncurrent + 1
-            while btnselect(btncurrent) == tcod.Color(50, 50, 0):
+            while btnselect(btncurrent) == (50, 50, 0):
                 btncurrent = btncurrent + 1
         if direction == "-":
             btncurrent = btncurrent - 1
-            while btnselect(btncurrent) == tcod.Color(50, 50, 0):
+            while btnselect(btncurrent) == (50, 50, 0):
                 btncurrent = btncurrent - 1
         # loop main menu
         if btncurrent > 12:
@@ -223,11 +225,21 @@ def handle_keys():  # interface - button functions, and loops as needed.
         if btncurrent > 25:
             if screencurrent.name == "maketroll":
                 if btncurrent == 51:
-                    troll3 = deets.createtroll()
-                    troll3 = deets.createtroll3(libbie, lester)
-                    # for now.  Replace this with a function that takes libbie,lester as input
-                    # and combines them into a grub.
+                    # Btn 1 : Troll from parents
+                    troll3 = deets.trollobj()
+                    troll3 = deets.blendtroll(libbie, lester)
                     updatescreen()
+                    return False
+                if btncurrent == 52:
+                    # Btn 2 : Troll from slurry
+                    troll3 = deets.trollobj()
+                    troll3 = deets.slurrytroll()
+                    updatescreen()
+                    return False
+                if btncurrent == 53:
+                    # Btn 3 : Save.
+                    savetroll(troll3)
+                    draw(73, 20, "Saved")
                     return False
                 return False
             # End "main menu" portion of Enter loop.
@@ -267,7 +279,7 @@ def savetroll(grub):  # interface     Save Troll
 
 
 def loadtroll(filename):  # interface     Load Troll
-    trollobj = deets.createtroll()
+    trollobj = deets.trollobj()
     savedtroll = "Caverns/AncestralCave/" + filename + ".troll"
     if os.path.exists(savedtroll):
         loadedtroll = open(savedtroll, "rt")
@@ -275,30 +287,38 @@ def loadtroll(filename):  # interface     Load Troll
         trollobj = json.loads(y)
         loadedtroll.close()
     if trollobj["savetype"] != "5":
-        trollobj = deets.createtroll()
+        trollobj = deets.trollobj()
     return trollobj
 
 
 # menu-related boxen.
-def drawbtn(x, y, label="", btncolor=tcod.Color(255, 255, 225), txtcolor=tcod.Color(50, 50, 0)):  # interface
+def drawbtn(x, y, label="", btncolor=(255, 255, 225), txtcolor=(50, 50, 0)):  # interface
     rectolor(x, y, 24, 2, btncolor, txtcolor)
     draw(x + 2, y + 1, label)
     return
 
 
-def drawsmallbtn(x, y, label="", btncolor=tcod.Color(255, 255, 225), txtcolor=tcod.Color(50, 50, 0)):  # interface
+def drawsmallbtn(x, y, label="", btncolor=(255, 255, 225), txtcolor=(50, 50, 0)):  # interface
     rectolor(x, y, 21, 0, btncolor, txtcolor)
     draw(x, y, label)
     return
 
 
-def rectolor(x, y, ww, hh, btncolor=tcod.Color(255, 255, 225), txtcolor=tcod.Color(0, 0, 0)):  # interface
+def rectolor(x, y, ww, hh, btncolor=(255, 255, 225), txtcolor=(0, 0, 0)):  # interface
     h = 0
     w = 0
+    (btnr, btng, btnb) = btncolor
+    btnr = round(btnr)
+    btng = round(btng)
+    btnb = round(btnb)
+    (txtr, txtg, txtb) = txtcolor
+    txtr = round(txtr)
+    txtg = round(txtg)
+    txtb = round(txtb)
     while h <= hh:
         while w <= ww:
-            tcod.console_set_char_background(0, x + w, y + h, btncolor, tcod.BKGND_SET)
-            tcod.console_set_char_foreground(0, x + w, y + h, txtcolor)
+            tcod.console_set_char_background(0, x + w, y + h, tcod.Color(btnr, btng, btnb), tcod.BKGND_SET)
+            tcod.console_set_char_foreground(0, x + w, y + h, tcod.Color(txtr, txtg, txtb))
             w = w + 1
         w = 0
         h = h + 1
@@ -315,12 +335,8 @@ def draw(x, y, thing):  # interface
 def displaytroll(x, y, t0):  # interface -- prints a standard-format window display to the screen.
     # set some defaults
     # called when screencurrent.name = "maketroll"
-    # colbg = tcod.Color(0, 0, 0)
-    # colfg = tcod.Color(255, 255, 255)
-    # recolor
-    (rgb1, rgb2, rgb3) = colg.bloodtorgb(t0["blood"])
-    colbg = tcod.Color(rgb1, rgb2, rgb3)
-    colfg = colg.pastel(rgb1, rgb2, rgb3)
+    colbg = colg.bloodtorgb(t0["blood"])
+    colfg = (255, 255, 255)
     hornl1 = t0["hornL"]
     hornl2 = deets.Horn(hornl1)
     hornr1 = t0["hornR"]
@@ -352,36 +368,50 @@ def bloodpage():  # interface - page of blood color examples
     # screencurrent.name = bloodpage
     # all the display stuff for this page goes here since it's spammy
     z = [
-         "RR", "RRR", "RRr", "Rr", "Rrr", "R", "r", "rr", "rrr",
-         "RRg", "RGB", "Rrg", "Rg", "rgb",
-         "Rgg", "RRG", "RG", "RGG", "RGr", "RGg", "Grr", "rg", "rrg",
-         "rgg", "GGr", "Gr", "Grg",
-         "G", "g", "GG", "GGG", "GGg", "Gg", "Ggg", "gg", "ggg",
-         "GGb", "Gb", "Ggb",
-         "GGB", "GB", "GBB", "GBg", "GBb", "Gbb", "ggb", "gb", "Bgg",
-         "gbb", "BBg", "Bg", "Bgb",
-         "B", "b", "Bb", "Bbb", "bb", "bbb", "BB", "BBB", "BBb",
-         "BBr", "Br", "Brb",
-         "Brr", "rrb", "rbb",
-         "RRB", "RB", "RBB", "RBr", "RBb", "Rbb",
-         "Rrb", "Rb",
-         "rb", "RRb", "RGb", "RBg", "Rgb", "GBr", "Grb", "Brg",
-         ]
+        "RR", "RRr", "RRR", "RRg", "RRG", "RrB", "Rrb",
+        "Rr", "Rrr", "RrR", "Rrg", "RrG", "rrB", "rrb",
+        "rr", "rrr", "rrR", "rrg", "rrG", "rGR", "rGr", "rGB",
+        "rG", "RGB", "RGb", "RGg", "RGG", "RgR", "Rgr", "RgB", "Rgb",
+        "Rg", "Rgg", "RgG", "rgR", "rgr", "rgB", "rgb",
+        "rg", "rgg", "rgG", "GGR", "GGr", "GGG", "GGg",
+        "GG", "GGb", "GGB", "GgR", "Ggr", "GgG", "Ggg",
+        "Gg", "Ggb", "GgB", "ggR", "ggr", "ggG", "ggg",
+        "gg", "ggb", "ggB", "GbG", "Gbg", "GbR", "Gbr",
+        "Gb", "Gbb", "GbB", "GBG", "GBg", "GBR", "GBr",
+        "GB", "GBb", "GBB", "gBG", "gBg", "gBR", "gBr",
+        "gB", "gBb", "gBB", "gbG", "gbg", "gbR", "gbr",
+        "gb", "gbb", "gbB", "BBG", "BBg", "BBB", "BBb",
+        "BB", "BBr", "BBR", "BbG", "Bbg", "BbB",
+        "Bb", "Bbb", "Bbr", "BbR", "bbG", "bbg", "bbb",
+        "bb", "bbB", "bbr", "bbR", "rBB", "rBb", "rBg",
+        "rB", "rBG", "rBr", "rBR", "RBB", "RBb", "RBG", "RBg",
+        "RB", "RBr", "RBR", "RbB", "Rbb", "RbG",
+        "Rb", "Rbr", "RbR", "rbB", "rbb", "rbg",
+        "rb", "rbG", "rbr", "rbR", "RRB", "RRb",
+        ]
     h = 1
     w = 1
     numtotal = 0
     for x in z:
-        if numtotal == 15 or numtotal == 30 or numtotal == 45 or numtotal == 60 or numtotal == 75 or numtotal == 90:
-            w = w + 17
+        if numtotal == 15 or numtotal == 30 or numtotal == 45 or numtotal == 60 or numtotal == 75 or numtotal == 90 or numtotal == 105 or numtotal == 120 or numtotal == 135:
+            w = w + 13
             h = 1
         h = h + 3
         displayname = x
         (rgb1, rgb2, rgb3) = colg.bloodtorgb(x)
-        displaycol = tcod.Color(rgb1, rgb2, rgb3)
-        castename = deets.getcastefromcolor(displaycol.r, displaycol.g, displaycol.b)
-        rectolor(w, h, 15, 2, displaycol)
+        displaycol = (rgb1, rgb2, rgb3)
+        # ----- To show bloodcode + Castenum
+        castename = deets.getcastefromcolor(rgb1, rgb2, rgb3)
+        rectolor(w, h, 12, 2, displaycol)
+# ----- To show bloodcode + Caste
         draw(w + 1, h + 1, displayname)
         draw(w + 5, h + 1, castename)
+# ----- To show rgb coords + bloodcode
+#        colname = str(displaycol.r) + "." + str(displaycol.g) + "." + str(displaycol.b)
+#        draw(w, h+1, displayname + " " + colname)
+# ----- To show Hue + Caste
+#        hue = round(colg.rgbtohue(displaycol.r, displaycol.g, displaycol.b))
+#        draw(w + 1, h + 1, str(hue) + "-" + castename)
         numtotal = numtotal + 1
     return
 
@@ -409,10 +439,28 @@ def loadingzone():  # interface - page to load trolls from file
     global pageloadtroll
     z = os.listdir("Caverns/AncestralCave/")
     tcod.console_set_default_foreground(0, tcod.Color(250, 250, 200))
+    castlist = [ "" ]
     h = 7
     w = 7
     numtotal = 0
+    # First load them into the cast-list.
     for arb in z:
+        temp = arb
+        if 20 < len(temp) < 30:
+            if temp[6] == "." and temp[13] == ".":
+                castlist.insert(numtotal, temp)
+                numtotal = numtotal + 1
+    # Sort by hemism - in progress.
+#    bloodcol = temp[14:17]
+#    if bloodcol[2] == ".":
+#        bloodcol = temp[14:16]
+#        castenum = deets.getcastefromcolor(colg.bloodtorgb(bloodcol))
+
+    numtotal = 0
+
+
+    # Print out the data you now have
+    for arb in castlist:
         temp = arb
         if 20 < len(temp) < 30:
             if temp[6] == "." and temp[13] == ".":
@@ -459,15 +507,15 @@ tcod.console_set_custom_font(font_path, font_flags)
 window_title = "Dancestry " + versionnum
 fullscreen = False
 tcod.console_init_root(screen_width, screen_height, window_title, fullscreen)
-libbie = loadtroll("Libbie.Pickle.RGg")
-lester = loadtroll("Lester.Pebble.Brb")
-troll3 = deets.createtroll()
+libbie = slurry.getpremadetroll(1)
+lester = slurry.getpremadetroll(2)
+troll3 = deets.trollobj()
 btncurrent = 1
 
 screencurrent = ScrPage()
 # screens: maketroll, loadingzone, bloodpage, donationpage,
 pageloadtroll = ScrPage("loadingzone", 101, 180, False, True)
-pagemaketroll = ScrPage("maketroll", 51, 51, True, False)
+pagemaketroll = ScrPage("maketroll", 51, 53, True, False)
 pageblood = ScrPage("bloodpage", 101, 101, False, True)
 pagename = ScrPage("namepage", 101, 101, False, False)
 # Invoke Main
