@@ -3,25 +3,25 @@ Generates adult trolls from arbitrary parentage, loads and saves adult trolls to
 
 Original version written in freebasic in late 2017.  Being adapted to Python in early 2019.
 
-
-Future goals: (approximate) 
-
-0.6.0 - Create grub from Parents + Slurry
-
-0.5.0 - Create fully random grub from just slurry
-
-0.3.0 - Functional default slurry
-
-0.2.9 - functional Slurry Object
-
-0.2.0 - begin grub creation
-
-0.0.x - menu and format upgrades
-
-
 =
 Approximate version history:
 =
+
+V. 0.2.2: 2019-05-01
+
+-- Can load currently-generated troll into slot 1 or 2, and produce descendants thereof
+
+-- Cannot yet load troll from file
+
+-- Cosmetic Tweaks
+
+-- Save format #6
+
+-- Create Troll From Slurry can be fed specific blood colors and will produce a troll of that caste
+
+-- Gender can be biased by blood color; trolls near jade and tyrian are more likely to be feminine
+
+-- Hornblender can now average length and curliness
 
 V. 0.2.1: 2019-04-29
 
