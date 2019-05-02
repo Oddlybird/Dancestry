@@ -7,6 +7,12 @@ Original version written in freebasic in late 2017.  Being adapted to Python in 
 Approximate version history:
 =
 
+V. 0.2.2b: 2019-05-01
+
+-- Height exists, in inches, and can be influenced by both child caste's average height and parents' relative heights.
+
+-- Basic sea genes / phenotype system in progress
+
 V. 0.2.2a: 2019-05-01
 
 -- Make From Slurry will only produce trolls whose blood codes are on the current spectrum selected in blood page.  Make From Parents is unchanged.  Current spectrums are full (350some distinct gradient colors), mini (12 colors), random (randomly generate 360 colors), rust, greens, blues, and purples.
