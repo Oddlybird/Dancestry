@@ -7,6 +7,24 @@ Original version written in freebasic in late 2017.  Being adapted to Python in 
 Approximate version history:
 =
 
+V. 0.2.3: 2019-05-03
+
+-- human-readable heightstr, seadesc, horndesc, etc added to troll object.
+
+-- functions to produce said descriptions moved out of horn/seagene objects to be callable from elsewhere
+
+-- new file "formattingbs" added, contains a wordwrap function.
+
+-- slurry contains default genes for land dwellers, seadwellers, and Crazy Mutant Shit
+
+-- slurry contains a spectrum of land vs seadweller
+
+-- Added new default troll, horrible recessive mutant
+
+-- updated display function
+
+-- left a HUGE MESS all throughout the code.
+
 V. 0.2.2b: 2019-05-01
 
 -- Height exists, in inches, and can be influenced by both child caste's average height and parents' relative heights.
