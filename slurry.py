@@ -8,22 +8,20 @@ import random
 # -- which blood codes are default
 
 
-def getpremadetroll(x=random.randint(1, 2)):
+def getpremadetroll(x=random.randint(1, 3)):
 
     t0 = deets.trollobj()
 
     # Things that aren't really enabled yet.
     # Go through and give each troll a different one once the systems exist.
-    strsea = "Landdweller"
     strpowers = "None"
     strskin = "grey"
     donator1 = "The Mists"
     donator2 = "Of Time"
-    strheight = "short"
+    strheight = "84"  # 7 feet
     strbuild = "thin"
     strhair = "short"
     if (x % 2) == 0:
-        strheight = "tall"
         strbuild = "big"
         strhair = "long"
 
@@ -32,13 +30,11 @@ def getpremadetroll(x=random.randint(1, 2)):
         t0["surname"] = "Pickle"
         t0["sex"] = "F"
         t0["blood"] = "RGg"
-        strcaste = deets.getcaste("RGg")
-        t0["caste"] = strcaste
-        t0["sea"] = strsea
+        t0["sea"] = "ssbbccEEwwwwffbbSbfggiggiGGittdeeAAAA"
         t0["powers"] = strpowers
         t0["hornL"] = "12TFw.point"
         t0["hornR"] = "21SOn.split"
-        t0["height"] = strheight
+        t0["height"] = 64
         t0["build"] = strbuild
         t0["hair"] = strhair
         t0["skin"] = strskin
@@ -49,18 +45,36 @@ def getpremadetroll(x=random.randint(1, 2)):
         t0["surname"] = "Pebble"
         t0["sex"] = "M"
         t0["blood"] = "rBb"
-        strcaste = deets.getcaste("rBb")
-        t0["caste"] = strcaste
-        t0["sea"] = strsea
+        t0["sea"] = "SsbbCcEewWwWffbbsbFGgiGgiggiTtdeeAAAA"
         t0["powers"] = strpowers
         t0["hornL"] = "46RIn.pincher"
         t0["hornR"] = "37OBn.round"
-        t0["height"] = strheight
+        t0["height"] = 89
         t0["build"] = strbuild
         t0["hair"] = strhair
         t0["skin"] = strskin
         t0["donator1"] = "The Mists"
         t0["donator2"] = "Of Time"
+    if x == 3:
+        t0["firname"] = "Lobbah"
+        t0["surname"] = "Parkle"
+        t0["sex"] = "N"
+        t0["blood"] = "bbb"
+        t0["sea"] = "ssBBcceeWWWWFFBBsBFGgeGgeGgeTtDEEaaaa"
+        t0["powers"] = strpowers
+        # doubled genes, make just one horn doubled.
+        t0["hornL"] = "17OFw.split"
+        t0["hornR"] = "17OFw.split"
+        t0["height"] = 72
+        t0["build"] = strbuild
+        t0["hair"] = strhair
+        t0["skin"] = strskin
+        t0["donator1"] = "The Mists"
+        t0["donator2"] = "Of Time"
+
+    h = t0["height"]
+    t0["heightstr"] = deets.heightstr(h)
+
     return t0
 
 
@@ -157,9 +171,11 @@ def eugenics(t0):
     return t0
 
 
+# Globals go below here.
+
 spectrumfull = [
-   "RR", "RRr", "RRR", "RRg", "RRG", "RrB", "Rrb",
-   "Rr", "Rrr", "RrR", "Rrg", "RrG", "rrB", "rrb",
+    "RR", "RRr", "RRR", "RRg", "RRG", "RrB", "Rrb",
+    "Rr", "Rrr", "RrR", "Rrg", "RrG", "rrB", "rrb",
     "rr", "rrr", "rrR", "rrg", "rrG", "rGR", "rGr", "rGB",
     "rG", "RGB", "RGb", "RGg", "RGG", "RgR", "Rgr", "RgB", "Rgb",
     "Rg", "Rgg", "RgG", "rgR", "rgr", "rgB", "rgb",
@@ -289,3 +305,59 @@ def spectrumrand():
         premadeblood(), premadeblood(), premadeblood(), premadeblood(), premadeblood(),
     ]
     return spectrum
+
+sgeneland = "ssbbccEEwwwwffbbsbfggiggiggittdeeAAAA"  # no aquatic traits, no biolum, ears and no fins.
+sgenesea =  "SSbbCCeeWwWwffBBSBFGGiGGiggiTTdEEAAAA"
+# Seadweller active, earfins + no ears, half-webbed fingers/toes,
+# no dorsal fins, strong biolum, any water, internal rib/neck gills, no face gills.
+sgenemutant = "SsBBCcEewWwWFFBbsBFGgeGgeggiTtDEeaaaa"
+
+
+
+heightspectrum = {  # 5' = 60, 6' = 72, 7' = 84, 8' = 96, 9' = 108, 10' = 120, 11' = 132
+    "RR": 70,  # Maroon
+    "Rr": 76,
+    "rr": 80,  # Bronze
+    "Rg": 90,
+    "RG": 96,  # Gold
+    "rG": 94,
+    "rg": 90,  # Lime
+    "GG": 90,  # Olive
+    "Gg": 90,
+    "gg": 96,  # Jade
+    "Gb": 93,
+    "GB": 90,  # Teal
+    "gB": 93,
+    "gb": 96,  # Ceru
+    "BB": 100,  # Bloo
+    "Bb": 110,
+    "bb": 120,  # Indigo
+    "rB": 100,
+    "RB": 96,  # Violet
+    "Rb": 84,
+    "rb": 72,  # Tyrian
+    }
+
+dwellspectrum = {
+    "RR": "landdweller",  # Maroon
+    "Rr": "landdweller",
+    "rr": "landdweller",  # Bronze
+    "Rg": "landdweller",
+    "RG": "landdweller",  # Gold
+    "rG": "landdweller",
+    "rg": "landdweller",  # Lime
+    "GG": "landdweller",  # Olive
+    "Gg": "landdweller",
+    "gg": "landdweller",  # Jade
+    "Gb": "landdweller",
+    "GB": "landdweller",  # Teal
+    "gB": "landdweller",
+    "gb": "landdweller",  # Ceru
+    "BB": "landdweller",  # Bloo
+    "Bb": "landdweller",
+    "bb": "landdweller",  # Indigo
+    "rB": "landdweller",
+    "RB": "seadweller",  # Violet
+    "Rb": "seadweller",
+    "rb": "seadweller",  # Tyrian
+    }

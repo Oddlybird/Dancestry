@@ -5,7 +5,7 @@ import libtcodpy as tcod
 import names
 import colorgarbage as colg
 import slurry
-
+import formattingbs as fbs
 # getcaste(b) is a function you can use to get the plaintext of a caste.  Put in the blood-code.
 # Will be tagging each function / class / etc
 # If I ever figure out modules, that will be which modules they go in.
@@ -411,22 +411,46 @@ def draw(x, y, thing):  # interface
 def displaytroll(x, y, t0):  # interface -- prints a standard-format window display to the screen.
     # set some defaults
     # called when screencurrent.name = "maketroll"
+    text1 = t0["blood"][0:2]
     colbg = colg.bloodtorgb(t0["blood"])
     colfg = (255, 255, 255)
     hornl1 = t0["hornL"]
-    hornl2 = deets.Horn(hornl1)
     hornr1 = t0["hornR"]
+    hornl2 = deets.Horn(hornl1)
     hornr2 = deets.Horn(hornr1)
+    t0["hornLdesc"] = hornl2.desc()
+    t0["hornRdesc"] = hornr2.desc()
+    h = t0["height"]
+    t0["heightstr"] = deets.heightstr(h)
+    seatemp = t0["sea"]
+    t0["seadesc"] = deets.describesea(seatemp)
+    sdtrim = fbs.trimmulti(t0["seadesc"])
+    sdmulti = fbs.multisplit(sdtrim)
+    t0["dwell"] = deets.describedwell(seatemp)
+    t0["weirdshitsea"] = str(deets.weirdseashit(seatemp))
+    t0["caste"] = deets.getcaste(text1)
+    castedefaultheight = slurry.heightspectrum[text1]
     rectolor(x, y, 64, 20, colbg, colfg)
     string1 = t0["firname"] + " " + t0["surname"] + ", " + t0["blood"] + " " + t0["sex"]
     string2 = t0["caste"] + ", " + t0["powers"]
-    string3 = t0["sea"]
-    string4 = t0["height"] + ", " + t0["build"] + " build"
+    string3 = t0["donator1"] + " / " + t0["donator2"]
+    string4 = t0["heightstr"] + "/" + deets.heightstr(castedefaultheight) + ", " + t0["build"] + " build"
     string5 = t0["hair"] + " hair"
     string6 = t0["skin"] + " skin"
-    string7 = "LHorn: " + hornl2.desc()
-    string8 = "RHorn: " + hornr2.desc()
-    string13 = t0["donator1"] + " / " + t0["donator2"]
+    string7 = "LHorn: " + t0["hornLdesc"]
+    string8 = "RHorn: " + t0["hornRdesc"]
+    string9 = "."
+    string10 = t0["sea"]
+    string11 = t0["dwell"]
+    string12 = sdmulti[0]
+    string13 = sdmulti[1]
+    string14 = sdmulti[2]
+    string15 = sdmulti[3]
+    string16 = sdmulti[4]
+    string17 = sdmulti[5]
+    string18 = "."
+    string19 = "."
+    string20 = "."
     tcod.console_print_frame(0, x, y, 65, 21, True, 13, string1)
     draw(x + 2, y + 1, string2)
     draw(x + 2, y + 2, string3)
@@ -435,7 +459,18 @@ def displaytroll(x, y, t0):  # interface -- prints a standard-format window disp
     draw(x + 2, y + 5, string6)
     draw(x + 2, y + 6, string7)
     draw(x + 2, y + 7, string8)
+    draw(x + 2, y + 8, string9)
+    draw(x + 2, y + 9, string10)
+    draw(x + 2, y + 10, string11)
+    draw(x + 2, y + 11, string12)
     draw(x + 2, y + 12, string13)
+    draw(x + 2, y + 13, string14)
+    draw(x + 2, y + 14, string15)
+    draw(x + 2, y + 15, string16)
+    draw(x + 2, y + 16, string17)
+    draw(x + 2, y + 17, string18)
+    draw(x + 2, y + 18, string19)
+    draw(x + 2, y + 19, string20)
     return
 
 
@@ -444,6 +479,7 @@ def bloodpage():  # interface - page of blood color examples
     # screencurrent.name = bloodpage
     global spectrum
     z = spectrum
+    spectrum.sort(key=deets.getcastenumstr, )
     h = 1
     w = 1
     numtotal = 0
@@ -562,7 +598,7 @@ libbie = slurry.getpremadetroll(1)
 lester = slurry.getpremadetroll(2)
 troll1 = libbie
 troll2 = lester
-troll3 = deets.trollobj()
+troll3 = deets.trollblank
 spectrum = slurry.spectrumfull
 btncurrent = 1
 
