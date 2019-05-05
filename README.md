@@ -7,6 +7,10 @@ Original version written in freebasic in late 2017.  Being adapted to Python in 
 Approximate version history:
 =
 
+V. 0.2.3a: 2019-05-03
+
+-- seadesc is prettier.
+
 V. 0.2.3: 2019-05-03
 
 -- human-readable heightstr, seadesc, horndesc, etc added to troll object.
