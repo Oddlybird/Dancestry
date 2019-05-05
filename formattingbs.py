@@ -1,24 +1,44 @@
 import re
 
-def multisplit(a):
-    a = a + "@,@,@,"
-    b = a.split("@")
-    return b
+
+def wordwrap2(instring, wraplength = 20):
+    splitup = instring.split(" ")
+    result = [ "", "", "", "", "", "", "", "", "", ]
+    a = 0
+    for arb in splitup:
+        if (len(result[a]) + 1 + len(arb)) <= wraplength:
+            result[a] = result[a] + " " + arb
+            result[a] = result[a].strip()
+        if (len(result[a]) + 1 + len(arb)) > wraplength:
+            result[a] = result[a].strip()
+            a = a + 1
+    return result
 
 
-def trimmulti(a):
-    b = re.sub(', , ', ', ', a)
-    c = re.sub(',@,@', ',@', b)
-    d = re.sub(', , ', ', ', c)
-    e = re.sub('@@', '@', d)
-    return e
+def lyst(a, b):
+    # Combine With Commas And Spaces
+    c = ""
+    if a == "" and b == "":
+        c = ""
+    if a == "" and b != "":
+        c = b
+    if a != "" and b == "":
+        c = a
+    if a != "" and b != "":
+        c = a + ", " + b
+    return c
 
 
-def wordwrap(a, b, c):
-    # instring, instring, number of characters to allow
-    d = a
-    if len(a) < c and len(b) < c:
-        d = a + b
-        if len(d) > c:
-            d = a + "@" + b
-    return d
+def lyst2(a, b):
+    # Combine with spaces, no commas
+    c = ""
+    if a == "" and b == "":
+        c = ""
+    if a == "" and b != "":
+        c = b
+    if a != "" and b == "":
+        c = a
+    if a != "" and b != "":
+        c = a + " " + b
+    return c
+

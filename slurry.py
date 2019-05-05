@@ -6,6 +6,8 @@ import random
 # -- source data to produce random trolls from slurry
 # -- source data for mutations in genesourced trolls
 # -- which blood codes are default
+# -- spectrum groupings (high, mid, low, reds, blues, greens..)
+# -- bias-by-caste for height, aquatic traits, etc
 
 
 def getpremadetroll(x=random.randint(1, 3)):
@@ -306,13 +308,11 @@ def spectrumrand():
     ]
     return spectrum
 
+sgenemutant = "SsBBCcEewWwWFFBbsBFGgeGgeggiTtDEeaaaa" # Weird Shit.
 sgeneland = "ssbbccEEwwwwffbbsbfggiggiggittdeeAAAA"  # no aquatic traits, no biolum, ears and no fins.
 sgenesea =  "SSbbCCeeWwWwffBBSBFGGiGGiggiTTdEEAAAA"
 # Seadweller active, earfins + no ears, half-webbed fingers/toes,
 # no dorsal fins, strong biolum, any water, internal rib/neck gills, no face gills.
-sgenemutant = "SsBBCcEewWwWFFBbsBFGgeGgeggiTtDEeaaaa"
-
-
 
 heightspectrum = {  # 5' = 60, 6' = 72, 7' = 84, 8' = 96, 9' = 108, 10' = 120, 11' = 132
     "RR": 70,  # Maroon
@@ -356,8 +356,33 @@ dwellspectrum = {
     "BB": "landdweller",  # Bloo
     "Bb": "landdweller",
     "bb": "landdweller",  # Indigo
-    "rB": "landdweller",
+    "rB": "surfacedweller",
     "RB": "seadweller",  # Violet
     "Rb": "seadweller",
     "rb": "seadweller",  # Tyrian
     }
+
+spectrumgenesea = {
+    "RR": "ssbbccEEwwwwffbbsbfggiggiggittdeeAAAA",  # Maroon
+    "Rr": "ssbbccEEwwwwffbbsbfggiggiggittdeeaAAA",
+    "rr": "ssbbccEEwwwwffbbsbfggiggiggittdeeAAAA",  # Bronze
+    "Rg": "ssbbccEEwwwwffbbsbfggiggiggittdeeAaAA",
+    "RG": "ssbbccEEwwwwffbBsbfggiggiggittdEeAAAA",  # Gold
+    "rG": "ssbbccEEwwwwffbbsbfggiggiggittdeeAAaA",
+    "rg": "ssbbccEEwwwwffbbsbfggiggiggittdeeAAAA",  # Lime
+    "GG": "ssbbccEEwwwwffbbsbfggiggiggittdeeAAAA",  # Olive
+    "Gg": "ssbbccEEwwwwffbbsbfggiggiggittdeeAAAa",
+    "gg": "ssbbccEEwwwwffBBsbfggiggiggittdeeAAAA",  # Jade
+    "Gb": "ssbbccEEwwwwffbbsbfggiggiggittdeeaAAA",
+    "GB": "ssbbccEEwwwwffbbsbfggiggiggittdeeAAAA",  # Teal
+    "gB": "ssbbccEEwwwwffbbsbfggiggiggittdeeAaAA",
+    "gb": "ssbbccEEwwwwffbbsbfggiggiggittdeeAAAA",  # Ceru
+    "BB": "ssbbccEEwwwwffbbsbfggiggiggittdeeAAAA",  # Bloo
+    "Bb": "ssbbccEEwwwwffbbsbfggiggiggittdeeAAaA",
+    "bb": "ssbbCcEEwwWwFfbbsbfGgiGgiggittdeeAAAA",  # Indigo
+    "rB": "SsbbCcEewwWwffbbsbfGgiGgiggiTtdEeAaAa",
+    "RB": "SSBbCCeeWwWwffBbSbFGGiGGiggiTTdEEAAAA",  # Violet
+    "Rb": "SSBbCCeeWwWWFfBBSBFGGiGGiGgitTdEEaaaA",
+    "rb": "SSBbCCeeWwWwffBBSbfGGiGGiggiTTdEEAAAA",  # Tyrian
+    }
+

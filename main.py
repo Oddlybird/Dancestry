@@ -411,7 +411,7 @@ def draw(x, y, thing):  # interface
 def displaytroll(x, y, t0):  # interface -- prints a standard-format window display to the screen.
     # set some defaults
     # called when screencurrent.name = "maketroll"
-    text1 = t0["blood"][0:2]
+    blood = t0["blood"][0:2]
     colbg = colg.bloodtorgb(t0["blood"])
     colfg = (255, 255, 255)
     hornl1 = t0["hornL"]
@@ -423,13 +423,12 @@ def displaytroll(x, y, t0):  # interface -- prints a standard-format window disp
     h = t0["height"]
     t0["heightstr"] = deets.heightstr(h)
     seatemp = t0["sea"]
-    t0["seadesc"] = deets.describesea(seatemp)
-    sdtrim = fbs.trimmulti(t0["seadesc"])
-    sdmulti = fbs.multisplit(sdtrim)
+    t0["seadesc"] = deets.describeseanew(blood, seatemp)
     t0["dwell"] = deets.describedwell(seatemp)
     t0["weirdshitsea"] = str(deets.weirdseashit(seatemp))
-    t0["caste"] = deets.getcaste(text1)
-    castedefaultheight = slurry.heightspectrum[text1]
+    t0["caste"] = deets.getcaste(blood)
+    castedefaultheight = slurry.heightspectrum[blood]
+    seawrap = fbs.wordwrap2(t0["seadesc"], 60)
     rectolor(x, y, 64, 20, colbg, colfg)
     string1 = t0["firname"] + " " + t0["surname"] + ", " + t0["blood"] + " " + t0["sex"]
     string2 = t0["caste"] + ", " + t0["powers"]
@@ -442,12 +441,12 @@ def displaytroll(x, y, t0):  # interface -- prints a standard-format window disp
     string9 = "."
     string10 = t0["sea"]
     string11 = t0["dwell"]
-    string12 = sdmulti[0]
-    string13 = sdmulti[1]
-    string14 = sdmulti[2]
-    string15 = sdmulti[3]
-    string16 = sdmulti[4]
-    string17 = sdmulti[5]
+    string12 = "."
+    string13 = seawrap[0]
+    string14 = "  " + seawrap[1]
+    string15 = "  " + seawrap[2]
+    string16 = "  " + seawrap[3]
+    string17 = "."
     string18 = "."
     string19 = "."
     string20 = "."
@@ -576,7 +575,7 @@ def loadingzone():  # interface - page to load trolls from file
 
 
 def trollmakepage():  # interface
-    global troll1, troll2
+    global troll1, troll2, troll3
     displaytroll(1, 7, troll1)
     displaytroll(1, 29, troll2)
     displaytroll(66, 17, troll3)
@@ -587,7 +586,7 @@ def trollmakepage():  # interface
 
 screen_width = 160
 screen_height = 50
-versionnum = "0.2.2"
+versionnum = "0.2.3"
 font_path = 'terminal8x12_gs_tc.png'
 font_flags = tcod.FONT_TYPE_GREYSCALE | tcod.FONT_LAYOUT_TCOD
 tcod.console_set_custom_font(font_path, font_flags)

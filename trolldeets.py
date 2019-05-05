@@ -3,8 +3,8 @@ import re
 import names
 import colorsys
 import colorgarbage as colg
-import formattingbs as fbs
 import slurry
+import formattingbs as fbs
 
 
 # This file contains basic formatting information,
@@ -45,11 +45,11 @@ class Horn:  # trolldeets
         descr = describehorn(self.code)
         return descr
 
-
 class GeneSea:  # trolldeets
     # This contains genes relating to aquatic and amphibious traits
     # These will be stored in trolls as just the code part.  Use this class when manipulating.
     # create gene object by going temp1 = SeaGenes("Ssx"),temp1 = SeaGenes(troll["sea"])
+    blood = "rr"
     code = "ssbbccEEwwwwffbbsbfggiggiggittdeeAAAA"  # The code used to store data longterm.
     SS = "ss"          # SS = seadweller, Ss = depends on caste/gene defaults, ss = land-dweller.
     bladders = "bb"    # Swim bladders - several / one / none
@@ -64,15 +64,16 @@ class GeneSea:  # trolldeets
     salt = "sbf"       # Saltwater(Y/n)?  Brackish (Y/N)?  Fresh (Y/N)?   S/s, B/b, F/f.
     gillneck = "gg"    # full/half/none
     gillneckt = "i"    # i: internal.  e: external.
-    gillrib = "gg"     # full/half/none
-    gillribt = "i"     # i: internal, e: external
+    gillribs = "gg"     # full/half/none
+    gillribst = "i"     # i: internal, e: external
     gillface = "gg"    # ocular gills, internal/external/none.
     gillfacet = "i"    # i: internal, e: external
     teeth = "ttd"      # t = land, T = barracuda, Tt = blend, d/D = doubled vs single
     eyelids = "ee"     # ee = single, eE = permanent transparent coating, EE = doubled transparent lids
     air = "AAAA"       # Can the troll breathe air?  All four must be "a" to produce a no.
 
-    def __init__(self, code):
+    def __init__(self, blood, code):
+        self.blood = blood
         self.code = code
         self.SS = code[0:2]  # First two letters are whether seadweller genes are active or not.
         self.bladders = code[2:4]
@@ -85,8 +86,8 @@ class GeneSea:  # trolldeets
         self.salt = code[16:19]
         self.gillneck = code[19:21]
         self.gillneckt = code[21:22]
-        self.gillrib = code[22:24]
-        self.gillribt = code[24:25]
+        self.gillribs = code[22:24]
+        self.gillribst = code[24:25]
         self.gillface = code[25:27]
         self.gillfacet = code[27:28]
         self.teeth = code[28:31]
@@ -103,10 +104,12 @@ class GeneSea:  # trolldeets
     def desc(self):
         # verbal description of aquatic traits
         # Include specifics of all genes that differ from slurry defaults for landdweller / seadweller
-        descr = describesea(self.code)
+        descr = describeseanew(self.blood, self.code)
         return descr
 
-# Need a phenotype class for misc. physical traits based on universe norms
+
+
+# Need a phenotype class for misc. physical traits usually defined by universe norms
 # Need a feral traits class
 # Need a psychic / voodoo traits class
 # Need a ...eldritch...?
@@ -168,33 +171,17 @@ def slurrytroll(spectrum):
     strheight = a
 
     # The sea-activating gene CAN be anything.
-    # sgeneland = "ssbbccEEwwwwffbbsbfggiggiggi"
-    # sgenesea = "SSbbCCeeWwWwffBBSBFGGiGGiggi"
-
-    strsea = genecombine(slurry.sgeneland, slurry.sgenesea)
-    x = random.randint(1, 100)
-    # ...but usually, only those near the aquatic castes get dominant S genes.
-    (cr, cg, cb) = colg.bloodtorgb(strblood)
-    (h, s, v) = colorsys.rgb_to_hsv(cr, cg, cb)
-    hue = h * 360
-    hue = round(hue)
-
-    if x < 90:
-        if hue < 285:
-            # Trolls below indigo get biased towards land genes.
-            strsea = genecombine(strsea, slurry.sgeneland)
-            strsea = genecombine(strsea, slurry.sgeneland)
-            strsea = genecombine(strsea, slurry.sgeneland)
-        if 285 <= hue <= 360:
-            # Trolls between indigo and tyrian get whatever they get.
-            string2 = genecombine(slurry.sgeneland, slurry.sgenesea)
-            strsea = genecombine(strsea, string2)
-        if 299 <= hue <= 332:
-            # Trolls tightly between violet and tyrian get biased to seagenes.
-            strsea = genecombine(strsea, slurry.sgenesea)
-            strsea = genecombine(strsea, slurry.sgenesea)
-            strsea = genecombine(strsea, slurry.sgenesea)
-    gene1 = GeneSea(strsea)
+    sgenetype = slurry.spectrumgenesea[strblood[0:2]]
+    if slurry.dwellspectrum == "landdweller":
+        sgenetype = slurry.sgeneland
+    if slurry.dwellspectrum == "seadweller":
+        sgenetype = slurry.sgenesea
+    strsea1 = genecombine(slurry.sgenemutant, sgenetype) # Mutant + dweller type
+    strsea2 = genecombine(strsea1, sgenetype)            # Dilute that with dweller type again.
+    sgenetype = slurry.spectrumgenesea[strblood[0:2]]
+    strsea3 = genecombine(strsea2, sgenetype)   # Caste-specific...
+    strsea = genecombine(strsea3, sgenetype)   # Caste-specific...
+    gene1 = GeneSea(strblood, strsea)
     strseadesc = gene1.desc()
 
     # Phenotype shit comes later.
@@ -294,7 +281,7 @@ def blendtroll(trolla, trollb):  # trolldeets
 
     # str-sea = Phenotype shit comes later.
     strsea = genecombine(p1["sea"], p2["sea"])
-    gene1 = GeneSea(strsea)
+    gene1 = GeneSea(strblood, strsea)
     strseadesc = gene1.desc()
 
     # traits come later.
@@ -720,49 +707,6 @@ def bloodsort(blood):
     return sortedblood
 
 
-# original version
-def bloodsort_orig(blood):  # trolldeets.  Put in a group of letters.
-    a = 0  # count the number of letters stripped out
-    sortedblood = ""  # sorted blood code
-    for arb in blood:  # for each letter...
-        if arb == "R":
-            sortedblood = sortedblood + "R"
-            a = a + 1
-        if a == len(blood):
-            break
-    for arb in blood:  # for each letter...
-        if arb == "G":
-            sortedblood = sortedblood + "G"
-            a = a + 1
-        if a == len(blood):
-            break
-    for arb in blood:  # for each letter...
-        if arb == "B":
-            sortedblood = sortedblood + "B"
-            a = a + 1
-        if a == len(blood):
-            break
-    for arb in blood:  # for each letter...
-        if arb == "r":
-            sortedblood = sortedblood + "r"
-            a = a + 1
-        if a == len(blood):
-            break
-    for arb in blood:  # for each letter...
-        if arb == "g":
-            sortedblood = sortedblood + "g"
-            a = a + 1
-        if a == len(blood):
-            break
-    for arb in blood:  # for each letter...
-        if arb == "b":
-            sortedblood = sortedblood + "b"
-            a = a + 1
-        if a == len(blood):
-            break
-    return sortedblood
-
-
 def heightstr(h):
     h = int(h)
     feet = h // 12
@@ -819,351 +763,326 @@ def describehorn(inhorn="22RIn.point"):
     return descr
 
 
-def describesea(sea):
-    # slurry.sgenesea, slurry.sgeneland.  slurry.sgenemutant = allows novel mutations.
-    # use by going temp2 = temp1.desc()
+def describeseanew(bloodcode, sea):    # slurry.spectrumgenesea, blood[0:2]
     # "SSbbCCeeWwWwffBBSBFGGiGGiggittdeeAAAA"
-    self = GeneSea(sea)
+    blood = bloodcode[0:2]
+    me = GeneSea(blood, sea)                      # The troll being tested
+    cd = GeneSea(blood, slurry.spectrumgenesea[blood])   # Caste Default
+    done = False
     descr = ""
-    detail = self.code[3:len(self.code)]
-    landtype = slurry.sgeneland[3:len(slurry.sgeneland)]
-    seatype = slurry.sgenesea[3:len(slurry.sgenesea)]
-    weirdo = False
-    if self.SS == "Ss" or self.SS == "sS":
-        # Hold onto your hats, we got a live one here.
-        weirdo = True
-    if self.SS == "SS" or self.SS == "ss":
-        weirdo = False
-    if detail == landtype or detail == seatype:
-        weirdo = False
-    if not weirdo and detail != landtype and detail != seatype:
-        descr = "normal " + describedwell(sea)
-    if not weirdo and detail == landtype:
-        descr = "normal landdweller"
-    if not weirdo and detail == seatype:
-        descr = "normal seadweller"
 
-    if weirdo:
-        # Hold onto your hats, we got a live one here.
-        descr = ""
-        a = 0
-        island = 0  # more like a Land-dweller?
-        issea = 0  # more like a Sea  dweller?
-        ismutt = 0  # Unused...for now.
-        compstr = self.code
-        while a < len(self.code):
-            if self.code[a] == slurry.sgeneland[a]:
-                island = island + 1
-            if self.code[a] == slurry.sgenesea[a]:
-                issea = issea + 1
-            if self.code[a] == slurry.sgenemutant[a]:
-                ismutt = ismutt + 1
-            a = a + 1
-        if issea > island and self.code[3:len(self.code)] != slurry.sgenesea[3:len(slurry.sgenesea)]:
-            descr = "seatroll with "
-            compstr = slurry.sgenesea
-        if issea < island and self.code[3:len(self.code)] != slurry.sgenesea[3:len(slurry.sgenesea)]:
-            descr = "landtroll with "
-            compstr = slurry.sgeneland
-        compstr = GeneSea(compstr)
+    while not done:
+        # If someone is caste-typical
+        if me.SS == "SS":
+            dwellvar = slurry.dwellspectrum[blood]
+            if dwellvar != "seadweller":
+                dwellvar = me.dwell()
+            descr = "normal " + dwellvar
+            return descr
+        if me.SS == "ss":
+            dwellvar = slurry.dwellspectrum[blood]
+            if dwellvar != "landdweller":
+                dwellvar = me.dwell()
+            descr = "normal " + dwellvar
+            return descr
+        if me.code[3:17] == cd.code[3:17] and me.code[20:34] == cd.code[20:34] and me.air != "aaaa":
+            if blood == "rB":
+                descr = "normal " + slurry.dwellspectrum[blood]
+                return descr
+            descr = "suspiciously normal " + slurry.dwellspectrum[blood]
+            return descr
+        # If someone cannot breathe at all
+        if me.air == "aaaa":
+            if me.gillface == "gg" and me.gillneck == "gg" and me.gillribs == "gg":
+                descr = "no gills, cannot breathe air"
+                return descr
+            if me.salt == "sbf":
+                descr = "cannot breathe air or water"
+                return descr
+        done = True
+        break
 
-        bladders = ""
-        bodyfins = ""
-        teeth = ""
-        biolum = ""
-        eyelids = ""
-        ears = ""
-        cheekfins = ""
-        earfins = ""
-        fingers = ""
-        toes = ""
-        webbing = ""
-        gillneck = ""
-        gillribs = ""
-        gillface = ""
-        gills = ""
-        canbreathe = ""
-        cantbreathe = ""
+    # Below this point, everyone has Ss or sS, at least one noteworthy difference from cd, and can breathe.
+    # Things that add descriptions to the list, but do not end the loop
+    if me.air != "AAAA" and me.air != "aaaa":
+        if countaa(me.air) > 1:
+            descr = descr + "rank " + str(countaa(me.air) - 1) + " airless"
 
-        # We have the basis defined, let's write out the exceptions.
-        if self.code[3:len(self.code)] != compstr.code[3:len(self.code)]:
-            # Swim Bladders
-            if self.bladders != compstr.bladders:
-                if self.bladders == "BB":
-                    bladders = "swim bladders"
-                if self.bladders == "Bb" or self.bladders == "bB":
-                    if compstr.bladders != "Bb" and compstr.bladders != "bB":
-                        bladders = "a swim bladder"
-                if self.bladders == "bb":
-                    bladders = "no swim bladders"
-            # Dorsal Fins
-            if self.dorsalfins != compstr.dorsalfins:
-                if self.dorsalfins == "FF":
-                    bodyfins = "body fins"
-                if self.dorsalfins == "Ff" or self.dorsalfins == "fF":
-                    if compstr.dorsalfins != "Ff" and compstr.dorsalfins != "fF":
-                        bodyfins = "mini body fins"
-                if self.dorsalfins == "ff":
-                    bodyfins = "no body fins"
-            # teeth
-            if self.teeth != compstr.teeth:
-                # doubled?
-                if self.teeth[2] == "D" and compstr.teeth[2] != "D":
-                    teeth = "doubled "
-                if self.teeth[2] == "d" and compstr.teeth[2] != "d":
-                    teeth = "undoubled "
-                # tooth type
-                if self.teeth[0:2] == "TT":
-                    teeth = teeth + "pure sea teeth, "
-                if self.teeth[0:2] == "Tt" or self.teeth[0:2] == "tT":
-                    #
-                    if compstr.teeth[0:2] != "Tt" and compstr.teeth[0:2] != "tT":
-                        teeth = teeth + "land/sea teeth"
-                    # if doubling is all that's different ...
-                    if compstr.teeth[2] != self.teeth[2] and compstr.teeth[0:2] == self.teeth[0:2]:
-                        teeth = teeth + "teeth"
-                if self.teeth[0:2] == "tt":
-                    teeth = teeth + "land teeth"
-            # biolum
-            if self.biolum != compstr.biolum:
-                if self.biolum == "BB":
-                    biolum = "biolum"
-                if self.biolum == "Bb" or self.biolum == "bB":
-                    if compstr.biolum != "Bb" and compstr.biolum != "bB":
-                        biolum = "partial biolum"
-                if self.biolum == "bb":
-                    biolum = "no biolum"
-            # eyelids
-            if self.eyelids != compstr.eyelids:
-                if self.eyelids == "EE":
-                    eyelids = "nictating membranes"
-                if self.eyelids == "Ee" or self.eyelids == "eE":
-                    if compstr.eyelids != "Ee" and compstr.eyelids != "eE":
-                        eyelids = "eye covers"
-                if self.eyelids == "ff":
-                    eyelids = "land eyelids"
-            # ears
-            if self.ears != compstr.ears:
-                if self.ears == "EE":
-                    ears = "ears"
-                if self.ears == "Ee" or self.ears == "eE":
-                    if compstr.ears != "Ee" and compstr.ears != "eE":
-                        ears = "gimp ears"
-                if self.ears == "ee":
-                    ears = "no ears"
-            # cheekfins
-            if self.cheekfins != compstr.cheekfins:
-                if self.cheekfins == "CC":
-                    cheekfins = "fins"
-                if self.cheekfins == "Cc" or self.cheekfins == "cC":
-                    if compstr.cheekfins != "Cc" and compstr.cheekfins != "cC":
-                        cheekfins = "gimp fins"
-                if self.cheekfins == "cc":
-                    cheekfins = "no fins"
-            #earfins
-            if ears == "ears" and cheekfins == "fins":
-                earfins = "ears and fins"
-            if ears == "ears" and cheekfins == "gimp fins":
-                earfins = "partially-finned ears"
-            if ears == "ears" and cheekfins == "no fins":
-                earfins = "ears"
-            if ears == "gimp ears" and cheekfins == "fins":
-                earfins = "full earfins"
-            if ears == "gimp ears" and cheekfins == "gimp fins":
-                earfins = "earfins"
-            if ears == "gimp ears" and cheekfins == "no fins":
-                earfins = "gimpy ears"
-            if ears == "no ears" and cheekfins == "fins":
-                earfins = "fins"
-            if ears == "no ears" and cheekfins == "gimp fins":
-                earfins = "gimpy fins"
-            if ears == "no ears" and cheekfins == "no fins":
-                earfins = "no ears or fins"
-            # wfingers
-            if self.wfingers != compstr.wfingers:
-                if self.wfingers == "WW":
-                    fingers = "webbed+ fingers"
-                if self.wfingers == "Ww" or self.wfingers == "wW":
-                    if compstr.wfingers != "Ww" and compstr.wfingers != "wW":
-                        fingers = "webbed fingers"
-                if self.wfingers == "ww":
-                    fingers = "unwebbed fingers"
-            # wtoes
-            if self.wtoes != compstr.wtoes:
-                if self.wtoes == "WW":
-                    toes = "webbed+ toes"
-                if self.wtoes == "Ww" or self.wtoes == "wW":
-                    if compstr.wtoes != "Ww" and compstr.wtoes != "wW":
-                        toes = "webbed toes"
-                if self.wtoes == "ww":
-                    toes = "unwebbed toes"
-            # combined webbing
-            if fingers[0:7] == "webbed+" and toes[0:7] == "webbed+":
-                webbing = "deeply webbed fingers and toes"
-            if fingers[0:7] == "webbed+" and toes[0:7] == "webbed ":
-                webbing = "deeply webbed fingers and webbed toes"
-            if fingers[0:7] == "webbed+" and toes[0:7] == "unwebbe":
-                webbing = "deeply webbed fingers and unwebbed toes"
-            if fingers[0:7] == "webbed " and toes[0:7] == "webbed+":
-                webbing = "webbed fingers and deeply webbed toes"
-            if fingers[0:7] == "webbed " and toes[0:7] == "webbed ":
-                webbing = "webbed fingers and toes"
-            if fingers[0:7] == "webbed " and toes[0:7] == "unwebbe":
-                webbing = "webbed fingers and unwebbed toes"
-            if fingers[0:7] == "unwebbe" and toes[0:7] == "webbed+":
-                webbing = "unwebbed fingers and deeply webbed toes"
-            if fingers[0:7] == "unwebbe" and toes[0:7] == "webbed ":
-                webbing = "unwebbed fingers and webbed toes"
-            if fingers[0:7] == "unwebbe" and toes[0:7] == "unwebbe":
-                webbing = "unwebbed fingers and toes"
-            # gillneck
-            if self.gillneck != compstr.gillneck:
-                if self.gillneck[0:2] != compstr.gillneck[0:2] and self.gillneck != "gg":
-                    # Get a word for the gilltype, ONLY when it doesn't match.
-                    gilltype = ""
-                    if self.gillneckt != compstr.gillneckt:
-                        if self.gillneckt == "e":
-                            gilltype = "external "
-                        if self.gillneckt == "i":
-                            gilltype = "internal "
-                    if self.gillneck == "GG":
-                        gillneck = "full " + gilltype + "neckgills"
-                    if self.gillneck == "Gg" or self.gillneck == "gG":
-                        if compstr.gillneck != "Gg" and compstr.gillneck != "gG":
-                            gillneck = "partial " + gilltype + "neckgills"
-                if self.gillneck == "gg":
-                    gillneck = "no neckgills"
-            # gillribs
-            if self.gillrib != compstr.gillrib:
-                if self.gillrib[0:2] != compstr.gillrib[0:2] and self.gillrib != "gg":
-                    # Get a word for the gilltype, ONLY when it doesn't match.
-                    gilltype = ""
-                    if self.gillribt != compstr.gillribt:
-                        if self.gillribt == "e":
-                            gilltype = "external "
-                        if self.gillribt == "i":
-                            gilltype = "internal "
-                    if self.gillrib == "GG":
-                        gillribs = "full " + gilltype + "rib gills"
-                    if self.gillrib == "Gg" or self.gillrib == "gG":
-                        if compstr.gillrib != "Gg" and compstr.gillrib != "gG":
-                            gillribs = "partial " + gilltype + "rib gills"
-                if self.gillrib == "gg":
-                    gillribs = "no rib gills"
-            # gillface
-            if self.gillface != compstr.gillface:
-                if self.gillface[0:2] != compstr.gillface[0:2] and self.gillface != "gg":
-                    # Get a word for the gilltype, ONLY when it doesn't match.
-                    gilltype = ""
-                    if self.gillfacet != compstr.gillfacet:
-                        if self.gillfacet == "e":
-                            gilltype = "external "
-                        if self.gillfacet == "i":
-                            gilltype = "internal "
-                    if self.gillface == "GG":
-                        gillface = "full " + gilltype + "face gills"
-                    if self.gillface == "Gg" or self.gillface == "gG":
-                        if compstr.gillface != "Gg" and compstr.gillface != "gG":
-                            gillface = "partial " + gilltype + "face gills"
-                if self.gillface == "gg":
-                    gillface = "no face gills"
-            # gills
-            if gillribs[0:2] != "no" and gillneck[0:2] != "no" and gillneck != "":
-                gillneck = gillneck + ", "
-            if gillface[0:2] != "no" and gillribs[0:2] != "no" and gillribs != "":
-                gillribs = gillribs + ", "
-            if gillface[0:2] != "no" and gillribs[0:2] == "no" and gillneck[0:2] != "no" and gillneck != "":
-                gillneck = gillneck + ", "
-            if gillneck[0:2] == "no":
-                if gillribs[0:2] == "no":
-                    if gillface[0:2] == "no":
-                        gills = "no gills"  # 000
-                    if gillface[0:2] != "no":
-                        gills = gills + gillface # 001
-                if gillribs[0:2] != "no":
-                    if gillface[0:2] == "no":
-                        gills = gills + gillribs  #010
-                    if gillface[0:2] != "no":
-                        gills = gills + gillribs + gillface  # 011
-            if gillneck[0:2] != "no":
-                if gillribs[0:2] == "no":
-                    if gillface[0:2] == "no":
-                        gills = gills + gillneck  # 100
-                    if gillface[0:2] != "no":
-                        gills = gills + gillneck + gillface # 101
-                if gillribs[0:2] != "no":
-                    if gillface[0:2] == "no":
-                        gills = gills + gillneck + gillribs #110
-                    if gillface[0:2] != "no":
-                        gills = gills + gillneck + gillribs + gillface  # 111
-            # breathing
-            if self.salt != compstr.salt or self.air != compstr.air:
-                canbreathe = "breathes "
-                cantbreathe = "but not "
-                ws = "salt water"
-                wb = "brack water"
-                wf = "fresh water"
-                wa = "air"
-                if self.salt[0] == "S":
-                    canbreathe = canbreathe + ws + ", "
-                if self.salt[0] == "s":
-                    cantbreathe = cantbreathe + ws + ", "
-                if self.salt[1] == "B":
-                    canbreathe = canbreathe + wb + ", "
-                if self.salt[1] == "b":
-                    cantbreathe = cantbreathe + wb + ", "
-                if self.salt[2] == "F":
-                    canbreathe = canbreathe + wf + ", "
-                if self.salt[2] == "f":
-                    cantbreathe = cantbreathe + wf + ", "
-                x = 0
-                asthma = -1
-                while x < len(self.air):
-                    if self.air[x] == "a":
-                        asthma = asthma + 1
-                    x = x + 1
-                if self.air != "aaaa" and asthma < 1:
-                    canbreathe = canbreathe + ", " + wa
-                if self.air != "aaaa" and asthma > 0:
-                    canbreathe = str(x) + "/4 asthma, " + canbreathe
-                    canbreathe = canbreathe + ", " + wa
-                if self.air == "aaaa":
-                    cantbreathe = cantbreathe + wa
+    # teeth
+    # Replace or enhance this with caste-specific teeth and teeth mutations
+    teeth = ""
+    if me.teeth != cd.teeth:
+        if me.teeth[2] == "D" and cd.teeth[2] != "D":
+            teeth = "doubled "
+        if me.teeth[2] == "d" and cd.teeth[2] != "d":
+            teeth = "undoubled "
+        if cd.teeth[0:2] == me.teeth[0:2]:
+            teeth = teeth + "teeth"
+        if cd.teeth[0:2] != me.teeth[0:2]:
+            if me.teeth[0:2] == "tt":
+                teeth = teeth + "land teeth"
+            if me.teeth[0:2] == "TT":
+                teeth = teeth + "pure sea teeth"
+            if me.teeth[0:2] == "Tt" or me.teeth[0:2] == "tT":
+                if cd.teeth[0:2] != "Tt" and cd.teeth[0:2] != "tT":
+                    teeth = teeth + "land/sea teeth"
+                if cd.teeth[0:2] == "Tt" or cd.teeth[0:2] == "tT" and me.teeth[2] == cd.teeth[2]:
+                    teeth = ""
 
-        if biolum != "":
-            biolum = biolum + ", "
-        if eyelids != "":
-            eyelids = eyelids + ", "
-        if bladders != "":
-            bladders = bladders + ", "
-        if teeth != "":
-            teeth = teeth + ", "
-        if earfins != "":
-            earfins = earfins + ", "
-        if webbing != "":
-            webbing = webbing + ", "
+    # Bioluminescence
+    biolum = ""
+    if me.biolum != cd.biolum:
+        if me.biolum == "BB":
+            biolum = "biolum"
+        if me.biolum == "Bb" or me.biolum == "bB":
+            if cd.biolum != "Bb" and cd.biolum != "bB":
+                biolum = "partial biolum"
+        if me.biolum == "bb":
+            biolum = "no biolum"
+    # eyelids
+    eyelids = ""
+    if me.eyelids != cd.eyelids:
+        if me.eyelids == "ff":
+            eyelids = "single eyelids"
+        if me.eyelids == "EE":
+            eyelids = "nictating membranes"
+        if me.eyelids == "Ee" or me.eyelids == "eE":
+            if cd.eyelids != "Ee" and cd.eyelids != "eE":
+                eyelids = "transparent eye cover"
 
-        descr = fbs.wordwrap(descr, biolum, 60)
-        descr = fbs.wordwrap(descr, eyelids, 60)
-        descr = fbs.wordwrap(descr, bladders, 60)
-        descr = fbs.wordwrap(descr, teeth, 60)
-        descr = fbs.wordwrap(descr, earfins, 60)
-        descr = fbs.wordwrap(descr, bodyfins, 60)
-        descr = fbs.wordwrap(descr, webbing, 60)
-        descr = fbs.wordwrap(descr, gills, 60)
-        descr = fbs.wordwrap(descr, canbreathe, 60)
-        descr = fbs.wordwrap(descr, cantbreathe, 60)
+    # Webbing Area
+    # limb webbing?  Neck webs?
+    # fingers
+    fingers = "xxx"
+    if me.wfingers != cd.wfingers:
+        if me.wfingers == "ww":
+            fingers = "unwebbed fingers"
+        if me.wfingers == "WW":
+            fingers = "deeply webbed fingers"
+        if me.wfingers == "Ww" or me.wfingers == "wW":
+            fingers = "webbed fingers"
+            if cd.wfingers == "Ww" or cd.wfingers == "wW":
+                fingers = "xxx"
+    # toes
+    toes = "xxx"
+    if me.wtoes != cd.wtoes:
+        if me.wtoes == "ww":
+            toes = "unwebbed toes"
+        if me.wtoes == "WW":
+            wtoes = "deeply webbed toes"
+        if me.wtoes == "Ww" or me.wtoes == "wW":
+            wtoes = "webbed toes"
+            if cd.wtoes == "Ww" or cd.wtoes == "wW":
+                wtoes = "xxx"
+    # webbing combo
+    webbing = ""
+    # If either is caste-normal:
+    if fingers == "xxx" and toes != "xxx":
+        webbing = toes
+    if toes == "xxx" and fingers != "xxx":
+        webbing = fingers
+    # if both are abnormal:
+    if toes != "xxx" and fingers != "xxx":
+        webbing = fingers + " and " + toes
+    # if both are abnormal in the same way
+    if fingers[0] == "u" and toes[0] == "u":
+        webbing = "unwebbed fingers and toes"
+    if fingers[0] == "d" and toes[0] == "d":
+        webbing = "deeply webbed fingers and toes"
+    if fingers[0] == "w" and toes[0] == "w":
+        webbing = "webbed fingers and toes"
+    # If both are differently webbed
+    if fingers[0] == "d" and toes[0] == "w":
+        webbing = "webbed toes and deeply webbed fingers"
+    if fingers[0] == "w" and toes[0] == "u":
+        webbing = "webbed fingers and deeply webbed toes"
+    # Bladders
+    bladders = ""
+    if me.bladders != cd.bladders:
+        if me.bladders == "bb":
+            bladders = "no swim bladder"
+        if me.bladders == "BB":
+            bladders = "swim bladders"
+        if me.bladders == "Bb" or me.bladders == "bB":
+            if cd.bladders != "Bb" and cd.bladders != "bB":
+                bladders = "a swim bladder"
+            if cd.bladders == "Bb" or cd.bladders == "bB":
+                bladders = ""
+    # body fins
+    bodyfins = ""
+    if me.dorsalfins != cd.dorsalfins:
+        if me.dorsalfins == "ff":
+            bodyfins = "no body fins"
+        if me.dorsalfins == "FF":
+            bodyfins = "body fins"
+        if me.dorsalfins == "Ff" or me.dorsalfins == "fF":
+            if cd.dorsalfins != "Ff" and cd.dorsalfins != "fF":
+                bodyfins = "mini body fins"
+            if cd.dorsalfins == "Ff" or cd.dorsalfins == "fF":
+                bodyfins = ""
+    # ears, cheekfins, earfins
+    # ears
+    ears = "xxx"
+    if me.ears != cd.ears:
+        if me.ears == "ff":
+            ears = "no ears"
+        if me.ears == "FF":
+            ears = "full ears"
+        if me.ears == "Ff" or me.ears == "fF":
+            if cd.ears != "Ff" and cd.ears != "fF":
+                ears = "gimpy ears"
+            if cd.ears == "Ff" or cd.ears == "fF":
+                ears = "xxx"
+    cheekfins = "xxx"
+    if me.cheekfins != cd.cheekfins:
+        if me.cheekfins == "cc":
+            cheekfins = "no cheekfins"
+        if me.cheekfins == "CC":
+            cheekfins = "fins"
+        if me.cheekfins == "Cc" or me.cheekfins == "cC":
+            if cd.cheekfins != "Cc" and cd.cheekfins != "cC":
+                cheekfins = "gimpy cheekfins"
+            if cd.cheekfins == "Cc" or cd.cheekfins == "cC":
+                cheekfins = "xxx"
+    # earfins combo
+    earfins = ""
+    # If either is caste-normal:
+    if cheekfins == "xxx" and ears != "xxx":
+        earfins = ears
+    if ears == "xxx" and cheekfins != "xxx":
+        earfins = cheekfins
+    # if both are abnormal:
+    if ears != "xxx" and cheekfins != "xxx":
+        earfins = cheekfins + " and " + ears
+    # if both are abnormal in the same way
+    if cheekfins[0] == "n" and ears[0] == "n":
+        earfins = "no fins or ears"
+    if cheekfins[0] == "f" and ears[0] == "f":
+        earfins = "full fins and ears"
+    if cheekfins[0] == "g" and ears[0] == "g":
+        earfins = "gimpy earfins"
+    # If both are differently webbed
+    if cheekfins[0] == "f" and ears[0] == "g":
+        earfins = "earlike fins"
+    if cheekfins[0] == "g" and ears[0] == "f":
+        earfins = "finlike ears"
+    # Gills and breathing.
+    # gilltypes
+    gillnecktype = ""
+    if me.gillneckt != cd.gillneckt:
+        if me.gillneckt == "i":
+            gillnecktype = "internal"
+        if me.gillneckt == "e":
+            gillnecktype = "external"
+    gillribstype = ""
+    if me.gillribst != cd.gillribst:
+        if me.gillribst == "i":
+            gillribstype = "internal"
+        if me.gillribst == "e":
+            gillribstype = "external"
+    gillfacetype = ""
+    if me.gillfacet != cd.gillfacet:
+        if me.gillfacet == "i":
+            gillfacetype = "internal"
+        if me.gillfacet == "e":
+            gillfacetype = "external"
+    # neckgills
+    gillneck = ""
+    if me.gillneck != cd.gillneck:
+        if me.gillneck == "gg":
+            gillneck = "no neckgills"
+        if me.gillneck == "GG":
+            gillneck = "full " + fbs.lyst2(gillnecktype, "neckgills")
+        if me.gillneck == "Gg" or me.gillneck == "gG":
+            if cd.gillneck != "Gg" and cd.gillneck != "gG":
+                gillneck = fbs.lyst2(gillnecktype, "partial neckgills")
+            if cd.gillneck == "Gg" or cd.gillneck == "gG":
+                gillneck = ""
+                if gillnecktype != "":
+                    gillneck = fbs.lyst2(gillnecktype, "neckgills")
+    # rib gills
+    gillribs = ""
+    if me.gillribs != cd.gillribs:
+        if me.gillribs == "gg":
+            gillribs = "no rib gills"
+        if me.gillribs == "GG":
+            gillribs = "full " + fbs.lyst2(gillribstype, "rib gills")
+        if me.gillribs == "Gg" or me.gillribs == "gG":
+            if cd.gillribs != "Gg" and cd.gillribs != "gG":
+                gillribs = fbs.lyst2(gillribstype, "partial rib gills")
+            if cd.gillribs == "Gg" or cd.gillribs == "gG":
+                gillribs = ""
+                if gillribstype != "":
+                    gillribs = fbs.lyst2(gillribstype, "rib gills")
+    # face gills
+    gillface = ""
+    if me.gillface != cd.gillface:
+        if me.gillface == "gg":
+            gillface = "no face gills"
+        if me.gillface == "GG":
+            gillface = "full " + fbs.lyst2(gillfacetype, "face gills")
+        if me.gillface == "Gg" or me.gillface == "gG":
+            if cd.gillface != "Gg" and cd.gillface != "gG":
+                gillface = fbs.lyst2(gillfacetype, "partial face gills")
+            if cd.gillface == "Gg" or cd.gillface == "gG":
+                gillface = ""
+                if gillfacetype != "":
+                    gillface = fbs.lyst2(gillfacetype, "face gills")
+    # gill summary!
+    gills = ""
+    # If at least one gill area is noteworthy in some way...
+    if gillneck != "" or gillribs != "" or gillface != "":
+        if gillneck != "":
+            gills = fbs.lyst(gills, gillneck)
+        if gillribs != "":
+            gills = fbs.lyst(gills, gillribs)
+        if gillribs != "":
+            gills = fbs.lyst(gills, gillface)
+        # Find ways to shorten this later maybe.  For now it works.
+    # breathability
+    breathes = ""
+    if me.salt != cd.salt or me.air != cd.air:
+        canb = ""
+        cantb = ""
+        ws = "salt water"
+        wb = "brackwater"
+        wf = "freshwater"
+        wa = "air"
+        if me.salt[0] == "S":
+            canb = fbs.lyst(canb, ws)
+        if me.salt[0] == "s":
+            cantb = fbs.lyst(cantb, ws)
+        if me.salt[1] == "B":
+            canb = fbs.lyst(canb, wb)
+        if me.salt[1] == "b":
+            cantb = fbs.lyst(cantb, wb)
+        if me.salt[2] == "F":
+            canb = fbs.lyst(canb, wf)
+        if me.salt[2] == "f":
+            cantb = fbs.lyst(cantb, wf)
+        if countaa(me.air) < 4:
+            canb = fbs.lyst(canb, wa)
+        if countaa(me.air) > 3:
+            cantb = fbs.lyst(cantb, wa)
+        breathes = "can breathe " + canb
+        if cantb != "":
+            breathes = breathes + ", but not " + cantb
 
-    if detail == landtype and not self.SS == "SS" and not self.SS == "ss":
-        descr = "suspiciously normal landdweller"
-    if detail == seatype and not self.SS == "SS" and not self.SS == "ss":
-        descr = "suspiciously normal landdweller"
-    descr = descr + "@,@,@,@,@,@,@,@,@,@"
+    descr = fbs.lyst(descr, gills)
+    descr = fbs.lyst(descr, bladders)
+    descr = fbs.lyst(descr, teeth)
+    descr = fbs.lyst(descr, biolum)
+    descr = fbs.lyst(descr, webbing)
+    descr = fbs.lyst(descr, eyelids)
+    descr = fbs.lyst(descr, bodyfins)
+    descr = fbs.lyst(descr, earfins)
+    descr = fbs.lyst(descr, breathes)
+
     return descr
 
 
 def describedwell(sea):
-    self = GeneSea(sea)
+    self = GeneSea("rr", sea)
     detail = self.code[3:len(self.code)]
     landtype = slurry.sgenesea[3:len(slurry.sgeneland)]
     seatype = slurry.sgenesea[3:len(slurry.sgenesea)]
@@ -1176,7 +1095,7 @@ def describedwell(sea):
     if weirdo:
         descr = "beachdweller"
         if self.salt == "SBF":
-            descr = "beachdweller"
+            descr = "seadweller"
         if self.salt == "SBf":
             descr = "tidedweller"
         if self.salt == "Sbf":
@@ -1185,13 +1104,13 @@ def describedwell(sea):
             descr = "riverdweller"
         if self.salt == "sBF":
             descr = "ponddweller"
+        if self.salt == "sBf":
+            descr = "deltadweller"
         if self.salt == "sbf":
             descr = "surfacedweller"
             # if surface dweller but no gills, landdweller.
-            if self.gillface == "gg" and self.gillneck == "gg" and self.gillrib == "gg":
+            if self.gillface == "gg" and self.gillneck == "gg" and self.gillribs == "gg":
                 descr = "landdweller"
-        if self.salt == "sBf":
-            descr = "deltadweller"
     if self.SS == "SS":
         descr = "seadweller"
     if self.SS == "ss":
@@ -1201,6 +1120,10 @@ def describedwell(sea):
     if self.air == "aaaa" and self.SS != "ss":
         descr2 = "non-air " + descr
         descr = descr2
+    if self.air != "aaaa" and self.air != "AAAA" and self.SS != "ss" and self.SS != "SS":
+        if countaa(self.air) > 1:
+            descr2 = "breathshort " + descr
+            descr = descr2
     descr = descr.strip()
     return descr
 
@@ -1210,6 +1133,20 @@ def weirdseashit(sea):
     if sea[0:2] == "Ss" or "sS":
         flag = 1
     return flag
+
+
+def countaa(inhale):
+    a = 0
+    if inhale[0] == "a":
+        a = a + 1
+    if inhale[1] == "a":
+        a = a + 1
+    if inhale[2] == "a":
+        a = a + 1
+    if inhale[3] == "a":
+        a = a + 1
+    exhale = a
+    return exhale
 
 
 def genecombine(g1, g2):
@@ -1231,6 +1168,35 @@ def genecombine(g1, g2):
         x = x + 1
     return gf
 
+
+def genedesc1(my, cy, a, atxt, b, btxt, abtxt):
+    txt = ""
+    if my != cy:
+        if my == a + a:
+            txt = atxt
+        if my == b + b:
+            txt = btxt
+        if my == a + b or my == b + a:
+            if cy != a + b and cy != b + a:
+                txt = abtxt
+            if cy == a + b or cy == b + a:
+                txt = ""
+    return txt
+
+
+# Not actually used yet.
+def genedesc2(my, cy, a, atxt, b, btxt, abtxt, batxt):
+    txt = ""
+    if my != cy:
+        if my == a + a:
+            txt = atxt
+        if my == b + b:
+            txt = btxt
+        if my == a + b:
+            txt = abtxt
+        if my == b + a:
+            txt = batxt
+    return txt
 
 
 # Most "repair troll" functions are in the display function.  For now.
