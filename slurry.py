@@ -32,7 +32,7 @@ def getpremadetroll(x=random.randint(1, 3)):
         t0["surname"] = "Pickle"
         t0["sex"] = "F"
         t0["blood"] = "RGg"
-        t0["sea"] = "ssbbccEEwwwwffbbSbfggiggiGGittdeeAAAA"
+        t0["sea"] = "ssbbccEEwwwwffbbSbfggiggiGGittdeeAAAAsss"
         t0["powers"] = strpowers
         t0["hornL"] = "12TFw.point"
         t0["hornR"] = "21SOn.split"
@@ -47,7 +47,7 @@ def getpremadetroll(x=random.randint(1, 3)):
         t0["surname"] = "Pebble"
         t0["sex"] = "M"
         t0["blood"] = "rBb"
-        t0["sea"] = "SsbbCcEewWwWffbbsbFGgiGgiggiTtdeeAAAA"
+        t0["sea"] = "SSbbCcEewWwWffbbsbFGgiGgiggiTtdeeAAAAsss"
         t0["powers"] = strpowers
         t0["hornL"] = "46RIn.pincher"
         t0["hornR"] = "37OBn.round"
@@ -62,7 +62,7 @@ def getpremadetroll(x=random.randint(1, 3)):
         t0["surname"] = "Parkle"
         t0["sex"] = "N"
         t0["blood"] = "bbb"
-        t0["sea"] = "ssBBcceeWWWWFFBBsBFGgeGgeGgeTtDEEaaaa"
+        t0["sea"] = "ssBBcceeWWWWFFBBsBFGgeGgeGgeTtDEEaaaasSS"
         t0["powers"] = strpowers
         # doubled genes, make just one horn doubled.
         t0["hornL"] = "17OFw.split"
@@ -308,9 +308,9 @@ def spectrumrand():
     ]
     return spectrum
 
-sgenemutant = "SsBBCcEewWwWFFBbsBFGgeGgeggiTtDEeaaaa" # Weird Shit.
-sgeneland = "ssbbccEEwwwwffbbsbfggiggiggittdeeAAAA"  # no aquatic traits, no biolum, ears and no fins.
-sgenesea =  "SSbbCCeeWwWwffBBSBFGGiGGiggiTTdEEAAAA"
+sgenemutant = "SsBBCcEewWwWFFBbsBFGgeGgeggiTtDEeaaaaSSs" # Weird Shit.
+sgeneland = "ssbbccEEwwwwffbbsbfggiggiggittdeeAAAAsss"  # no aquatic traits, no biolum, ears and no fins.
+sgenesea =  "SSbbCCeeWwWwffBBSBFGGiGGiggiTTdEEAAAASSS"
 # Seadweller active, earfins + no ears, half-webbed fingers/toes,
 # no dorsal fins, strong biolum, any water, internal rib/neck gills, no face gills.
 
@@ -356,33 +356,56 @@ dwellspectrum = {
     "BB": "landdweller",  # Bloo
     "Bb": "landdweller",
     "bb": "landdweller",  # Indigo
-    "rB": "surfacedweller",
+    "rB": "landdweller",
     "RB": "seadweller",  # Violet
     "Rb": "seadweller",
     "rb": "seadweller",  # Tyrian
     }
 
 spectrumgenesea = {
-    "RR": "ssbbccEEwwwwffbbsbfggiggiggittdeeAAAA",  # Maroon
-    "Rr": "ssbbccEEwwwwffbbsbfggiggiggittdeeaAAA",
-    "rr": "ssbbccEEwwwwffbbsbfggiggiggittdeeAAAA",  # Bronze
-    "Rg": "ssbbccEEwwwwffbbsbfggiggiggittdeeAaAA",
-    "RG": "ssbbccEEwwwwffbBsbfggiggiggittdEeAAAA",  # Gold
-    "rG": "ssbbccEEwwwwffbbsbfggiggiggittdeeAAaA",
-    "rg": "ssbbccEEwwwwffbbsbfggiggiggittdeeAAAA",  # Lime
-    "GG": "ssbbccEEwwwwffbbsbfggiggiggittdeeAAAA",  # Olive
-    "Gg": "ssbbccEEwwwwffbbsbfggiggiggittdeeAAAa",
-    "gg": "ssbbccEEwwwwffBBsbfggiggiggittdeeAAAA",  # Jade
-    "Gb": "ssbbccEEwwwwffbbsbfggiggiggittdeeaAAA",
-    "GB": "ssbbccEEwwwwffbbsbfggiggiggittdeeAAAA",  # Teal
-    "gB": "ssbbccEEwwwwffbbsbfggiggiggittdeeAaAA",
-    "gb": "ssbbccEEwwwwffbbsbfggiggiggittdeeAAAA",  # Ceru
-    "BB": "ssbbccEEwwwwffbbsbfggiggiggittdeeAAAA",  # Bloo
-    "Bb": "ssbbccEEwwwwffbbsbfggiggiggittdeeAAaA",
-    "bb": "ssbbCcEEwwWwFfbbsbfGgiGgiggittdeeAAAA",  # Indigo
-    "rB": "SsbbCcEewwWwffbbsbfGgiGgiggiTtdEeAaAa",
-    "RB": "SSBbCCeeWwWwffBbSbFGGiGGiggiTTdEEAAAA",  # Violet
-    "Rb": "SSBbCCeeWwWWFfBBSBFGGiGGiGgitTdEEaaaA",
-    "rb": "SSBbCCeeWwWwffBBSbfGGiGGiggiTTdEEAAAA",  # Tyrian
+    "RR": "ssbbccEEwwwwffbbsbfggiggiggittdeeAAAAsss",  # Maroon
+    "Rr": "ssbbccEEwwwwffbbsbfggiggiggittdeeaAAAsss",
+    "rr": "ssbbccEEwwwwffbbsbfggiggiggittdeeAAAAsss",  # Bronze
+    "Rg": "ssbbccEEwwwwffbbsbfggiggiggittdeeAaAAsss",
+    "RG": "ssbbccEEwwwwffbBsbfggiggiggittdEeAAAAsSs",  # Gold
+    "rG": "ssbbccEEwwwwffbbsbfggiggiggittdeeAAaAsss",
+    "rg": "ssbbccEEwwwwffbbsbfggiggiggittdeeAAAAsss",  # Lime
+    "GG": "ssbbccEEwwwwffbbsbfggiggiggittdeeAAAAsss",  # Olive
+    "Gg": "ssbbccEEwwwwffbbsbfggiggiggittdeeAAAasss",
+    "gg": "ssbbccEEwwwwffBBsbfggiggiggittdeeAAAAsss",  # Jade
+    "Gb": "ssbbccEEwwwwffbbsbfggiggiggittdeeaAAAsSs",
+    "GB": "ssbbccEEwwwwffbbsbfggiggiggittdeeAAAAsss",  # Teal
+    "gB": "ssbbccEEwwwwffbbsbfggiggiggittdeeAaAAsss",
+    "gb": "ssbbccEEwwwwffbbsbfggiggiggittdeeAAAAsss",  # Ceru
+    "BB": "ssbbccEEwwwwffbbsbfggiggiggittdeeAAAAsss",  # Bloo
+    "Bb": "ssbbccEEwwwwffbbsbfggiggiggittdeeAAaAsss",
+    "bb": "ssbbCcEEwwWwFfbbsbfGgiGgiggittdeeAAAAsss",  # Indigo
+    "rB": "SSbbCcEewwWwffbbsbfGgiGgiggiTtdEeAaAasss",
+    "RB": "SSBbCCeeWwWwffBbSbFGGiGGiggiTTdEEAAAASSS",  # Violet
+    "Rb": "SSBbCCeeWwWWFfBBSBFGGiGGiGgitTdEEaaaASSS",
+    "rb": "SSBbCCeeWwWwffBBSbfGGiGGiggiTTdEEAAAASSS",  # Tyrian
     }
 
+socialspectrumgenesea = {
+    "RR": sgeneland,  # Maroon
+    "Rr": sgeneland,
+    "rr": sgeneland,  # Bronze
+    "Rg": sgeneland,
+    "RG": sgeneland,  # Gold
+    "rG": sgeneland,
+    "rg": sgeneland,  # Lime
+    "GG": sgeneland,  # Olive
+    "Gg": sgeneland,
+    "gg": sgeneland,  # Jade
+    "Gb": sgeneland,
+    "GB": sgeneland,  # Teal
+    "gB": sgeneland,
+    "gb": sgeneland,  # Ceru
+    "BB": sgeneland,  # Bloo
+    "Bb": sgeneland,
+    "bb": sgeneland,  # Indigo
+    "rB": sgeneland,
+    "RB": sgenesea,  # Violet
+    "Rb": sgenesea,
+    "rb": sgenesea,  # Tyrian
+    }

@@ -423,7 +423,7 @@ def displaytroll(x, y, t0):  # interface -- prints a standard-format window disp
     h = t0["height"]
     t0["heightstr"] = deets.heightstr(h)
     seatemp = t0["sea"]
-    t0["seadesc"] = deets.describeseanew(blood, seatemp)
+    t0["seadesc"] = deets.describesea(blood, seatemp)
     t0["dwell"] = deets.describedwell(seatemp)
     t0["weirdshitsea"] = str(deets.weirdseashit(seatemp))
     t0["caste"] = deets.getcaste(blood)
@@ -593,7 +593,7 @@ tcod.console_set_custom_font(font_path, font_flags)
 window_title = "Dancestry " + versionnum
 fullscreen = False
 tcod.console_init_root(screen_width, screen_height, window_title, fullscreen)
-libbie = slurry.getpremadetroll(1)
+libbie = slurry.getpremadetroll(3)
 lester = slurry.getpremadetroll(2)
 troll1 = libbie
 troll2 = lester
