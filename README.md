@@ -7,6 +7,14 @@ Original version written in freebasic in late 2017.  Being adapted to Python in 
 Approximate version history:
 =
 
+V. 0.2.3b: 2019-05-04
+
+-- seadesc's code is prettier, and more functional
+
+-- did planning stage for eye and teeth genes
+
+-- made seadesc describe differences from land dweller / seadweller defaults, not caste norms
+
 V. 0.2.3a: 2019-05-03
 
 -- seadesc is prettier.
