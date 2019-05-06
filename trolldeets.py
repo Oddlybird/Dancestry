@@ -5,147 +5,11 @@ import colorsys
 import colorgarbage as colg
 import slurry
 import formattingbs as fbs
-
+import genome as gene
 
 # This file contains basic formatting information,
 # Functions that are used to combine info from a slurry,
 # Functions that manipulate / interact with troll data
-
-# Phenotype Classes, containing genes
-
-class Horn:  # trolldeets
-    # Horns are stored in trolls as just the code part.  Use this class when manipulating.
-    # create a horn by going horn-variable = Horn("21RIn.f point"), or horn-variable = Horn(troll.hornL)
-    code = "21RIn.point"
-    length = 2  # 1 = 0-1 handspans, 2 = 1-2 handspans, 3 = 2-3 handspans, 4 = 3+ handspans.
-    curl = 1
-    # 1 = straight, 2 = up to 45 degrees, 3 = 90 degrees +/- 45, 4 = 180 +/- 45,
-    # 5 = 270 +/- 45, 6 = 360 +/-45, 7 = ampora wave-like curves
-    radial = "R"  # cross-section shape.  R = round, O = Oval, T = triangular, S = spiraling like a goat.
-    dir = "I"
-    # primary growth direction.  F = frontwards, B = backwards, O = outwards (usually up), I = inwards (usually up).
-    wide = "n"  # n = normal width like terezi.  w = wide base, like nepeta.
-    tipA = "point"  # shape of the point.  Point, Cone, Spade, Pincher, Jagged, Round, hook, ...
-    # Add :  Horn bumps, doubled horns, notched and rounded-notched horns
-    # bolt-tipped
-    # branched / antler horns, sheet-like moose horns
-
-    def __init__(self, code):
-        self.code = code
-        self.length = code[0]
-        self.curl = code[1]
-        self.radial = code[2]
-        self.dir = code[3]
-        self.wide = code[4]
-        self.tipA = code[6:len(code)]  # everything else in string = the tip type.
-
-    def desc(self):
-        # convert the current features of the horn into a verbal description as in basic version.
-        # use by going description-string = horn-temp.desc()
-        descr = describehorn(self.code)
-        return descr
-
-class GeneSea:  # trolldeets
-    # This contains genes relating to aquatic and amphibious traits
-    # These will be stored in trolls as just the code part.  Use this class when manipulating.
-    # create gene object by going temp1 = SeaGenes("Ssx"),temp1 = SeaGenes(troll["sea"])
-    blood = "rr"
-    code = "ssbbccEEwwwwffbbsbfggiggiggittdeeAAAAsss"  # The code used to store data longterm.
-    SS = "ss"          # SS = seadweller, Ss/sS = depends on genes, ss = land-dweller.
-    SS2 = "sssss"      # extended.  [0:2] and [37:40]
-    bladders = "bb"    # Swim bladders - several / one / none
-    cheekfins = "cc"     # yes / half / no
-    # Make genes for earfin size, number of tines, etc.
-    ears = "EE"        # yes / half / no.   Someday ear types?
-    wfingers = "ww"    # webbed fingers?  full/half/none
-    wtoes = "ww"       # webbed toes, full/half/none
-    dorsalfins = "ff"  # big/small/none
-    biolum = "bb"      # y/n
-    # patterns, brightness, colors, conscious / unconscious control, steady state vs bloodflow, fin glow, eye glow..
-    salt = "sbf"       # Saltwater(Y/n)?  Brackish (Y/N)?  Fresh (Y/N)?   S/s, B/b, F/f.
-    gillneck = "gg"    # full/half/none
-    gillneckt = "i"    # i: internal.  e: external.
-    gillribs = "gg"     # full/half/none
-    gillribst = "i"     # i: internal, e: external
-    gillface = "gg"    # ocular gills, internal/external/none.
-    gillfacet = "i"    # i: internal, e: external
-    teeth = "ttd"      # t = land, T = barracuda, Tt = blend, d/D = doubled vs single
-    eyelids = "ee"     # ee = single, eE = permanent transparent coating, EE = doubled transparent lids
-    air = "AAAA"       # Can the troll breathe air?  All four must be "a" to produce a no.
-
-    def __init__(self, blood, code):
-        self.blood = blood
-        self.code = code
-        self.SS = code[0:2]  # First two letters are whether seadweller genes are active or not.
-        self.bladders = code[2:4]
-        self.cheekfins = code[4:6]
-        self.ears = code[6:8]
-        self.wfingers = code[8:10]
-        self.wtoes = code[10:12]
-        self.dorsalfins = code[12:14]
-        self.biolum = code[14:16]
-        self.salt = code[16:19]
-        self.gillneck = code[19:21]
-        self.gillneckt = code[21:22]
-        self.gillribs = code[22:24]
-        self.gillribst = code[24:25]
-        self.gillface = code[25:27]
-        self.gillfacet = code[27:28]
-        self.teeth = code[28:31]
-        self.eyelids = code[31:33]
-        self.air = code[33:37]
-        temp = code[0:2] + code[37:40]
-        self.SS2 = temp
-#        self.tipA = code[6:len(code)]  # Not sure if I'll need this format or not.
-
-    def dwell(self):
-        # land dweller or sea?
-        # use by going temp2 = temp1.desc()
-        descr = describedwell(self.code)
-        return descr
-
-    def desc(self):
-        # verbal description of aquatic traits
-        # Include specifics of all genes that differ from slurry defaults for landdweller / seadweller
-        descr = describesea(self.blood, self.code)
-        return descr
-
-# Need a phenotype class for misc. physical traits usually defined by universe norms
-# Need a feral traits class
-# Need a psychic / voodoo traits class
-# Need a ...eldritch...?
-#      ...mutations...?
-# eye mutations:  octopus pupils, vision 8fold, 1 eye,
-
-
-# class Troll: #trolldeets.  just so I can pass them around easier...   Maybe?
-def trollobj():  # trolldeets
-    t0 = {
-        "savetype": "7",  # Save Version
-        "firname": "FIRNAM",  # six letters
-        "surname": "SURNAM",  # six letters
-        "sex": "N",  # M/N/F
-        "blood": "Rg",  # RGB rgb
-        "caste": "?",
-        "dwell": "?",
-        "seadesc": "?",
-        "hornLdesc": "?",
-        "hornRdesc": "?",
-        "sea": slurry.sgeneland,
-        # pawfeet, tail, wing, hairstreaks, grubscars, ?
-        "powers": "none",  # psychic, voodoo, eldritch, none.  specify type later.  Make psychics eyes glow colors?
-        "hornL": "22RIn.point",  # see horn notes.
-        "hornR": "22RIn.point",
-        "height": 84,       # height in inches
-        "strheightstr":  heightstr(84),
-        "build": "medium",  # more detailed data later
-        "hair": "short",    # more detailed data later.  medium/long.
-        "skin": "grey",     # freckles, stripes, birthmarks, vitiligo, melanism, albinism, etc.
-        "donator1": "?.?",  # higher caste donator
-        "donator2": "?.?",   # lower caste donator
-        "weirdshitsea": "0" # False flag
-    }
-    return t0
 
 
 def slurrytroll(spectrum):
@@ -182,7 +46,7 @@ def slurrytroll(spectrum):
     sgenetype = slurry.spectrumgenesea[strblood[0:2]]
     strsea3 = genecombine(strsea2, sgenetype)   # Caste-specific...
     strsea = genecombine(strsea3, sgenetype)   # Caste-specific...
-    gene1 = GeneSea(strblood, strsea)
+    gene1 = gene.Aquatic(strblood, strsea)
     strseadesc = gene1.desc()
 
     # Phenotype shit comes later.
@@ -199,16 +63,16 @@ def slurrytroll(spectrum):
     hornl = slurry.premadehorn()
     hornr = slurry.premadehorn()
     (hornl, hornr) = hornaverager(hornl, hornr)
-    hornl2 = Horn(hornl)
+    hornl2 = gene.HornObj(hornl)
     strhornl = hornl2.desc()
-    hornr2 = Horn(hornr)
+    hornr2 = gene.HornObj(hornr)
     strhornr = hornr2.desc()
 
     # names
     firstname = names.newname()
     lastname = names.newname()
 
-    t1 = trollobj()
+    t1 = gene.trollobj()
     t1["firname"] = firstname
     t1["surname"] = lastname
     t1["sex"] = strsex
@@ -282,7 +146,7 @@ def blendtroll(trolla, trollb):  # trolldeets
 
     # str-sea = Phenotype shit comes later.
     strsea = genecombine(p1["sea"], p2["sea"])
-    gene1 = GeneSea(strblood, strsea)
+    gene1 = gene.Aquatic(strblood, strsea)
     strseadesc = gene1.desc()
 
     # traits come later.
@@ -298,16 +162,16 @@ def blendtroll(trolla, trollb):  # trolldeets
     hornl = hornblender(p1["hornL"], p2["hornL"], p1["hornR"], p2["hornR"])
     hornr = hornblender(p1["hornR"], p2["hornR"], p1["hornL"], p2["hornL"])
     (hornl, hornr) = hornaverager(hornl, hornr)
-    hornl2 = Horn(hornl)
+    hornl2 = gene.HornObj(hornl)
     strhornl = hornl2.desc()
-    hornr2 = Horn(hornr)
+    hornr2 = gene.HornObj(hornr)
     strhornr = hornr2.desc()
 
     # names
     firstname = names.newname()
     lastname = names.newname()
 
-    t1 = trollobj()
+    t1 = gene.trollobj()
     t1["firname"] = firstname
     t1["surname"] = lastname
     t1["sex"] = strsex
@@ -532,104 +396,6 @@ def getsex(blood):
     return sex
 
 
-# Original
-def getcaste_orig(b):  # trolldeets
-    caste = "?"
-
-    # Dense What If Forest : Divine place on hemospectrum,
-    if b[0] == "R":
-        caste = "Maroon"  # R
-        if len(b) > 1:
-            if b[1] == "R":
-                caste = "Maroon"  # RR Maroon
-                if len(b) > 2:
-                    if b[2] == "G":
-                        caste = "Gold"  # RRG
-            if b[1] == "G":
-                caste = "Gold"  # RG Gold
-                if len(b) > 2:
-                    if b[2] == "G":
-                        caste = "Lime"  # RGG
-                    if b[2] == "B":
-                        caste = "xBronze"  # RGB
-                    if b[2] == "b":
-                        caste = "xGold"  # RGb
-            if b[1] == "B":
-                caste = "Violet"  # RB Violet
-                if len(b) > 2:
-                    if b[2] == "B":
-                        caste = "Indigo"   # RBB
-                    if b[2] == "g":
-                        caste = "xViolet"  # RBg
-                    if b[2] == "b":
-                        caste = "Indigo"  # RBb
-            if b[1] == "r":
-                caste = "Maroon"  # Rr Maroon
-                if len(b) > 2:
-                    if b[2] == "g":
-                        caste = "Bronze"  # Rrg
-                    if b[2] == "b":
-                        caste = "xTyrian"  # Rrb
-            if b[1] == "g":
-                caste = "Bronze"  # Rg Bronze
-                if len(b) > 2:
-                    if b[2] == "g":
-                        caste = "Gold"  # Rgg
-                    if b[2] == "b":
-                        caste = "xBronze"  # Rgb
-            if b[1] == "b":
-                caste = "Tyrian"  # Rb Tyrian
-                if len(b) > 2:
-                    if b[2] == "b":
-                        caste = "Violet"  # Rbb
-    if b[0] == "G":
-        caste = "Olive"  # G
-        if len(b) > 1:
-            if b[1] == "G":
-                caste = "Olive"  # GG Olive
-            if b[1] == "B":
-                caste = "Teal"  # GB Teal
-            if b[1] == "r":
-                caste = "Lime"  # Gr Lime
-            if b[1] == "g":
-                caste = "Olive"  # Gg Olive
-            if b[1] == "b":
-                caste = "Jade"  # Gb Jade
-    if b[0] == "B":
-        caste = "Bloo"  # B
-        if len(b) > 1:
-            if b[1] == "B":
-                caste = "Blue"  # BB Bloo
-            if b[1] == "r":
-                caste = "Indigo"  # Br Indigo
-            if b[1] == "g":
-                caste = "Cerulean"  # Gb Ceru
-            if b[1] == "b":
-                caste = "Blue"  # Bb Bloo
-    if b[0] == "r":
-        caste = "Maroon"  # r
-        if len(b) > 1:
-            if b[1] == "r":
-                caste = "Maroon"  # rr maroon
-            if b[1] == "g":
-                caste = "Bronze"  # rg Bronze
-            if b[1] == "b":
-                caste = "Mutant"  # rb vantas
-    if b[0] == "g":
-        caste = "olive"  # g
-        if len(b) > 1:
-            if b[1] == "g":
-                caste = "Olive"  # gg Olive
-            if b[1] == "b":
-                caste = "Jade"  # gb Jade
-    if b[0] == "b":
-        caste = "bloo"  # b
-        if len(b) > 1:
-            if b[1] == "b":
-                caste = "Blue"  # bb Bloo
-    return caste
-
-
 def getcastenum(b):  # trolldeets
     (cr, cg, cb) = colg.bloodtorgb(b)
     (h, s, v) = colorsys.rgb_to_hsv(cr, cg, cb)
@@ -641,15 +407,8 @@ def getcastenum(b):  # trolldeets
 
 
 def getcastenumstr(b):  # trolldeets
-    (cr, cg, cb) = colg.bloodtorgb(b)
-    (h, s, v) = colorsys.rgb_to_hsv(cr, cg, cb)
-    hue = h * 360
-    hue = round(hue)
-    if hue >= 345:
-        hue = hue - 360
-    hue = hue + 15
-    val = v / 100
-    caste = round(hue + val, 1)
+    caste = getcastenum(b)
+    caste = round(caste)
     caste = str(caste)
     caste = caste.zfill(5)
     return caste
@@ -665,7 +424,6 @@ def highercaste(blood1, blood2):  # trolldeets
     return bloodhigher
 
 
-# chibs version
 def bloodsort(blood):
     a = 0  # count the number of letters stripped out
     sortedblood = ""  # sorted blood code
@@ -717,7 +475,7 @@ def heightstr(h):
 
 
 def describehorn(inhorn="22RIn.point"):
-    temp = Horn(inhorn)
+    temp = gene.HornObj(inhorn)
     descr = ""
     # Length, default 2
     if temp.length == "1":
@@ -767,8 +525,8 @@ def describehorn(inhorn="22RIn.point"):
 def describesea(bloodcode, sea):    # slurry.spectrumgenesea, blood[0:2]
     # "SSbbCCeeWwWwffBBSBFGGiGGiggittdeeAAAASSS"
     blood = bloodcode[0:2]
-    me = GeneSea(blood, sea)                      # The troll being tested
-    cd = GeneSea(blood, slurry.socialspectrumgenesea[blood])   # Caste Default
+    me = gene.Aquatic(blood, sea)                      # The troll being tested
+    cd = gene.Aquatic(blood, slurry.socialspectrumgenesea[blood])   # Caste Default
     done = False
     descr = ""
     earfins = ""
@@ -782,7 +540,7 @@ def describesea(bloodcode, sea):    # slurry.spectrumgenesea, blood[0:2]
     bodyfins = ""
 
     while not done:
-        # If someone is caste-typical
+        # If someone is arbitrarily set to caste-typical
         if me.SS2 == "SSSSS":
             dwellvar = slurry.dwellspectrum[blood]
             if dwellvar != "seadweller":
@@ -795,8 +553,10 @@ def describesea(bloodcode, sea):    # slurry.spectrumgenesea, blood[0:2]
                 dwellvar = me.dwell()
             descr = dwellvar
             return descr
+        # if someone happens to be caste-typical due to epigenetics
+#            if not (s0w == "Y" and ((me.code[] != slurry.spectrumblood]))
         # If someone cannot breathe at all
-        if me.air == "aaaa":
+        if me.air == "aaaa" and me.s1w == "Y":
             if me.gillface == "gg" and me.gillneck == "gg" and me.gillribs == "gg":
                 descr = "no gills, cannot breathe air"
                 return descr
@@ -958,9 +718,9 @@ def describesea(bloodcode, sea):    # slurry.spectrumgenesea, blood[0:2]
             breathes = "can breathe " + canb
             if cantb != "":
                 breathes = breathes + ", but not " + cantb
-            if gills == "" and me.salt == "sbf" and slurry.dwellspectrum(blood) != "landdweller":
+            if gills == "" and me.salt == "sbf" and slurry.dwellspectrum[blood] != "landdweller":
                 breathes = "breathes " + canb
-            if gills == "" and me.salt == "SBF" and slurry.dwellspectrum(blood) != "seadweller":
+            if gills == "" and me.salt == "SBF" and slurry.dwellspectrum[blood] != "seadweller":
                 breathes = "breathes " + canb
         if me.SS2[2] == "S":  # Swimbladders.
             bladders = genedesc1(me.bladders, cd.bladders, "B", "swim bladders", "b", "no swim bladder", "a swim bladder")
@@ -997,17 +757,20 @@ def describesea(bloodcode, sea):    # slurry.spectrumgenesea, blood[0:2]
         descr = fbs.lyst(descr, eyelids)
         descr = fbs.lyst(descr, bodyfins)
 
+    if descr == "":
+        descr = cd.dwell()
+
     return descr
 
 
 def describedwell(sea):
-    self = GeneSea("rr", sea)
-    detail = self.code[3:len(self.code)]
-    landtype = slurry.sgenesea[3:len(slurry.sgeneland)]
-    seatype = slurry.sgenesea[3:len(slurry.sgenesea)]
+    self = gene.Aquatic("rr", sea)
+    detail = self.code[3:len(self.code) - 3]
+    landtype = slurry.sgenesea[3:len(slurry.sgeneland) - 3]
+    seatype = slurry.sgenesea[3:len(slurry.sgenesea) - 3]
     weirdo = False
     descr = ""
-    if self.SS == "sS":
+    if self.SS2[1] == "S":
         weirdo = True
     if detail == landtype or detail == seatype:
         weirdo = False
@@ -1030,9 +793,9 @@ def describedwell(sea):
             # if surface dweller but no gills, landdweller.
             if self.gillface == "gg" and self.gillneck == "gg" and self.gillribs == "gg":
                 descr = "landdweller"
-    if self.SS == "SS":
+    if self.SS2 == "SSSSS":
         descr = "seadweller"
-    if self.SS == "ss":
+    if self.SS2 == "sssss":
         descr = "landdweller"
 
     descr = descr.strip()
@@ -1046,13 +809,6 @@ def describedwell(sea):
 #            descr = descr2
     descr = descr.strip()
     return descr
-
-
-def weirdseashit(sea):
-    flag = 0
-    if sea[0:2] == "Ss" or "sS":
-        flag = 1
-    return flag
 
 
 def countaa(inhale):
@@ -1090,6 +846,7 @@ def genecombine(g1, g2):
 
 
 def genedesc1(my, cy, a, atxt, b, btxt, abtxt):
+    # ab and ba have the same text string
     txt = ""
     if my != cy:
         if my == a + a:
@@ -1106,6 +863,7 @@ def genedesc1(my, cy, a, atxt, b, btxt, abtxt):
 
 # Not actually used yet.
 def genedesc2(my, cy, a, atxt, b, btxt, abtxt, batxt):
+    # ab and ba have different text strings.
     txt = ""
     if my != cy:
         if my == a + a:
@@ -1123,4 +881,4 @@ def genedesc2(my, cy, a, atxt, b, btxt, abtxt, batxt):
 # Until I figure out why it isn't working any other way.
 
 
-trollblank = trollobj()
+trollblank = gene.trollobj()

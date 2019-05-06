@@ -1,5 +1,7 @@
 import trolldeets as deets
+import genome as gene
 import random
+
 
 # This file contains:
 # -- hardcoded trolls who have contributed to slurry,
@@ -12,7 +14,7 @@ import random
 
 def getpremadetroll(x=random.randint(1, 3)):
 
-    t0 = deets.trollobj()
+    t0 = gene.trollobj()
 
     # Things that aren't really enabled yet.
     # Go through and give each troll a different one once the systems exist.
@@ -211,8 +213,8 @@ spectrummini = [
     ]
 
 spectrumlow = [
-   "RR", "RRr", "RRR", "RRg", "RRG", "RrB", "Rrb", "RRB", "RRb",
-   "Rr", "Rrr", "RrR", "Rrg", "RrG", "rrB", "rrb",
+    "RR", "RRr", "RRR", "RRg", "RRG", "RrB", "Rrb", "RRB", "RRb",
+    "Rr", "Rrr", "RrR", "Rrg", "RrG", "rrB", "rrb",
     "rr", "rrr", "rrR", "rrg", "rrG", "rGR", "rGr", "rGB",
     "rG", "RGB", "RGb", "RGg", "RGG", "RgR", "Rgr", "RgB", "Rgb",
     "Rg", "Rgg", "RgG", "rgR", "rgr", "rgB", "rgb",
@@ -240,8 +242,8 @@ spectrumhigh = [
     ]
 
 spectrumrust = [
-   "RR", "RRr", "RRR", "RRg", "RRG", "RrB", "Rrb", "RRB", "RRb",
-   "Rr", "Rrr", "RrR", "Rrg", "RrG", "rrB", "rrb",
+    "RR", "RRr", "RRR", "RRg", "RRG", "RrB", "Rrb", "RRB", "RRb",
+    "Rr", "Rrr", "RrR", "Rrg", "RrG", "rrB", "rrb",
     "rr", "rrr", "rrR", "rrg", "rrG", "rGR", "rGr", "rGB",
     "rG", "RGB", "RGb", "RGg", "RGG", "RgR", "Rgr", "RgB", "Rgb",
     "Rg",
@@ -272,6 +274,7 @@ spectrumpurples = [
     "Rb", "Rbr", "RbR", "rbB", "rbb", "rbg",
     "rb", "rbG", "rbr", "rbR",
     ]
+
 
 def spectrumrand():
     spectrum = [
@@ -308,11 +311,13 @@ def spectrumrand():
     ]
     return spectrum
 
-sgenemutant = "SsBBCcEewWwWFFBbsBFGgeGgeggiTtDEeaaaaSSs" # Weird Shit.
-sgeneland = "ssbbccEEwwwwffbbsbfggiggiggittdeeAAAAsss"  # no aquatic traits, no biolum, ears and no fins.
-sgenesea =  "SSbbCCeeWwWwffBBSBFGGiGGiggiTTdEEAAAASSS"
+
+sgenemutant = "SsBBCcEewWwWFFBbsBFGgeGgeggiTtDEeaaaaSSs"  # Weird Shit.
+sgeneland = "ssbbccEEwwwwffbbsbfggiggiggittdeeAAAAsss"    # no aquatic traits, no biolum, ears and no fins.
+sgenesea = "SSbbCCeeWwWwffBBSBFGGiGGiggiTTdEEAAAASSS"
 # Seadweller active, earfins + no ears, half-webbed fingers/toes,
 # no dorsal fins, strong biolum, any water, internal rib/neck gills, no face gills.
+
 
 heightspectrum = {  # 5' = 60, 6' = 72, 7' = 84, 8' = 96, 9' = 108, 10' = 120, 11' = 132
     "RR": 70,  # Maroon

@@ -5,6 +5,7 @@ import libtcodpy as tcod
 import names
 import colorgarbage as colg
 import slurry
+import genome as gene
 import formattingbs as fbs
 # getcaste(b) is a function you can use to get the plaintext of a caste.  Put in the blood-code.
 # Will be tagging each function / class / etc
@@ -245,13 +246,13 @@ def handle_keys():  # interface - button functions, and loops as needed.
             if screencurrent.name == "maketroll":
                 if btncurrent == 51:
                     # Btn 1 : Troll from parents
-                    troll3 = deets.trollobj()
+                    troll3 = gene.trollobj()
                     troll3 = deets.blendtroll(troll1, troll2)
                     updatescreen()
                     return False
                 if btncurrent == 52:
                     # Btn 2 : Troll from slurry
-                    troll3 = deets.trollobj()
+                    troll3 = gene.trollobj()
                     troll3 = deets.slurrytroll(spectrum)
                     updatescreen()
                     return False
@@ -355,7 +356,7 @@ def savetroll(grub):  # interface     Save Troll
 
 
 def loadtroll(filename):  # interface     Load Troll
-    trollobj = deets.trollobj()
+    trollobj = gene.trollobj()
     savedtroll = "Caverns/AncestralCave/" + filename + ".troll"
     if os.path.exists(savedtroll):
         loadedtroll = open(savedtroll, "rt")
@@ -363,7 +364,7 @@ def loadtroll(filename):  # interface     Load Troll
         trollobj = json.loads(y)
         loadedtroll.close()
     if trollobj["savetype"] != "5":
-        trollobj = deets.trollobj()
+        trollobj = gene.trollobj()
     return trollobj
 
 
@@ -416,8 +417,8 @@ def displaytroll(x, y, t0):  # interface -- prints a standard-format window disp
     colfg = (255, 255, 255)
     hornl1 = t0["hornL"]
     hornr1 = t0["hornR"]
-    hornl2 = deets.Horn(hornl1)
-    hornr2 = deets.Horn(hornr1)
+    hornl2 = gene.HornObj(hornl1)
+    hornr2 = gene.HornObj(hornr1)
     t0["hornLdesc"] = hornl2.desc()
     t0["hornRdesc"] = hornr2.desc()
     h = t0["height"]
@@ -425,7 +426,6 @@ def displaytroll(x, y, t0):  # interface -- prints a standard-format window disp
     seatemp = t0["sea"]
     t0["seadesc"] = deets.describesea(blood, seatemp)
     t0["dwell"] = deets.describedwell(seatemp)
-    t0["weirdshitsea"] = str(deets.weirdseashit(seatemp))
     t0["caste"] = deets.getcaste(blood)
     castedefaultheight = slurry.heightspectrum[blood]
     seawrap = fbs.wordwrap2(t0["seadesc"], 60)
@@ -434,18 +434,18 @@ def displaytroll(x, y, t0):  # interface -- prints a standard-format window disp
     string2 = t0["caste"] + ", " + t0["powers"]
     string3 = t0["donator1"] + " / " + t0["donator2"]
     string4 = t0["heightstr"] + "/" + deets.heightstr(castedefaultheight) + ", " + t0["build"] + " build"
-    string5 = t0["hair"] + " hair"
-    string6 = t0["skin"] + " skin"
-    string7 = "LHorn: " + t0["hornLdesc"]
-    string8 = "RHorn: " + t0["hornRdesc"]
-    string9 = "."
-    string10 = t0["sea"]
-    string11 = t0["dwell"]
-    string12 = "."
-    string13 = seawrap[0]
-    string14 = "  " + seawrap[1]
-    string15 = "  " + seawrap[2]
-    string16 = "  " + seawrap[3]
+    string5 = t0["dwell"]
+    string6 = "LHorn: " + t0["hornLdesc"]
+    string7 = "RHorn: " + t0["hornRdesc"]
+    string8 = t0["sea"]
+    string9 = seawrap[0]
+    string10 = "  " + seawrap[1]
+    string11 = "  " + seawrap[2]
+    string12 = "  " + seawrap[3]
+    string13 = "."
+    string14 = t0["hair"] + " hair"
+    string15 = t0["skin"] + " skin"
+    string16 = "."
     string17 = "."
     string18 = "."
     string19 = "."
@@ -530,7 +530,7 @@ def loadingzone():  # interface - page to load trolls from file
     global pageloadtroll
     z = os.listdir("Caverns/AncestralCave/")
     tcod.console_set_default_foreground(0, tcod.Color(250, 250, 200))
-    castlist = [ "" ]
+    castlist = [""]
     h = 7
     w = 1
     numtotal = 0
