@@ -11,6 +11,10 @@ V. 0.2.3d: 2019-05-05
 
 -- split "deets" into deets (functions / utility), and genome (classes for trollobj, genes, etc).
 
+-- added list of genestrand ideas to genome file
+
+-- fleshed out eye, mouth, and tooth objects / genes; still unfinished and nonfunctional.
+
 V. 0.2.3c: 2019-05-05
 
 -- There are now five epigenetic flags controlling whether seadweller traits express or not.  S0 (ears, fins, finger/toe webbing), S1 (gills and waterbreathing), S2 (swim bladders), S3 (bioluminance, teeth genes), and S4 (nictating eyelids, body fins)
