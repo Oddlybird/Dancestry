@@ -7,6 +7,18 @@ Original version written in freebasic in late 2017.  Being adapted to Python in 
 Approximate version history:
 =
 
+V. 0.2.4: 2019-05-08
+
+-- TEEF, teefblender, teef from slurry, teef averager.
+
+-- Teef still undescribed, undergoing basic testing.
+
+-- Note to self : Redo horns to fit genestrand format.
+
+-- Note to self : Move seadweller double-tooth gene to mouth object, remove from seadweller
+
+-- Note to self : Update documentation.
+
 V. 0.2.3d: 2019-05-05
 
 -- split "deets" into deets (functions / utility), and genome (classes for trollobj, genes, etc).
