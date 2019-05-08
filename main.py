@@ -7,7 +7,7 @@ import colorgarbage as colg
 import slurry
 import genome as gene
 import formattingbs as fbs
-# getcaste(b) is a function you can use to get the plaintext of a caste.  Put in the blood-code.
+# getcastefromblood(b) is a function you can use to get the plaintext of a caste.  Put in the blood-code.
 # Will be tagging each function / class / etc
 # If I ever figure out modules, that will be which modules they go in.
 # tags so far:  #trolldeets, #interface,
@@ -426,7 +426,7 @@ def displaytroll(x, y, t0):  # interface -- prints a standard-format window disp
     seatemp = t0["sea"]
     t0["seadesc"] = deets.describesea(blood, seatemp)
     t0["dwell"] = deets.describedwell(seatemp)
-    t0["caste"] = deets.getcaste(blood)
+    t0["caste"] = deets.getcastefromblood(blood)
     castedefaultheight = slurry.heightspectrum[blood]
     seawrap = fbs.wordwrap2(t0["seadesc"], 60)
     rectolor(x, y, 64, 20, colbg, colfg)
@@ -445,7 +445,7 @@ def displaytroll(x, y, t0):  # interface -- prints a standard-format window disp
     string13 = "."
     string14 = t0["hair"] + " hair"
     string15 = t0["skin"] + " skin"
-    string16 = "."
+    string16 = t0["mouth"]
     string17 = "."
     string18 = "."
     string19 = "."

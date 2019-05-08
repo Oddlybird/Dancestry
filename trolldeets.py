@@ -16,7 +16,6 @@ def slurrytroll(spectrum):
     # Record Donators
     strdonator1 = "?.?"
     strdonator2 = "?.?"
-
     # Blood + Caste:
     a = 0
     strblood = "rr"
@@ -26,7 +25,7 @@ def slurrytroll(spectrum):
             if arb == strblood:
                 a = a + 1
 
-    strcaste = getcaste(strblood)
+    strcaste = getcastefromblood(strblood)
 
     # height
     a = random.randint(85, 115)
@@ -38,18 +37,24 @@ def slurrytroll(spectrum):
     # The sea-activating gene CAN be anything.
     sgenetype = slurry.spectrumgenesea[strblood[0:2]]
     if slurry.dwellspectrum == "landdweller":
-        sgenetype = slurry.sgeneland
+        sgenetype = slurry.genesealand
     if slurry.dwellspectrum == "seadweller":
-        sgenetype = slurry.sgenesea
-    strsea1 = genecombine(slurry.sgenemutant, sgenetype) # Mutant + dweller type
-    strsea2 = genecombine(strsea1, sgenetype)            # Dilute that with dweller type again.
+        sgenetype = slurry.geneseasea
+    strsea1 = genecombine(slurry.geneseamutant, sgenetype)  # Mutant + dweller type
+    strsea2 = genecombine(strsea1, sgenetype)             # Dilute that with dweller type again.
     sgenetype = slurry.spectrumgenesea[strblood[0:2]]
     strsea3 = genecombine(strsea2, sgenetype)   # Caste-specific...
-    strsea = genecombine(strsea3, sgenetype)   # Caste-specific...
+    strsea = genecombine(strsea3, sgenetype)    # Caste-specific...
     gene1 = gene.Aquatic(strblood, strsea)
     strseadesc = gene1.desc()
 
-    # Phenotype shit comes later.
+    mouthgenetype = slurry.spectrumgenemouth[strblood[0:2]]
+    strmouthgene = genecombine(slurry.genemouthmutant, mouthgenetype)
+    strmouthgene = genecombine(strmouthgene, mouthgenetype)
+    strmouthgene = genecombine(strmouthgene, mouthgenetype)
+    strmouthgene = mouthaverager(strmouthgene)
+
+# Phenotype shit comes later.
     # traits come later.
     # Powers
     # Build
@@ -82,6 +87,7 @@ def slurrytroll(spectrum):
     t1["hornLdesc"] = strhornl
     t1["hornRdesc"] = strhornr
     t1["sea"] = strsea
+    t1["mouth"] = strmouthgene
     #    t1["powers"] = ,
     t1["hornL"] = hornl
     t1["hornR"] = hornr
@@ -131,7 +137,7 @@ def blendtroll(trolla, trollb):  # trolldeets
     x = random.randint(1, 2)
     if x == 1:
         strblood = strblood[0] + strblood[1]
-    strcaste = getcaste(strblood)
+    strcaste = getcastefromblood(strblood)
 
     # Height
     x = random.randint(95, 105)
@@ -148,6 +154,8 @@ def blendtroll(trolla, trollb):  # trolldeets
     strsea = genecombine(p1["sea"], p2["sea"])
     gene1 = gene.Aquatic(strblood, strsea)
     strseadesc = gene1.desc()
+
+    strmouth = mouthblender(p1["mouth"], p2["mouth"], slurry.spectrumgenemouth[strblood[0:2]])
 
     # traits come later.
     # Powers
@@ -181,6 +189,7 @@ def blendtroll(trolla, trollb):  # trolldeets
     t1["hornRdesc"] = strhornr
     t1["blood"] = strblood
     t1["sea"] = strsea
+    t1["mouth"] = strmouth
 #    t1["powers"] = ,
     t1["hornL"] = hornl
     t1["hornR"] = hornr
@@ -290,6 +299,35 @@ def hornaverager(hornl, hornr):
     return hornl, hornr
 
 
+def mouthblender(mouth1, mouth2, basis):
+    strmouth = genecombine(mouth1, mouth2)
+    mouth3 = genecombine(strmouth, basis)
+    return mouth3
+
+
+def mouthaverager(mouth1):
+    mouthgene = gene.Mouth(mouth1)
+    mouthgene2 = mouthgene
+    mouthgene2.symtopl = genecombine(mouthgene.symtopl, mouthgene.symtopr)
+    mouthgene2.symtopr = genecombine(mouthgene.symtopr, mouthgene.symtopl)
+    mouthgene2.symbotl = genecombine(mouthgene.symbotl, mouthgene.symbotr)
+    mouthgene2.symbotr = genecombine(mouthgene.symbotr, mouthgene.symbotl)
+    mouthgene2.lengthtopl = genecombine(mouthgene.lengthtopl, mouthgene.lengthtopr)
+    mouthgene2.lengthtopr = genecombine(mouthgene.lengthtopr, mouthgene.lengthtopl)
+    mouthgene2.lengthbotl = genecombine(mouthgene.lengthbotl, mouthgene.lengthbotr)
+    mouthgene2.lengthbotr = genecombine(mouthgene.lengthbotr, mouthgene.lengthbotl)
+    mouthgene2.widthtopl = genecombine(mouthgene.widthtopl, mouthgene.widthtopr)
+    mouthgene2.widthtopr = genecombine(mouthgene.widthtopr, mouthgene.widthtopl)
+    mouthgene2.widthbotl = genecombine(mouthgene.widthbotl, mouthgene.widthbotr)
+    mouthgene2.widthbotr = genecombine(mouthgene.widthbotr, mouthgene.widthbotl)
+    mouthgene2.typetopl = genecombine(mouthgene.typetopl, mouthgene.typetopr)
+    mouthgene2.typetopr = genecombine(mouthgene.typetopr, mouthgene.typetopl)
+    mouthgene2.typebotl = genecombine(mouthgene.typebotl, mouthgene.typebotr)
+    mouthgene2.typebotr = genecombine(mouthgene.typebotr, mouthgene.typebotl)
+    mouthgene2.update()
+    return mouthgene2.code
+
+
 def getcastefromcolor(r, g, b):  # trolldeets
     (h, s, v) = colorsys.rgb_to_hsv(r, g, b)
     hue = h * 360
@@ -350,7 +388,7 @@ def getcastefromcolor(r, g, b):  # trolldeets
     return caste
 
 
-def getcaste(innie):
+def getcastefromblood(innie):
     (r, g, b) = colg.bloodtorgb(innie)
     caste = getcastefromcolor(r, g, b)
     return caste
@@ -423,6 +461,15 @@ def highercaste(blood1, blood2):  # trolldeets
         bloodhigher = blood2
     return bloodhigher
 
+
+def neighborcaste(blood, dir = "+", number = 1):
+    castes = {"RR": 0, "Rr": 1, "rr": 2, "rG": 3, "RG": 4, "Rg": 5, "rg": 6, "GG": 7, "Gg": 8, "gg": 9, "Gb": 10,
+              "GB": 11, "gB": 12, "gb": 13, "BB": 14, "Bb": 15, "bb": 16, "rB": 17, "RB": 18, "Rb": 19, "rb": 20,
+              "Cull": 5}
+    caste1 = castes[blood[0:2]]
+
+    neighbor = caste1
+    return neighbor
 
 def bloodsort(blood):
     a = 0  # count the number of letters stripped out
@@ -523,10 +570,10 @@ def describehorn(inhorn="22RIn.point"):
 
 
 def describesea(bloodcode, sea):    # slurry.spectrumgenesea, blood[0:2]
-    # "SSbbCCeeWwWwffBBSBFGGiGGiggittdeeAAAASSS"
+    # "SSSSSbbCCeeWwWwffBBSBFGGiGGiggittdeeAAAA"
     blood = bloodcode[0:2]
-    me = gene.Aquatic(blood, sea)                      # The troll being tested
-    cd = gene.Aquatic(blood, slurry.socialspectrumgenesea[blood])   # Caste Default
+    me = gene.Aquatic(blood, sea)                                   # The troll being tested
+    cd = gene.Aquatic(blood, slurry.spectrumsocialgenesea[blood])   # Caste Default
     done = False
     descr = ""
     earfins = ""
@@ -541,13 +588,13 @@ def describesea(bloodcode, sea):    # slurry.spectrumgenesea, blood[0:2]
 
     while not done:
         # If someone is arbitrarily set to caste-typical
-        if me.SS2 == "SSSSS":
+        if me.SS == "SSSSS":
             dwellvar = slurry.dwellspectrum[blood]
             if dwellvar != "seadweller":
                 dwellvar = me.dwell()
             descr = dwellvar
             return descr
-        if me.SS2 == "sssss":
+        if me.SS == "sssss":
             dwellvar = slurry.dwellspectrum[blood]
             if dwellvar != "landdweller":
                 dwellvar = me.dwell()
@@ -563,7 +610,6 @@ def describesea(bloodcode, sea):    # slurry.spectrumgenesea, blood[0:2]
             if me.salt == "sbf":
                 descr = "cannot breathe air or water"
                 return descr
-        done = True
         break
 
     # Below this point, everyone has Ss or sS, at least one noteworthy difference from cd, and can breathe.
@@ -572,7 +618,7 @@ def describesea(bloodcode, sea):    # slurry.spectrumgenesea, blood[0:2]
         if countaa(me.air) > 1:
             descr = descr + "rank " + str(countaa(me.air) - 1) + " airless"
 
-    if me.SS2[0] == "S":  # Webbing, Earfins.
+    if me.SS[0] == "S":  # Webbing, Earfins.
         # limb webbing?  Neck webs?
         # fingers
         fingers = genedesc1(me.wfingers, cd.wfingers, "W", "deeply webbed fingers", "w", "unwebbed fingers", "webbed fingers")
@@ -602,7 +648,7 @@ def describesea(bloodcode, sea):    # slurry.spectrumgenesea, blood[0:2]
         # If both are differently webbed
         if fingers[0] == "d" and toes[0] == "w":
             webbing = "webbed toes and deeply webbed fingers"
-        #ears, cheekfins, and earfins
+        # ears, cheekfins, and earfins
         ears = genedesc1(me.ears, cd.ears, "E", "full ears", "e", "no ears", "gimpy ears")
         if ears == "":
             ears = "xxx"
@@ -631,7 +677,7 @@ def describesea(bloodcode, sea):    # slurry.spectrumgenesea, blood[0:2]
             earfins = "earlike fins"
         if cheekfins[0] == "g" and ears[0] == "f":
             earfins = "finlike ears"
-    if me.code[1] == "S":  # Gills and breathing
+    if me.SS[1] == "S":  # Gills and breathing
         # gilltypes
         gillnecktype = ""
         if me.gillneckt != cd.gillneckt:
@@ -722,38 +768,38 @@ def describesea(bloodcode, sea):    # slurry.spectrumgenesea, blood[0:2]
                 breathes = "breathes " + canb
             if gills == "" and me.salt == "SBF" and slurry.dwellspectrum[blood] != "seadweller":
                 breathes = "breathes " + canb
-        if me.SS2[2] == "S":  # Swimbladders.
-            bladders = genedesc1(me.bladders, cd.bladders, "B", "swim bladders", "b", "no swim bladder", "a swim bladder")
-        if me.SS2[3] == "S":  # Biolum and teeth.
-            biolum = genedesc1(me.biolum, cd.biolum, "B", "biolum", "b", "no biolum", "partial biolum")
-            # teeth
-            # Replace or enhance this with caste-specific teeth and teeth mutation gene.  But, for now ...
-            teeth = ""
-            if me.teeth != cd.teeth:
-                if me.teeth[2] == "D" and cd.teeth[2] != "D":
-                    teeth = "doubled "
-                if me.teeth[2] == "d" and cd.teeth[2] != "d":
-                    teeth = "undoubled "
-                if cd.teeth[0:2] == me.teeth[0:2]:
-                    teeth = teeth + "teeth"
-                if cd.teeth[0:2] != me.teeth[0:2]:
-                    teeth = teeth + genedesc1(me.teeth, cd.teeth, "T", "pure sea teeth", "t", "pure land teeth", "land/sea teeth")
-        if me.SS2[4] == "S":  # Eyelids and body fins
-            eyelids = genedesc1(me.eyelids, cd.eyelids, "E", "nictating membranes", "e", "single eyelids", "transparent eye cover")
-            bodyfins = genedesc1(me.dorsalfins, cd.dorsalfins, "F", "body fins", "f", "no body fins", "mini body fins")
+    if me.SS[2] == "S":  # Swimbladders.
+        bladders = genedesc1(me.bladders, cd.bladders, "B", "swim bladders", "b", "no swim bladder", "a swim bladder")
+    if me.SS[3] == "S":  # Biolum and teeth.
+        biolum = genedesc1(me.biolum, cd.biolum, "B", "biolum", "b", "no biolum", "partial biolum")
+        # teeth
+        # Replace or enhance this with caste-specific teeth and teeth mutation gene.  But, for now ...
+        teeth = ""
+        if me.teeth != cd.teeth:
+            if me.teeth[2] == "D" and cd.teeth[2] != "D":
+                teeth = "doubled "
+            if me.teeth[2] == "d" and cd.teeth[2] != "d":
+                teeth = "undoubled "
+            if cd.teeth[0:2] == me.teeth[0:2]:
+                teeth = teeth + "teeth"
+            if cd.teeth[0:2] != me.teeth[0:2]:
+                teeth = teeth + genedesc1(me.teeth, cd.teeth, "T", "pure sea teeth", "t", "pure land teeth", "land/sea teeth")
+    if me.SS[4] == "S":  # Eyelids and body fins
+        eyelids = genedesc1(me.eyelids, cd.eyelids, "E", "nictating membranes", "e", "single eyelids", "transparent eye cover")
+        bodyfins = genedesc1(me.dorsalfins, cd.dorsalfins, "F", "body fins", "f", "no body fins", "mini body fins")
 
-    if me.SS2[0] == "S":     # Skin
+    if me.SS[0] == "S":     # Skin
         descr = fbs.lyst(descr, earfins)
         descr = fbs.lyst(descr, webbing)
-    if me.SS2[1] == "S":     # Organ systems
+    if me.SS[1] == "S":     # Organ systems
         descr = fbs.lyst(descr, gills)
         descr = fbs.lyst(descr, breathes)
-    if me.SS2[2] == "S":     # ?
+    if me.SS[2] == "S":     # ?
         descr = fbs.lyst(descr, bladders)
-    if me.SS2[3] == "S":     # ?
+    if me.SS[3] == "S":     # ?
         descr = fbs.lyst(descr, biolum)
         descr = fbs.lyst(descr, teeth)
-    if me.SS2[4] == "S":     # ?
+    if me.SS[4] == "S":     # ?
         descr = fbs.lyst(descr, eyelids)
         descr = fbs.lyst(descr, bodyfins)
 
@@ -765,12 +811,12 @@ def describesea(bloodcode, sea):    # slurry.spectrumgenesea, blood[0:2]
 
 def describedwell(sea):
     self = gene.Aquatic("rr", sea)
-    detail = self.code[3:len(self.code) - 3]
-    landtype = slurry.sgenesea[3:len(slurry.sgeneland) - 3]
-    seatype = slurry.sgenesea[3:len(slurry.sgenesea) - 3]
+    detail = self.code[6:len(self.code) - 10]
+    landtype = slurry.geneseasea[6:len(slurry.genesealand) - 10]
+    seatype = slurry.geneseasea[6:len(slurry.geneseasea) - 10]
     weirdo = False
     descr = ""
-    if self.SS2[1] == "S":
+    if self.SS[1] == "S":
         weirdo = True
     if detail == landtype or detail == seatype:
         weirdo = False
@@ -793,9 +839,9 @@ def describedwell(sea):
             # if surface dweller but no gills, landdweller.
             if self.gillface == "gg" and self.gillneck == "gg" and self.gillribs == "gg":
                 descr = "landdweller"
-    if self.SS2 == "SSSSS":
+    if self.SS == "SSSSS":
         descr = "seadweller"
-    if self.SS2 == "sssss":
+    if self.SS == "sssss":
         descr = "landdweller"
 
     descr = descr.strip()
@@ -819,8 +865,8 @@ def countaa(inhale):
         a = a + 1
     if inhale[2] == "a":
         a = a + 1
-    if inhale[3] == "a":
-        a = a + 1
+#    if inhale[3] == "a":
+#        a = a + 1
     exhale = a
     return exhale
 
