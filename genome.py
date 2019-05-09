@@ -46,8 +46,8 @@ def trollobj():  # trolldeets
         "sea": slurry.genesealand,
         # pawfeet, tail, wing, hairstreaks, grubscars, ?
         "powers": "powers",  # psychic, voodoo, eldritch, none.  specify type later.  Make psychics eyes glow colors?
-        "hornL": "22RIn.point",  # see horn notes.
-        "hornR": "22RIn.point",
+        "hornL": "22RInP",  # see horn notes.
+        "hornR": "22RInP",
         "height": 84,       # height in inches
         "heightstr":  deets.heightstr(84),
         "build": "medium",  # more detailed data later
@@ -84,7 +84,7 @@ class EyeObj:
 class HornObj:  # trolldeets
     # Horns are stored in trolls as just the code part.  Use this class when manipulating.
     # create a horn by going horn-variable = HornObj("21RIn.f point"), or horn-variable = HornObj(troll.hornL)
-    code = "21RIn.point"
+    code = "21RInP"
     length = 2  # 1 = 0-1 handspans, 2 = 1-2 handspans, 3 = 2-3 handspans, 4 = 3+ handspans.
     curl = 1
     # 1 = straight, 2 = up to 45 degrees, 3 = 90 degrees +/- 45, 4 = 180 +/- 45,
@@ -93,31 +93,33 @@ class HornObj:  # trolldeets
     dir = "I"
     # primary growth direction.  F = frontwards, B = backwards, O = outwards (usually up), I = inwards (usually up).
     wide = "n"  # n = normal width like terezi.  w = wide base, like nepeta.
-    tipA = "point"  # shape of the point.  Point, Cone, Spade, Pincher, Jagged, Round, hook, ...
+    tip = "P"  # shape of the point.  Point, Cone, Split/Pincher, Jagged, Round, hook, ...
+    # P, C, S, J, R, H
     # Add :  HornObj bumps, doubled horns, notched and rounded-notched horns
     # bolt-tipped
     # branched / antler horns, sheet-like moose horns
 
     def __init__(self, code):
         self.code = code
-        c = 0
-        self.length = code[c]
-        c = c + 1
-        self.curl = code[c]
-        c = c + 1
-        self.radial = code[c]
-        c = c + 1
-        self.dir = code[c]
-        c = c + 1
-        self.wide = code[c]
-        c = c + 2
-        self.tipA = code[c:len(code)]  # everything else in string = the tip type.
+        t0 = horncode(code)
+        self.length = t0["length"]
+        self.curl = t0["curl"]
+        self.radial = t0["radial"]
+        self.dir = t0["dir"]
+        self.wide = t0["wide"]
+        self.tip = t0["tip"]
+        self.update()
 
     def desc(self):
         # convert the current features of the horn into a verbal description as in basic version.
         # use by going description-string = horn-temp.desc()
         descr = str(deets.describehorn(self.code))
         return descr
+
+    def update(self):
+        self.code = str(self.length) + str(self.curl) + str(self.radial) + str(
+            self.dir) + str(self.wide) + str(self.tip)
+        return self.code
 
 
 # Incomplete
@@ -372,6 +374,23 @@ def aquaticcode(code):
         "gillface": agillface, "gillfacet": agillfacet, "teeth": ateeth, "eyelids": aeyelids
         }
     return aquacode
+
+
+def horncode(code):
+    c = 0
+    length = code[c]
+    c = c + 1
+    curl = code[c]
+    c = c + 1
+    radial = code[c]
+    c = c + 1
+    dir = code[c]
+    c = c + 1
+    wide = code[c]
+    c = c + 1
+    tip = code[c]  # everything else in string = the tip type.
+    thing = {"length": length, "curl": curl, "radial": radial, "dir": dir, "wide": wide, "tip": tip,}
+    return thing
 
 
 def codemouth(code):

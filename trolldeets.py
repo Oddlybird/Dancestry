@@ -526,7 +526,7 @@ def heightstr(h):
     return hstr
 
 
-def describehorn(inhorn="22RIn.point"):
+def describehorn(inhorn="22RInP"):
     temp = gene.HornObj(inhorn)
     descr = ""
     # Length, default 2
@@ -558,7 +558,31 @@ def describehorn(inhorn="22RIn.point"):
     if temp.curl == "7":
         descr = descr + "wave-like "
     # tip shape
-    descr = descr + temp.tipA + "-tip "
+    if temp.tip == "B":
+        descr = descr + "bump"
+    if temp.tip == "b":
+        descr = descr + "branching"
+    if temp.tip == "C":
+        descr = descr + "cone"
+    if temp.tip == "F":
+        descr = descr + "flat"
+    if temp.tip == "H":
+        descr = descr + "hook"
+    if temp.tip == "J":
+        descr = descr + "jagged"
+    if temp.tip == "N":
+        descr = descr + "notched"
+    if temp.tip == "P":
+        descr = descr + "point"
+    if temp.tip == "p":
+        descr = descr + "pincher"
+    if temp.tip == "R":
+        descr = descr + "round"
+    if temp.tip == "S":
+        descr = descr + "split"
+    if temp.tip == "s":
+        descr = descr + "spade"
+    descr = descr + "-tip "
     # radial, default round
     if temp.radial == "O":
         descr = descr + "oval horn"

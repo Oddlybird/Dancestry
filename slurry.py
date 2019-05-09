@@ -38,8 +38,8 @@ def getpremadetroll(x=random.randint(1, 3)):
         t0["sea"] = "sssssbbccEEwwwwffbbSbfggiggiGGittdeeAAAA"
         t0["powers"] = strpowers
         t0["mouth"] = genemouthlow
-        t0["hornL"] = "12TFw.point"
-        t0["hornR"] = "21SOn.split"
+        t0["hornL"] = "12TFwP"
+        t0["hornR"] = "21SOnS"
         t0["height"] = 64
         t0["build"] = strbuild
         t0["hair"] = strhair
@@ -54,8 +54,8 @@ def getpremadetroll(x=random.randint(1, 3)):
         t0["mouth"] = genemouthhigh
         t0["sea"] = "SSsssbbCcEewWwWffbbsbFGgiGgiggiTtdeeAAAA"
         t0["powers"] = strpowers
-        t0["hornL"] = "46RIn.pincher"
-        t0["hornR"] = "37OBn.round"
+        t0["hornL"] = "46RInp"
+        t0["hornR"] = "37OBnR"
         t0["height"] = 89
         t0["build"] = strbuild
         t0["hair"] = strhair
@@ -71,8 +71,8 @@ def getpremadetroll(x=random.randint(1, 3)):
         t0["mouth"] = genemouthmutant
         t0["powers"] = strpowers
         # doubled genes, make just one horn doubled.
-        t0["hornL"] = "17OFw.split"
-        t0["hornR"] = "17OFw.split"
+        t0["hornL"] = "17OFwn"
+        t0["hornR"] = "17OFws"
         t0["height"] = 72
         t0["build"] = strbuild
         t0["hair"] = strhair
@@ -124,26 +124,33 @@ def premadehorn(inhorn=""):
             horn = horn + "n"
         # Point shape
         # change xmax to match
-        x = random.randint(1, 6)
-        horn = horn + "."
+        x = random.randint(1, 15)
         if x == 1:
-            horn = horn + "cone"
+            horn = horn + "B"  # bump
         if x == 2:
-            horn = horn + "spade"
+            horn = horn + "b"  # branching
         if x == 3:
-            horn = horn + "pincher"
+            horn = horn + "C"  # cone
         if x == 4:
-            horn = horn + "nub"
+            horn = horn + "F"  # flat
         if x == 5:
-            horn = horn + "jagged"
+            horn = horn + "H"  # hook
         if x == 6:
-            horn = horn + "flat"
+            horn = horn + "J"  # jagged
         if x == 7:
-            horn = horn + "round"
+            horn = horn + "N"  # notched
         if x == 8:
-            horn = horn + "hook"
-        if x > 8:
-            horn = horn + "point"
+            horn = horn + "P"  # point
+        if x == 9:
+            horn = horn + "p"  # pincher
+        if x == 10:
+            horn = horn + "R"  # round
+        if x == 11:
+            horn = horn + "S"  # split
+        if x == 12:
+            horn = horn + "s"  # spade
+        if x > 12:
+            horn = horn + "P"  # point
 
     return horn
 
@@ -170,7 +177,7 @@ def premadeblood():
     blood = getoneblood() + getoneblood()
     blood = deets.bloodsort(blood)
     x = random.randint(1, 4)
-    if x > 1:
+    if x > 2:
         blood = blood + getoneblood()
     return blood
 
@@ -419,6 +426,30 @@ spectrumgenemouth = {
     "RB": "64ddTTTTTT445444PPPPPP222222TTTTTT445444PPPPPP222222TTTTTT444544PPPPPP222222TTTTTT444544PPPPPP222222",  # Violet
     "Rb": "64ddTTTTTT445444PPPPPP222222TTTTTT445444PPPPPP222222TTTTTT444544PPPPPP222222TTTTTT444544PPPPPP222222",
     "rb": "64ddTTTTTT445444PPPPPP222222TTTTTT445444PPPPPP222222TTTTTT444544PPPPPP222222TTTTTT444544PPPPPP222222",  # Tyrian
+}
+
+spectrumgenehorn = {
+    "RR": "25RBnP",  # Maroon - jagged, rounded, wide
+    "Rr": "24RSnR",  #
+    "rr": "33RSnP",  # Bronze - LONG,
+    "rG": "22RInS",  #
+    "RG": "22RInP",  # Gold - split, hook, wide
+    "Rg": "12RSnH",  #
+    "rg": "11RInP",  # Lime
+    "GG": "12OSwb",  # Olive - branching/split, point
+    "Gg": "12RInP",  #
+    "gg": "22RInH",  # Jade - jagged, point, bolt
+    "Gb": "21RInF",  #
+    "GB": "11RSnP",  # Teal - nub, point, hook, flat
+    "gB": "21RInH",  #
+    "gb": "22RInp",  # Ceru - point, pincher, notches, branch, hook
+    "BB": "21RInC",  # Bloo - flat, hook,
+    "Bb": "21RInH",  #
+    "bb": "37SInP",  # Indigo - round-radial
+    "rB": "27RInP",  #
+    "RB": "27RInP",  # Violet
+    "Rb": "24RInP",  #
+    "rb": "22ROnP",  # Tyrian
 }
 
 spectrumgeneseasocial = {
