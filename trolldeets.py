@@ -30,15 +30,15 @@ def slurrytroll(spectrum):
     # height
     a = random.randint(85, 115)
     a = a / 100
-    a = a * slurry.heightspectrum[strblood[0:2]]
+    a = a * slurry.spectrumheight[strblood[0:2]]
     a = round(a)
     strheight = a
 
     # The sea-activating gene CAN be anything.
     sgenetype = slurry.spectrumgenesea[strblood[0:2]]
-    if slurry.dwellspectrum == "landdweller":
+    if slurry.spectrumdwell == "landdweller":
         sgenetype = slurry.genesealand
-    if slurry.dwellspectrum == "seadweller":
+    if slurry.spectrumdwell == "seadweller":
         sgenetype = slurry.geneseasea
     strsea1 = genecombine(slurry.geneseamutant, sgenetype)  # Mutant + dweller type
     strsea2 = genecombine(strsea1, sgenetype)             # Dilute that with dweller type again.
@@ -50,9 +50,8 @@ def slurrytroll(spectrum):
 
     mouthgenetype = slurry.spectrumgenemouth[strblood[0:2]]
     strmouthgene = genecombine(slurry.genemouthmutant, mouthgenetype)
-    strmouthgene = genecombine(strmouthgene, mouthgenetype)
-    strmouthgene = genecombine(strmouthgene, mouthgenetype)
     strmouthgene = mouthaverager(strmouthgene)
+    strmouthgene = genecombine(strmouthgene, mouthgenetype)
 
 # Phenotype shit comes later.
     # traits come later.
@@ -143,10 +142,10 @@ def blendtroll(trolla, trollb):  # trolldeets
     x = random.randint(95, 105)
     x = x / 100
 
-    ph1 = int(p1["height"]) / slurry.heightspectrum[p1["blood"][0:2]]
-    ph2 = int(p2["height"]) / slurry.heightspectrum[p2["blood"][0:2]]
+    ph1 = int(p1["height"]) / slurry.spectrumheight[p1["blood"][0:2]]
+    ph2 = int(p2["height"]) / slurry.spectrumheight[p2["blood"][0:2]]
     ph3 = (ph1 + ph2) / 2
-    y = ph3 * slurry.heightspectrum[strblood[0:2]] * x
+    y = ph3 * slurry.spectrumheight[strblood[0:2]] * x
     y = round(y)
     strheight = int(y)
 
@@ -155,7 +154,10 @@ def blendtroll(trolla, trollb):  # trolldeets
     gene1 = gene.Aquatic(strblood, strsea)
     strseadesc = gene1.desc()
 
-    strmouth = mouthblender(p1["mouth"], p2["mouth"], slurry.spectrumgenemouth[strblood[0:2]])
+    castemouth = slurry.spectrumgenemouth[strblood[0:2]]
+    mutationsource = mouthblender(slurry.genemouthmutant, castemouth, castemouth)
+    basicmouth = mouthblender(p1["mouth"], p2["mouth"], mutationsource)
+    strmouth = mouthaverager(basicmouth)
 
     # traits come later.
     # Powers
@@ -300,31 +302,33 @@ def hornaverager(hornl, hornr):
 
 
 def mouthblender(mouth1, mouth2, basis):
-    strmouth = genecombine(mouth1, mouth2)
-    mouth3 = genecombine(strmouth, basis)
+    moutha = genecombine(mouth1, basis)
+    mouthb = genecombine(mouth2, basis)
+    mouth3 = genecombine(moutha, mouthb)
     return mouth3
 
 
 def mouthaverager(mouth1):
     mouthgene = gene.Mouth(mouth1)
-    mouthgene2 = mouthgene
-    mouthgene2.symtopl = genecombine(mouthgene.symtopl, mouthgene.symtopr)
+    mouthgene2 = gene.Mouth(mouth1)
+    mouthgene2.symtopl = genecombine(mouthgene.symtopr, mouthgene.symtopl)
     mouthgene2.symtopr = genecombine(mouthgene.symtopr, mouthgene.symtopl)
-    mouthgene2.symbotl = genecombine(mouthgene.symbotl, mouthgene.symbotr)
+    mouthgene2.symbotl = genecombine(mouthgene.symbotr, mouthgene.symbotl)
     mouthgene2.symbotr = genecombine(mouthgene.symbotr, mouthgene.symbotl)
-    mouthgene2.lengthtopl = genecombine(mouthgene.lengthtopl, mouthgene.lengthtopr)
+    mouthgene2.lengthtopl = genecombine(mouthgene.lengthtopr, mouthgene.lengthtopl)
     mouthgene2.lengthtopr = genecombine(mouthgene.lengthtopr, mouthgene.lengthtopl)
-    mouthgene2.lengthbotl = genecombine(mouthgene.lengthbotl, mouthgene.lengthbotr)
+    mouthgene2.lengthbotl = genecombine(mouthgene.lengthbotr, mouthgene.lengthbotl)
     mouthgene2.lengthbotr = genecombine(mouthgene.lengthbotr, mouthgene.lengthbotl)
-    mouthgene2.widthtopl = genecombine(mouthgene.widthtopl, mouthgene.widthtopr)
+    mouthgene2.widthtopl = genecombine(mouthgene.widthtopr, mouthgene.widthtopl)
     mouthgene2.widthtopr = genecombine(mouthgene.widthtopr, mouthgene.widthtopl)
-    mouthgene2.widthbotl = genecombine(mouthgene.widthbotl, mouthgene.widthbotr)
+    mouthgene2.widthbotl = genecombine(mouthgene.widthbotr, mouthgene.widthbotl)
     mouthgene2.widthbotr = genecombine(mouthgene.widthbotr, mouthgene.widthbotl)
-    mouthgene2.typetopl = genecombine(mouthgene.typetopl, mouthgene.typetopr)
+    mouthgene2.typetopl = genecombine(mouthgene.typetopr, mouthgene.typetopl)
     mouthgene2.typetopr = genecombine(mouthgene.typetopr, mouthgene.typetopl)
-    mouthgene2.typebotl = genecombine(mouthgene.typebotl, mouthgene.typebotr)
+    mouthgene2.typebotl = genecombine(mouthgene.typebotr, mouthgene.typebotl)
     mouthgene2.typebotr = genecombine(mouthgene.typebotr, mouthgene.typebotl)
     mouthgene2.update()
+
     return mouthgene2.code
 
 
@@ -471,6 +475,7 @@ def neighborcaste(blood, dir = "+", number = 1):
     neighbor = caste1
     return neighbor
 
+
 def bloodsort(blood):
     a = 0  # count the number of letters stripped out
     sortedblood = ""  # sorted blood code
@@ -573,7 +578,7 @@ def describesea(bloodcode, sea):    # slurry.spectrumgenesea, blood[0:2]
     # "SSSSSbbCCeeWwWwffBBSBFGGiGGiggittdeeAAAA"
     blood = bloodcode[0:2]
     me = gene.Aquatic(blood, sea)                                   # The troll being tested
-    cd = gene.Aquatic(blood, slurry.spectrumsocialgenesea[blood])   # Caste Default
+    cd = gene.Aquatic(blood, slurry.spectrumgeneseasocial[blood])   # Caste Default
     done = False
     descr = ""
     earfins = ""
@@ -589,13 +594,13 @@ def describesea(bloodcode, sea):    # slurry.spectrumgenesea, blood[0:2]
     while not done:
         # If someone is arbitrarily set to caste-typical
         if me.SS == "SSSSS":
-            dwellvar = slurry.dwellspectrum[blood]
+            dwellvar = slurry.spectrumdwell[blood]
             if dwellvar != "seadweller":
                 dwellvar = me.dwell()
             descr = dwellvar
             return descr
         if me.SS == "sssss":
-            dwellvar = slurry.dwellspectrum[blood]
+            dwellvar = slurry.spectrumdwell[blood]
             if dwellvar != "landdweller":
                 dwellvar = me.dwell()
             descr = dwellvar
@@ -764,9 +769,9 @@ def describesea(bloodcode, sea):    # slurry.spectrumgenesea, blood[0:2]
             breathes = "can breathe " + canb
             if cantb != "":
                 breathes = breathes + ", but not " + cantb
-            if gills == "" and me.salt == "sbf" and slurry.dwellspectrum[blood] != "landdweller":
+            if gills == "" and me.salt == "sbf" and slurry.spectrumdwell[blood] != "landdweller":
                 breathes = "breathes " + canb
-            if gills == "" and me.salt == "SBF" and slurry.dwellspectrum[blood] != "seadweller":
+            if gills == "" and me.salt == "SBF" and slurry.spectrumdwell[blood] != "seadweller":
                 breathes = "breathes " + canb
     if me.SS[2] == "S":  # Swimbladders.
         bladders = genedesc1(me.bladders, cd.bladders, "B", "swim bladders", "b", "no swim bladder", "a swim bladder")
@@ -887,6 +892,31 @@ def genecombine(g1, g2):
     x = 0
     while x < len(g1) and x < len(g2):
         gf = gf + g3[x]
+        x = x + 1
+    return gf
+
+
+def genecombinenumbers(g1, g2):
+    # Feed in the gene codes to be combined.
+    g1 = str(g1)
+    g2 = str(g2)
+    x = 0
+    g3 = [""]
+    while x < len(g1) and x < len(g2):
+        g3.append("")
+        a = int(g1)
+        b = int(g2)
+        if g1 > g2:
+            a = int(g2)
+            b = int(g1)
+        y = random.randint(a, b)
+        g3[x] = str(y)
+        x = x + 1
+    gf = [""]
+    x = 0
+    while x < len(g1) and x < len(g2):
+        gf.append("")
+        gf[x] = g3[x]
         x = x + 1
     return gf
 

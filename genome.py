@@ -116,7 +116,7 @@ class HornObj:  # trolldeets
     def desc(self):
         # convert the current features of the horn into a verbal description as in basic version.
         # use by going description-string = horn-temp.desc()
-        descr = deets.describehorn(self.code)
+        descr = str(deets.describehorn(self.code))
         return descr
 
 
@@ -139,7 +139,7 @@ class Eyes:
 # Incomplete
 class Mouth:
     # general mouth traits
-    code = "6DddTTTTTT445444CCPPGG222222TTTTTT445444CCPPGG222222TTTTTT444544CCPPGG222222TTTTTT444544CCPPGG222222"
+    code = ""
     lipl = 6       # minimum tooth height to poke out over the lip
     lipw = 4       # furthest-out visible tooth; mouth width
     double = "dd"  # if teeth are doubled, second row identical to first.
@@ -147,73 +147,56 @@ class Mouth:
 #    width         # 0 (needles), 1, 2, 3 (wide)
 #    sym           # T/F symmetry overrides
 #    type          # Cc choppy/flat, Gg grinding, Pp pointy, serrated (?) other (?)
-    symtopl = "TTTTTT"         # [0] = center, [6] = molar
-    lengthtopl = "445444"      # [0] = center, [6] = molar
-    typetopl = "CCPPGG"  # [0] = center, [6] = molar
-    widthtopl = "222222"       # [0] = center, [6] = molar
-    symtopr = "TTTTTT"         # [0] = center, [6] = molar
-    lengthtopr = "445444"      # [0] = center, [6] = molar
-    typetopr = "CCPPGG"  # [0] = center, [6] = molar
-    widthtopr = "222222"       # [0] = center, [6] = molar
-    symbotl = "TTTTTT"         # [0] = center, [6] = molar
-    lengthbotl = "444544"      # [0] = center, [6] = molar
-    typebotl = "CCPPGG"  # [0] = center, [6] = molar
-    widthbotl = "222222"       # [0] = center, [6] = molar
-    symbotr = "TTTTTT"         # [0] = center, [6] = molar
-    lengthbotr = "444544"      # [0] = center, [6] = molar
-    typebotr = "CCPPGG"  # [0] = center, [6] = molar
-    widthbotr = "222222"       # [0] = center, [6] = molar
+    symtopl = ""         # [0] = center, [6] = molar
+    lengthtopl = ""      # [0] = center, [6] = molar
+    typetopl = ""        # [0] = center, [6] = molar
+    widthtopl = ""       # [0] = center, [6] = molar
+    symtopr = ""         # [0] = center, [6] = molar
+    lengthtopr = ""      # [0] = center, [6] = molar
+    typetopr = ""        # [0] = center, [6] = molar
+    widthtopr = ""       # [0] = center, [6] = molar
+    symbotl = ""         # [0] = center, [6] = molar
+    lengthbotl = ""      # [0] = center, [6] = molar
+    typebotl = ""        # [0] = center, [6] = molar
+    widthbotl = ""       # [0] = center, [6] = molar
+    symbotr = ""         # [0] = center, [6] = molar
+    lengthbotr = ""      # [0] = center, [6] = molar
+    typebotr = ""        # [0] = center, [6] = molar
+    widthbotr = ""       # [0] = center, [6] = molar
     # TT -> average them
     # TF -> T overwrites F
     # FF -> the two teeth are distinct
 
     def __init__(self, code):
-        self.code = code
-        c = 0
-        self.lipl = code[c]
-        c = c + 1
-        self.lipw = code[c]
-        c = c + 1
-        self.double = code[c:c+1]
-        c = c + 2
-        self.symtopl = code[c:c+6]
-        c = c + 6
-        self.lengthtopl = code[c:c+6]
-        c = c + 6
-        self.typetopl = code[c:c+6]
-        c = c + 6
-        self.widthtopl = code[c:c+6]
-        c = c + 6
-        self.symtopr = code[c:c+6]
-        c = c + 6
-        self.lengthtopr = code[c:c+6]
-        c = c + 6
-        self.typetopr = code[c:c+6]
-        c = c + 6
-        self.widthtopr = code[c:c+6]
-        c = c + 6
-        self.symbotl = code[c:c+6]
-        c = c + 6
-        self.lengthbotl = code[c:c+6]
-        c = c + 6
-        self.typebotl = code[c:c+6]
-        c = c + 6
-        self.widthbotl = code[c:c+6]
-        c = c + 6
-        self.symbotr = code[c:c+6]
-        c = c + 6
-        self.lengthbotr = code[c:c+6]
-        c = c + 6
-        self.typebotr = code[c:c+6]
-        c = c + 6
-        self.widthbotr = code[c:c+6]
+        t0 = codemouth(code)
+        self.lipl = t0["lipl"]
+        self.lipw = t0["lipw"]
+        self.double = t0["double"]
+        self.symtopl = t0["symtopl"]
+        self.symtopr = t0["symtopr"]
+        self.symbotl = t0["symbotl"]
+        self.symbotr = t0["symbotr"]
+        self.lengthtopl = t0["lengthtopl"]
+        self.lengthtopr = t0["lengthtopr"]
+        self.lengthbotl = t0["lengthbotl"]
+        self.lengthbotr = t0["lengthbotr"]
+        self.typetopl = t0["typetopl"]
+        self.typetopr = t0["typetopr"]
+        self.typebotl = t0["typebotl"]
+        self.typebotr = t0["typebotr"]
+        self.widthtopl = t0["widthtopl"]
+        self.widthtopr = t0["widthtopr"]
+        self.widthbotl = t0["widthbotl"]
+        self.widthbotr = t0["widthbotr"]
+        self.code = self.update()
 
     def update(self):
-        self.code = self.lipl + self.lipw + self.double
-        self.code = self.code + self.symtopl + self.lengthtopl + self.typetopl + self.widthtopl
-        self.code = self.code + self.symtopr + self.lengthtopr + self.typetopr + self.widthtopr
-        self.code = self.code + self.symbotl + self.lengthbotl + self.typebotl + self.widthbotl
-        self.code = self.code + self.symbotr + self.lengthbotr + self.typebotr + self.widthbotr
+        self.code = str(self.lipl) + str(self.lipw) + str(self.double) + str(
+            self.symtopl) + str(self.lengthtopl) + str(self.typetopl) + str(self.widthtopl) + str(
+            self.symtopr) + str(self.lengthtopr) + str(self.typetopr) + str(self.widthtopr) + str(
+            self.symbotl) + str(self.lengthbotl) + str(self.typebotl) + str(self.widthbotl) + str(
+            self.symbotr) + str(self.lengthbotr) + str(self.typebotr) + str(self.widthbotr)
+        return self.code
 
 
 class Aquatic:
@@ -399,37 +382,42 @@ def codemouth(code):
     c = c + 1
     double = code[c:c+2]
     c = c + 2
+
     symtopl = code[c:c+6]
     c = c + 6
     lengthtopl = code[c:c+6]
     c = c + 6
-    widthtopl = code[c:c+6]
-    c = c + 6
     typetopl = code[c:c+6]
     c = c + 6
+    widthtopl = code[c:c+6]
+    c = c + 6
+
     symtopr = code[c:c+6]
     c = c + 6
     lengthtopr = code[c:c+6]
     c = c + 6
-    widthtopr = code[c:c+6]
-    c = c + 6
     typetopr = code[c:c+6]
     c = c + 6
+    widthtopr = code[c:c+6]
+    c = c + 6
+
     symbotl = code[c:c+6]
     c = c + 6
     lengthbotl = code[c:c+6]
     c = c + 6
-    widthbotl = code[c:c+6]
-    c = c + 6
     typebotl = code[c:c+6]
     c = c + 6
+    widthbotl = code[c:c+6]
+    c = c + 6
+
     symbotr = code[c:c+6]
     c = c + 6
     lengthbotr = code[c:c+6]
     c = c + 6
+    typebotr = code[c:c+6]
+    c = c + 6
     widthbotr = code[c:c+6]
     c = c + 6
-    typebotr = code[c:c+6]
 
     thing = {"lipl": lipl, "lipw": lipw, "double": double,
              "symtopl": symtopl, "lengthtopl": lengthtopl, "widthtopl": widthtopl, "typetopl": typetopl,

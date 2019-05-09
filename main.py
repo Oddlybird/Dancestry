@@ -427,7 +427,7 @@ def displaytroll(x, y, t0):  # interface -- prints a standard-format window disp
     t0["seadesc"] = deets.describesea(blood, seatemp)
     t0["dwell"] = deets.describedwell(seatemp)
     t0["caste"] = deets.getcastefromblood(blood)
-    castedefaultheight = slurry.heightspectrum[blood]
+    castedefaultheight = slurry.spectrumheight[blood]
     seawrap = fbs.wordwrap2(t0["seadesc"], 60)
     rectolor(x, y, 64, 20, colbg, colfg)
     string1 = t0["firname"] + " " + t0["surname"] + ", " + t0["blood"] + " " + t0["sex"]
