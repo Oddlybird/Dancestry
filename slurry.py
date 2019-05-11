@@ -1,4 +1,4 @@
-import trolldeets as deets
+import biology as deets
 import genome as gene
 import random
 
@@ -7,9 +7,9 @@ import random
 # -- hardcoded trolls who have contributed to slurry,
 # -- source data to produce random trolls from slurry
 # -- source data for mutations in genesourced trolls
+# -- bias-by-caste for height, aquatic traits, etc
 # -- which blood codes are default
 # -- spectrum groupings (high, mid, low, reds, blues, greens..)
-# -- bias-by-caste for height, aquatic traits, etc
 
 
 def getpremadetroll(x=random.randint(1, 3)):
@@ -71,7 +71,7 @@ def getpremadetroll(x=random.randint(1, 3)):
         t0["mouth"] = genemouthmutant
         t0["powers"] = strpowers
         # doubled genes, make just one horn doubled.
-        t0["hornL"] = "17OFwn"
+        t0["hornL"] = "17OFwN"
         t0["hornR"] = "17OFws"
         t0["height"] = 72
         t0["build"] = strbuild
@@ -151,7 +151,6 @@ def premadehorn(inhorn=""):
             horn = horn + "s"  # spade
         if x > 12:
             horn = horn + "P"  # point
-
     return horn
 
 
@@ -191,7 +190,8 @@ def eugenics(t0):
 spectrumfull = [
     "RR", "RRr", "RRR", "RRg", "RRG", "RrB", "Rrb",
     "Rr", "Rrr", "RrR", "Rrg", "RrG", "rrB", "rrb",
-    "rr", "rrr", "rrR", "rrg", "rrG", "rGR", "rGr", "rGB", "RG",
+    "rr", "rrr", "rrR", "rrg", "rrG", "rGR", "rGr", "rGB",
+    "RG",
     "rG", "RGB", "RGb", "RGg", "RGG", "RgR", "Rgr", "RgB", "Rgb",
     "Rg", "Rgg", "RgG", "rgR", "rgr", "rgB", "rgb",
     "rg", "rgg", "rgG", "GGR", "GGr", "GGG", "GGg",
@@ -322,7 +322,7 @@ def spectrumrand():
     ]
     return spectrum
 
-
+# Possibly put these constants into the spectrum objects?  spectrumheight["short"], ...
 geneseamutant = "SsSSsBBCcEewWwWFFBbsBFGgeGgeggiTtDEeaaaa"  # Weird Shit.
 genesealand = "sssssbbccEEwwwwffbbsbfggiggiggittdeeAAAA"    # no aquatic traits, no biolum, ears and no fins.
 geneseasea = "SSSSSbbCCeeWwWwffBBSBFGGiGGiggiTTdEEAAAA"

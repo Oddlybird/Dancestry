@@ -1,5 +1,5 @@
 import slurry
-import trolldeets as deets
+import biology as bio
 
 # Phenotype Classes, containing genes
 
@@ -36,20 +36,27 @@ def trollobj():  # trolldeets
         "firname": "FIRNAM",  # six letters
         "surname": "SURNAM",  # six letters
         "sex": "N",  # M/N/F
-        "blood": "Rg",  # RGB rgb
+        "blood": "rG",  # RGB rgb
         "caste": "caste",
         "dwell": "dwell",
         "seadesc": "seadesc",
-        "hornLdesc": "hornL",
-        "hornRdesc": "hornR",
         "mouth": slurry.genemouthlow,
         "sea": slurry.genesealand,
         # pawfeet, tail, wing, hairstreaks, grubscars, ?
         "powers": "powers",  # psychic, voodoo, eldritch, none.  specify type later.  Make psychics eyes glow colors?
-        "hornL": "22RInP",  # see horn notes.
-        "hornR": "22RInP",
+        "hornL": slurry.spectrumgenehorn["rG"],
+        "hornR": slurry.spectrumgenehorn["rG"],
+        "hornLdesc": bio.describehorn(slurry.spectrumgenehorn["rG"]),
+        "hornRdesc": bio.describehorn(slurry.spectrumgenehorn["rG"]),
+        "hornleft1": slurry.spectrumgenehorn["rG"],
+        "hornleft2": slurry.spectrumgenehorn["RG"],
+        "hornleft3": slurry.spectrumgenehorn["rr"],
+        "hornright1": slurry.spectrumgenehorn["rG"],
+        "hornright2": slurry.spectrumgenehorn["rr"],
+        "hornright3": slurry.spectrumgenehorn["RG"],
+        "hornsdesc": "",
         "height": 84,       # height in inches
-        "heightstr":  deets.heightstr(84),
+        "heightstr":  bio.heightstr(84),
         "build": "medium",  # more detailed data later
         "hair": "short",    # more detailed data later.  medium/long.
         "skin": "grey",     # freckles, stripes, birthmarks, vitiligo, melanism, albinism, etc.
@@ -100,7 +107,6 @@ class HornObj:  # trolldeets
     # branched / antler horns, sheet-like moose horns
 
     def __init__(self, code):
-        self.code = code
         t0 = horncode(code)
         self.length = t0["length"]
         self.curl = t0["curl"]
@@ -108,18 +114,18 @@ class HornObj:  # trolldeets
         self.dir = t0["dir"]
         self.wide = t0["wide"]
         self.tip = t0["tip"]
-        self.update()
+        self.code = self.update()
 
     def desc(self):
         # convert the current features of the horn into a verbal description as in basic version.
         # use by going description-string = horn-temp.desc()
-        descr = str(deets.describehorn(self.code))
+        descr = str(bio.describehorn(self.code))
         return descr
 
     def update(self):
-        self.code = str(self.length) + str(self.curl) + str(self.radial) + str(
+        code = str(self.length) + str(self.curl) + str(self.radial) + str(
             self.dir) + str(self.wide) + str(self.tip)
-        return self.code
+        return code
 
 
 # Incomplete
@@ -129,13 +135,48 @@ class Eyes:
     Eye3 = EyeObj  # inactive, left
     Eye4 = EyeObj  # inactive, right
     Eye5 = EyeObj  # inactive, center
-    # need a deets function for blending and producing these
-    # deets function: describe eyes
+    # need a bio function for blending and producing these
+    # bio function: describe eyes
 
     def __init__(self, code):
         self.code = code
         # When activating Eye genes, include code parsing data here
 # eye mutations:  octopus pupils, vision 8fold, 1 eye,
+
+
+class Horns:
+    code = ""
+    blood = ""
+    controls = ""
+    hornleft1 = ""   # Primary
+    hornleft2 = ""   # Secondary
+    hornleft3 = ""   # Ultra-recessive
+    hornright1 = ""  # Primary
+    hornright2 = ""  # Secondary
+    hornright3 = ""  # Ultra-recessive
+
+    def __init__(self, code):
+        t0 = codehorns(code)
+        self.blood = t0["blood"]
+        self.controls = t0["controls"]
+        self.hornleft1 = t0["hornleft1"]
+        self.hornleft2 = t0["hornleft2"]
+        self.hornleft3 = t0["hornleft3"]
+        self.hornright1 = t0["hornright1"]
+        self.hornright2 = t0["hornright2"]
+        self.hornright3 = t0["hornright3"]
+        self.code = self.update()
+        return
+
+    def update(self):
+        self.code = str(self.blood) + str(self.controls) + str(
+            self.hornleft1) + str(self.hornleft2) + str(self.hornleft3) + str(
+            self.hornright1) + str(self.hornright2) + str(self.hornright3)
+        return self.code
+
+    def desc(self):
+        descr = str(bio.describehorns2(self.code))
+        return descr
 
 
 # Incomplete
@@ -208,11 +249,11 @@ class Aquatic:
     blood = "rr"
     code = "ssssbbccEEwwwwffbbsbfggiggiggittdeeAAAA"  # The code used to store data longterm.
     SS = "sssss"          # SS = seadweller, Ss/sS = depends on genes, ss = land-dweller.
-    s0w = "N"  # are any of the genes tied to SS2[0] active?
-    s1w = "N"
-    s2w = "N"
-    s3w = "N"
-    s4w = "N"
+    s0w = "N"  # Ears, Fins, wfingers, wtoes:  are any of the genes tied to SS2[0] active?
+    s1w = "N"  # gillneck, gillneckt, gillribs, gillribst, gillface, gillfacet, salt, air
+    s2w = "N"  # bladders,
+    s3w = "N"  # biolum, teeth
+    s4w = "N"  # eyelids, dorsal / bodyfins
     bladders = "bb"    # Swim bladders - several / one / none
     cheekfins = "cc"     # yes / half / no
     # Make genes for earfin size, number of tines, etc.
@@ -259,22 +300,27 @@ class Aquatic:
     def dwell(self):
         # land dweller or sea?
         # use by going temp2 = temp1.desc()
-        descr = deets.describedwell(self.code)
+        descr = bio.describedwell(self.code)
         return descr
 
     def desc(self):
         # verbal description of aquatic traits
         # Include specifics of all genes that differ from slurry defaults for landdweller / seadweller
-        descr = deets.describesea(self.blood, self.code)
+        descr = bio.describesea(self.blood, self.code)
         return descr
 
     def updatess(self):
         # check if any of the relevant genes are active for each
         ld = Aquatic("rr", slurry.genesealand)
         sd = Aquatic("rr", slurry.genesealand)
+        dwell = self.dwell
         if self.SS != "SSSSS" and self.SS != "sssss":
             if self.SS[0] == "S":
-                if self.ears[0] == "E" or self.ears[1] == "E":
+                if self.ears[0] != self.ears[1]:
+                    self.s0w = "Y"
+                if dwell[0] != "l" and self.ears[0] == "e" or self.ears[1] == "e":
+                    self.s0w = "Y"
+                if dwell[0] != "s" and self.ears[0] == "S" or self.ears[1] == "S":
                     self.s0w = "Y"
                 if self.cheekfins[0] == "F" or self.ears[1] == "F":
                     self.s0w = "Y"
@@ -300,7 +346,7 @@ class Aquatic:
                     self.s1w = "Y"
                 if self.salt[0] == "S" or self.salt[1] == "B" or self.salt[2] == "F":
                     self.s1w = "Y"
-                if deets.countaa(self.air) > 1:
+                if bio.countaa(self.air) > 2:
                     self.s1w = "Y"
                 self.s1w = "Y"
             if self.SS[1] == "s":
@@ -377,10 +423,11 @@ def aquaticcode(code):
 
 
 def horncode(code):
+    # Produces the individual stats from the code, on a per-horn basis
     c = 0
-    length = code[c]
-    c = c + 1
     curl = code[c]
+    c = c + 1
+    length = code[c]
     c = c + 1
     radial = code[c]
     c = c + 1
@@ -390,6 +437,31 @@ def horncode(code):
     c = c + 1
     tip = code[c]  # everything else in string = the tip type.
     thing = {"length": length, "curl": curl, "radial": radial, "dir": dir, "wide": wide, "tip": tip,}
+    return thing
+
+
+def codehorns(code):
+    # produces the parts from the code, from a -set- of horns.
+    c = 0
+    blood = code[c:c+3]
+    c = c + 3
+    controls = code[c:c+6]
+    c = c + 6
+    hornleft1 = code[c:c+6]
+    c = c + 6
+    hornleft2 = code[c:c+6]
+    c = c + 6
+    hornleft3 = code[c:c+6]
+    c = c + 6
+    hornright1 = code[c:c+6]
+    c = c + 6
+    hornright2 = code[c:c+6]
+    c = c + 6
+    hornright3 = code[c:c+6]
+    c = c + 6
+    thing = {"blood": blood, "controls": controls,
+             "hornleft1": hornleft1, "hornleft2": hornleft2, "hornleft3": hornleft3,
+             "hornright1": hornright1, "hornright2": hornright2, "hornright3": hornright3, }
     return thing
 
 

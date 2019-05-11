@@ -1,6 +1,6 @@
 import json
 import os
-import trolldeets as deets
+import biology as deets
 import libtcodpy as tcod
 import names
 import colorgarbage as colg
@@ -437,12 +437,12 @@ def displaytroll(x, y, t0):  # interface -- prints a standard-format window disp
     string5 = t0["dwell"]
     string6 = "LHorn: " + t0["hornLdesc"]
     string7 = "RHorn: " + t0["hornRdesc"]
-    string8 = t0["sea"]
-    string9 = seawrap[0]
-    string10 = "  " + seawrap[1]
-    string11 = "  " + seawrap[2]
-    string12 = "  " + seawrap[3]
-    string13 = "."
+    string8 = "(" + hornl1 + " " + hornr1 + ")"
+    string9 = t0["sea"]
+    string10 = seawrap[0]
+    string11 = "  " + seawrap[1]
+    string12 = "  " + seawrap[2]
+    string13 = "  " + seawrap[3]
     string14 = t0["hair"] + " hair"
     string15 = t0["skin"] + " skin"
     string16 = t0["mouth"]
