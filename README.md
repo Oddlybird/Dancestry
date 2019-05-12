@@ -7,17 +7,29 @@ Original version written in freebasic in late 2017.  Being adapted to Python in 
 Approximate version history:
 =
 
+V. 0.2.5: 2019-05-11
+
+-- Horns now in genestrand format and functioning; multi-horn averager complete.
+
+-- horns by caste defined in slurry (could use review)
+
+-- standardized premade trolls to use more constants from slurry while genetics being designed
+
+-- basic testing of gene results:  as long as you're crossing two trolls of different castes, everything looks great.  Horns, teeth, and seadweller genes have good rates of auto-mutation and inheritance.
+
+-- ready to add new horn metagenes
+
+-- ready to add mouth.describe and new horns.describe
+
+-- Note to self : Move seadweller double-tooth gene to mouth object, remove from seadweller
+
+-- Note to self : Update documentation.
+
 V. 0.2.4: 2019-05-08
 
 -- TEEF, teefblender, teef from slurry, teef averager.
 
 -- Teef still undescribed, undergoing basic testing.
-
--- Note to self : Redo horns to fit genestrand format.
-
--- Note to self : Move seadweller double-tooth gene to mouth object, remove from seadweller
-
--- Note to self : Update documentation.
 
 V. 0.2.3d: 2019-05-05
 
