@@ -14,7 +14,7 @@ import random
 
 def getpremadetroll(x=random.randint(1, 3)):
 
-    t0 = gene.trollobj()
+    t0 = gene.trolldict()
 
     # Things that aren't really enabled yet.
     # Go through and give each troll a different one once the systems exist.
@@ -38,8 +38,7 @@ def getpremadetroll(x=random.randint(1, 3)):
         t0["sea"] = "sssssbbccEEwwwwffbbSbfggiggiGGittdeeAAAA"
         t0["powers"] = strpowers
         t0["mouth"] = genemouthlow
-        t0["hornL"] = "12TFwP"
-        t0["hornR"] = "21SOnS"
+        t0["horns"] = spectrumgenehorn["RG"]
         t0["height"] = 64
         t0["build"] = strbuild
         t0["hair"] = strhair
@@ -54,8 +53,7 @@ def getpremadetroll(x=random.randint(1, 3)):
         t0["mouth"] = genemouthhigh
         t0["sea"] = "SSsssbbCcEewWwWffbbsbFGgiGgiggiTtdeeAAAA"
         t0["powers"] = strpowers
-        t0["hornL"] = "46RInp"
-        t0["hornR"] = "37OBnR"
+        t0["horns"] = spectrumgenehorn["rB"]
         t0["height"] = 89
         t0["build"] = strbuild
         t0["hair"] = strhair
@@ -71,8 +69,7 @@ def getpremadetroll(x=random.randint(1, 3)):
         t0["mouth"] = genemouthmutant
         t0["powers"] = strpowers
         # doubled genes, make just one horn doubled.
-        t0["hornL"] = "17OFwN"
-        t0["hornR"] = "17OFws"
+        t0["horns"] = spectrumgenehorn["RG"]  # Stand-in.
         t0["height"] = 72
         t0["build"] = strbuild
         t0["hair"] = strhair
@@ -86,7 +83,20 @@ def getpremadetroll(x=random.randint(1, 3)):
     return t0
 
 
-def premadehorn(inhorn=""):
+def randhorns(inblood="Rg"):
+    inblood = inblood[0:2]
+    basehorn = spectrumgenehorn[inblood]
+    horn1 = deets.genecombine(basehorn, spectrumgenehorn[deets.neighborcaste(inblood, "-", 1)])
+    horn2 = deets.genecombine(horn1, spectrumgenehorn[deets.neighborcaste(inblood, "+", 1)])
+    horn3 = deets.genecombine(horn2, spectrumgenehorn[inblood])
+    outhorn = inblood
+    while len(outhorn) < 3:
+        outhorn = outhorn + "x"
+    outhorn = outhorn + horn3[3:len(horn3)]
+    return outhorn
+
+
+def randhorn(inhorn=""):
     # be able to specify particular parts of the horn for randomization via the input?
     horn = ""
     if len(inhorn) < 2:
@@ -107,14 +117,16 @@ def premadehorn(inhorn=""):
         if x > 3:
             horn = horn + "R"
         # Primary growth direction.  F = forward, B = back, O = outward/side, I = inwards/up/default.
-        x = random.randint(1, 6)
+        x = random.randint(1, 7)
         if x == 1:
             horn = horn + "F"
         if x == 2:
             horn = horn + "B"
         if x == 3:
             horn = horn + "O"
-        if x > 3:
+        if x == 4:
+            horn = horn + "S"
+        if x > 4:
             horn = horn + "I"
         # Width.  w = nepetalike, n = normal.
         x = random.randint(1, 15)
@@ -429,27 +441,28 @@ spectrumgenemouth = {
 }
 
 spectrumgenehorn = {
-    "RR": "25RBnP",  # Maroon - jagged, rounded, wide
-    "Rr": "24RSnR",  #
-    "rr": "33RSnP",  # Bronze - LONG,
-    "rG": "22RInS",  #
-    "RG": "22RInP",  # Gold - split, hook, wide
-    "Rg": "12RSnH",  #
-    "rg": "11RInP",  # Lime
-    "GG": "12OSwb",  # Olive - branching/split, point
-    "Gg": "12RInP",  #
-    "gg": "22RInH",  # Jade - jagged, point, bolt
-    "Gb": "21RInF",  #
-    "GB": "11RSnP",  # Teal - nub, point, hook, flat
-    "gB": "21RInH",  #
-    "gb": "22RInp",  # Ceru - point, pincher, notches, branch, hook
-    "BB": "21RInC",  # Bloo - flat, hook,
-    "Bb": "21RInH",  #
-    "bb": "37SInP",  # Indigo - round-radial
-    "rB": "27RInP",  #
-    "RB": "27RInP",  # Violet
-    "Rb": "24RInP",  #
-    "rb": "22ROnP",  # Tyrian
+    # "xx": "xxx.....xxxxx.22RInS.22RInP.33RSnP.22RInS.33RSnP.22RInP",# New format for entries
+    "RR": "RRx.....xxxxx.25RBnP.25RBnB.25RBwJ.25RBnP.25RBnR.25RBwb",  # Maroon
+    "Rr": "Rrx.....xxxxx.24RSnR.24RSnR.24RSnR.24RSnR.24RSnR.24RSnB",  #
+    "rr": "rrx.....xxxxx.33RSnP.43RSnP.43RSnP.33RSnP.43RSnP.43RSnP",  # Bronze
+    "rG": "rGx.....xxxxx.22RInS.22RInS.22RInS.22RInS.22RInS.22RInb",  #
+    "RG": "RGx.....xxxxx.22RInP.22RInS.22RSwH.22RInP.22RInH.22RIwS",  # Gold
+    "Rg": "Rgx.....xxxxx.12RSnH.12RSnH.12RSnH.12RSnH.12RSnH.12RSnH",  #
+    "rg": "rgx.....xxxxx.11RInP.11RInP.11RInP.11RInP.11RInP.11RInP",  # Lime
+    "GG": "GGx.....xxxxx.12OSwb.12OSwP.12OSwS.12OSwS.12OSwb.12OSwP",  # Olive
+    "Gg": "Ggx.....xxxxx.12RInP.12RInP.12RInP.12RInP.12RInP.12RInS",  #
+    "gg": "ggx.....xxxxx.22RInH.22RInJ.22RInH.22RInP.22RInP.22RInN",  # Jade
+    "Gb": "Gbx.....xxxxx.21RInF.21RInF.21RInF.21RInF.21RInF.21RInF",  #
+    "GB": "GBx.....xxxxx.11RSnP.11RSnH.11RSnF.11RSnR.11RSnP.11RSnH",  # Teal
+    "gB": "gBx.....xxxxx.21RInH.21RInH.21RInH.21RInH.21RInH.21RIns",  #
+    "gb": "gbx.....xxxxx.22RInp.22RInP.22RInN.22RInH.22RInb.22RInp",  # Ceru
+    "BB": "BBx.....xxxxx.21RInC.21RInF.21RInH.21RInC.21RInF.21RInH",  # Bloo
+    "Bb": "Bbx.....xxxxx.21RInH.21RInH.21RInH.21RInH.21RInH.21RInH",  #
+    "bb": "bbx.....xxxxx.37SInP.37RInP.37SInP.37SInP.37RInP.37SInP",  # Indigo
+    "rB": "rBx.....xxxxx.27RInP.27RInP.27RInP.27RInP.27RInP.27RIns",  #
+    "RB": "RBx.....xxxxx.27RInP.27RInP.27RInP.27RInP.27RInP.27RInP",  # Violet
+    "Rb": "Rbx.....xxxxx.24RInP.24RInP.24RIns.24RInP.24RInP.24RInP",  #
+    "rb": "rbx.....xxxxx.22ROnP.22ROnP.22ROnP.22ROnP.22ROnP.22ROnP",  # Tyrian
 }
 
 spectrumgeneseasocial = {

@@ -246,13 +246,13 @@ def handle_keys():  # interface - button functions, and loops as needed.
             if screencurrent.name == "maketroll":
                 if btncurrent == 51:
                     # Btn 1 : Troll from parents
-                    troll3 = gene.trollobj()
+                    troll3 = gene.trolldict()
                     troll3 = deets.blendtroll(troll1, troll2)
                     updatescreen()
                     return False
                 if btncurrent == 52:
                     # Btn 2 : Troll from slurry
-                    troll3 = gene.trollobj()
+                    troll3 = gene.trolldict()
                     troll3 = deets.slurrytroll(spectrum)
                     updatescreen()
                     return False
@@ -356,7 +356,7 @@ def savetroll(grub):  # interface     Save Troll
 
 
 def loadtroll(filename):  # interface     Load Troll
-    trollobj = gene.trollobj()
+    trollobj = gene.trolldict()
     savedtroll = "Caverns/AncestralCave/" + filename + ".troll"
     if os.path.exists(savedtroll):
         loadedtroll = open(savedtroll, "rt")
@@ -364,7 +364,7 @@ def loadtroll(filename):  # interface     Load Troll
         trollobj = json.loads(y)
         loadedtroll.close()
     if trollobj["savetype"] != "5":
-        trollobj = gene.trollobj()
+        trollobj = gene.trolldict()
     return trollobj
 
 
@@ -415,12 +415,11 @@ def displaytroll(x, y, t0):  # interface -- prints a standard-format window disp
     blood = t0["blood"][0:2]
     colbg = colg.bloodtorgb(t0["blood"])
     colfg = (255, 255, 255)
-    hornl1 = t0["hornL"]
-    hornr1 = t0["hornR"]
-    hornl2 = gene.HornObj(hornl1)
-    hornr2 = gene.HornObj(hornr1)
-    t0["hornLdesc"] = hornl2.desc()
-    t0["hornRdesc"] = hornr2.desc()
+    hornsgene = gene.Horns(t0["horns"])
+    hornl = gene.HornObj(hornsgene.hornleft1)
+    hornr = gene.HornObj(hornsgene.hornright1)
+    t0["hornLdesc"] = hornl.desc()
+    t0["hornRdesc"] = hornr.desc()
     h = t0["height"]
     t0["heightstr"] = deets.heightstr(h)
     seatemp = t0["sea"]
@@ -431,24 +430,24 @@ def displaytroll(x, y, t0):  # interface -- prints a standard-format window disp
     seawrap = fbs.wordwrap2(t0["seadesc"], 60)
     rectolor(x, y, 64, 20, colbg, colfg)
     string1 = t0["firname"] + " " + t0["surname"] + ", " + t0["blood"] + " " + t0["sex"]
-    string2 = t0["caste"] + ", " + t0["powers"]
+    string2 = t0["caste"] + ", " + t0["dwell"]
     string3 = t0["donator1"] + " / " + t0["donator2"]
     string4 = t0["heightstr"] + "/" + deets.heightstr(castedefaultheight) + ", " + t0["build"] + " build"
-    string5 = t0["dwell"]
-    string6 = "LHorn: " + t0["hornLdesc"]
-    string7 = "RHorn: " + t0["hornRdesc"]
-    string8 = "(" + hornl1 + " " + hornr1 + ")"
-    string9 = t0["sea"]
-    string10 = seawrap[0]
-    string11 = "  " + seawrap[1]
-    string12 = "  " + seawrap[2]
-    string13 = "  " + seawrap[3]
-    string14 = t0["hair"] + " hair"
-    string15 = t0["skin"] + " skin"
-    string16 = t0["mouth"]
-    string17 = "."
-    string18 = "."
-    string19 = "."
+    string5 = seawrap[0]
+    string6 = "  " + seawrap[1]
+    string7 = "  " + seawrap[2]
+    string8 = "  " + seawrap[3]
+    string9 = "LHorn: " + t0["hornLdesc"]
+    string10 = "RHorn: " + t0["hornRdesc"]
+    string11 = "."  # t0["powers"]
+    string12 = "."  # t0["hair"] + " hair"
+    string13 = "."  # t0["skin"] + " skin"
+    string14 = "."
+    string15 = "."
+    string16 = "."
+    string17 = t0["sea"]
+    string18 = t0["horns"]
+    string19 = t0["mouth"]
     string20 = "."
     tcod.console_print_frame(0, x, y, 65, 21, True, 13, string1)
     draw(x + 2, y + 1, string2)

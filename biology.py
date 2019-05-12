@@ -62,20 +62,20 @@ def slurrytroll(spectrum):
     # sex
     strsex = getsex(strblood)
 
-    # Make horns.  The hornblender is biased, and 2/3 of results will be from the first two horns input.
-    hornl = slurry.premadehorn()
-    hornr = slurry.premadehorn()
-    (hornl, hornr) = hornaverager(hornl, hornr)
-    hornl2 = gene.HornObj(hornl)
-    strhornl = hornl2.desc()
-    hornr2 = gene.HornObj(hornr)
-    strhornr = hornr2.desc()
+    # Make horns.
+    horned = slurry.randhorns(strblood[0:2])
+    hornsfinal = hornsetaverager(horned)
+    hornset = gene.Horns(hornsfinal)
+    hornl = gene.HornObj(hornset.hornleft1)
+    hornr = gene.HornObj(hornset.hornright1)
+    strhornl = hornl.desc()
+    strhornr = hornr.desc()
 
     # names
     firstname = names.newname()
     lastname = names.newname()
 
-    t1 = gene.trollobj()
+    t1 = gene.trolldict()
     t1["firname"] = firstname
     t1["surname"] = lastname
     t1["sex"] = strsex
@@ -87,8 +87,7 @@ def slurrytroll(spectrum):
     t1["sea"] = strsea
     t1["mouth"] = strmouthgene
     #    t1["powers"] = ,
-    t1["hornL"] = hornl
-    t1["hornR"] = hornr
+    t1["horns"] = hornsfinal
     t1["height"] = strheight
     #    t1["build"] = ,
     #    t1["hair"] = ,
@@ -168,19 +167,18 @@ def blendtroll(trolla, trollb):  # trolldeets
     strsex = getsex(strblood)
 
     # Make horns.  The hornblender is biased, and 2/3 of results will be from the first two horns input.
-    hornl = hornblender(p1["hornL"], p2["hornL"], p1["hornR"], p2["hornR"])
-    hornr = hornblender(p1["hornR"], p2["hornR"], p1["hornL"], p2["hornL"])
-    (hornl, hornr) = hornaverager(hornl, hornr)
-    hornl2 = gene.HornObj(hornl)
-    strhornl = hornl2.desc()
-    hornr2 = gene.HornObj(hornr)
-    strhornr = hornr2.desc()
+    strhorns = hornblender(p1["horns"], p2["horns"], strblood)
+    horns = gene.Horns(strhorns)
+    hornl = gene.HornObj(horns.hornleft1)
+    strhornl = hornl.desc()
+    hornr = gene.HornObj(horns.hornright1)
+    strhornr = hornr.desc()
 
     # names
     firstname = names.newname()
     lastname = names.newname()
 
-    t1 = gene.trollobj()
+    t1 = gene.trolldict()
     t1["firname"] = firstname
     t1["surname"] = lastname
     t1["sex"] = strsex
@@ -192,8 +190,7 @@ def blendtroll(trolla, trollb):  # trolldeets
     t1["sea"] = strsea
     t1["mouth"] = strmouth
 #    t1["powers"] = ,
-    t1["hornL"] = hornl
-    t1["hornR"] = hornr
+    t1["horns"] = strhorns
     t1["height"] = strheight
 #    t1["build"] = ,
 #    t1["hair"] = ,
@@ -204,59 +201,16 @@ def blendtroll(trolla, trollb):  # trolldeets
     return t1
 
 
-def hornblender(horn1, horn2, horn3, horn4):
-    outhorn = ""
-    a = 0
-    # Pick one of the parents' horn genes at random for each horn.
-    while a <= 6:
-        # 6 is a dot, but you need the dot, so ...
-        if a < 6:
-            b = random.randint(1, 6)
-            if b == 1 or b == 2:
-                outhorn = outhorn + horn1[a]
-            if b == 3 or b == 4:
-                outhorn = outhorn + horn2[a]
-            if b == 5:
-                outhorn = outhorn + horn3[a]
-            if b == 6:
-                outhorn = outhorn + horn4[a]
-
-        if a == 6:
-            # on the last loop, you need to append the point-type word.  So...
-            b = random.randint(1, 6)
-            if b == 1 or b == 2:
-                outhorn = outhorn + horn1[a:len(horn1)]
-            if b == 3 or b == 4:
-                outhorn = outhorn + horn2[a:len(horn2)]
-            if b == 5:
-                outhorn = outhorn + horn3[a:len(horn3)]
-            if b == 6:
-                outhorn = outhorn + horn4[a:len(horn4)]
-        # increment loop
-        a = a + 1
-
-    a = 0
-    outhorn2 = ""
-    while a < 2:
-        b = random.randint(1, 12)
-        temp1 = int(outhorn[a])
-        temp2 = int(outhorn[a])
-        if b == 1 or b == 2:
-            temp2 = int(horn1[a])
-        if b == 3 or b == 4:
-            temp2 = int(horn2[a])
-        if b == 5:
-            temp2 = int(horn3[a])
-        if b == 6:
-            temp2 = int(horn4[a])
-        temp3 = (temp1 + temp2) // 2
-        temp4 = str(temp3)
-        outhorn2 = outhorn2 + temp4
-        a = a + 1
-
-    outhorn2 = outhorn2 + outhorn[2:len(outhorn)]
-
-    return outhorn2
+def hornblender(horna, hornb, strblood):
+    horn1 = genecombine(horna, hornb)
+    horn2 = hornsetaverager(horn1)
+    horns = genecombine(horn2, slurry.spectrumgenehorn[strblood[0:2]])
+    outhorn = strblood
+    while len(outhorn) < 3:
+        outhorn = outhorn + "x"
+    t0 = outhorn + horns[3:len(horns)]
+    t1 = hornsetaverager(t0)
+    return t1
 
 
 def hornaverager(hornl, hornr):
@@ -298,6 +252,27 @@ def hornaverager(hornl, hornr):
     if e == 2:
         hornr = hornr[0] + hornr[1] + hornr[2] + hornr[3] + hornr[4] + hornl[5:len(hornl)]
     return hornl, hornr
+
+
+def hornsetaverager(horned):
+    strblood = horned[0:3]
+    horns = gene.Horns(horned)
+    hornleft1 = horns.hornleft1
+    hornleft2 = horns.hornleft2
+    hornleft3 = horns.hornleft3
+    hornright1 = horns.hornright1
+    hornright2 = horns.hornright2
+    hornright3 = horns.hornright3
+    (hornleft1, hornleft2) = hornaverager(hornleft1, hornleft2)
+    (hornright2, hornleft3) = hornaverager(hornright2, hornleft3)
+    (hornright1, hornright2) = hornaverager(hornright1, hornright2)
+    (hornright3, hornleft2) = hornaverager(hornright3, hornleft2)
+    (hornleft1, hornright1) = hornaverager(hornleft1, hornright1)
+    outhorn = strblood
+    while len(outhorn) < 3:
+        outhorn = outhorn + "x"
+    hornsfinal = outhorn + horns.code[3:13] + "." + hornleft1 + "." + hornleft2 + "." + hornleft3 + "." + hornright1 + "." + hornright2 + "." + hornright3
+    return hornsfinal
 
 
 def mouthblender(mouth1, mouth2, basis):
@@ -556,6 +531,8 @@ def describehorn(inhorn="22RInP"):
     if temp.dir == "B":
         descr = descr + "backswept "
     if temp.dir == "O":
+        descr = descr + "outward "
+    if temp.dir == "S":
         descr = descr + "side "
     # curves, default = 2 (slightly curved)
     if temp.curl == "1":
@@ -994,4 +971,4 @@ def genedesc2(my, cy, a, atxt, b, btxt, abtxt, batxt):
 # Until I figure out why it isn't working any other way.
 
 
-trollblank = gene.trollobj()
+trollblank = gene.trolldict()

@@ -30,37 +30,37 @@ import biology as bio
 
 
 # Make a troll class instead?
-def trollobj():  # trolldeets
+def trolldict():  # trolldeets
+    bloodreal = slurry.premadeblood()
+    blood = bloodreal[0:2]
+    sea = slurry.genesealand
+    if slurry.spectrumdwell[blood] != "landdweller":
+        sea = slurry.geneseasea
     t0 = {
-        "savetype": "8",  # Save Version
+        "savetype": "9",  # Save Version
         "firname": "FIRNAM",  # six letters
         "surname": "SURNAM",  # six letters
         "sex": "N",  # M/N/F
-        "blood": "rG",  # RGB rgb
-        "caste": "caste",
-        "dwell": "dwell",
-        "seadesc": "seadesc",
-        "mouth": slurry.genemouthlow,
-        "sea": slurry.genesealand,
+        "blood": bloodreal,  # RGB rgb
+        "caste": bio.getcastefromblood(blood),
+        "dwell": slurry.spectrumdwell[blood],
+        "seadesc": bio.describesea(blood, sea),
+        "mouth": slurry.spectrumgenemouth[blood],
+        "sea": sea,
         # pawfeet, tail, wing, hairstreaks, grubscars, ?
         "powers": "powers",  # psychic, voodoo, eldritch, none.  specify type later.  Make psychics eyes glow colors?
-        "hornL": slurry.spectrumgenehorn["rG"],
-        "hornR": slurry.spectrumgenehorn["rG"],
+        "hornL": slurry.spectrumgenehorn["rG"],           # remove eventually
+        "hornR": slurry.spectrumgenehorn["rG"],           # remove eventually
         "hornLdesc": bio.describehorn(slurry.spectrumgenehorn["rG"]),
         "hornRdesc": bio.describehorn(slurry.spectrumgenehorn["rG"]),
-        "hornleft1": slurry.spectrumgenehorn["rG"],
-        "hornleft2": slurry.spectrumgenehorn["RG"],
-        "hornleft3": slurry.spectrumgenehorn["rr"],
-        "hornright1": slurry.spectrumgenehorn["rG"],
-        "hornright2": slurry.spectrumgenehorn["rr"],
-        "hornright3": slurry.spectrumgenehorn["RG"],
-        "hornsdesc": "",
-        "height": 84,       # height in inches
-        "heightstr":  bio.heightstr(84),
-        "build": "medium",  # more detailed data later
-        "hair": "short",    # more detailed data later.  medium/long.
-        "skin": "grey",     # freckles, stripes, birthmarks, vitiligo, melanism, albinism, etc.
-        "donator1": "?.?",  # higher caste donator
+        "horns": slurry.spectrumgenehorn["rG"],
+        "hornsdesc": "",  # To Do
+        "height": slurry.spectrumheight[blood],                     # height in inches
+        "heightstr":  bio.heightstr(slurry.spectrumheight[blood]),  # human-readable
+        "build": "medium",   # more detailed data later
+        "hair": "short",     # more detailed data later.  medium/long.
+        "skin": "grey",      # freckles, stripes, birthmarks, vitiligo, melanism, albinism, etc.
+        "donator1": "?.?",   # higher caste donator
         "donator2": "?.?",   # lower caste donator
     }
     return t0
@@ -157,21 +157,21 @@ class Horns:
 
     def __init__(self, code):
         t0 = codehorns(code)
-        self.blood = t0["blood"]
-        self.controls = t0["controls"]
-        self.hornleft1 = t0["hornleft1"]
-        self.hornleft2 = t0["hornleft2"]
-        self.hornleft3 = t0["hornleft3"]
-        self.hornright1 = t0["hornright1"]
-        self.hornright2 = t0["hornright2"]
-        self.hornright3 = t0["hornright3"]
+        self.blood = t0["blood"]      # first 3 characters.  if 2-letter blood, third letter is x.
+        self.controls = t0["controls"]     # 10 letters ( 5 .'s and 5 x's)
+        self.hornleft1 = t0["hornleft1"]    # 6 letters
+        self.hornleft2 = t0["hornleft2"]    # 6 letters
+        self.hornleft3 = t0["hornleft3"]    # 6 letters
+        self.hornright1 = t0["hornright1"]  # 6 letters
+        self.hornright2 = t0["hornright2"]  # 6 letters
+        self.hornright3 = t0["hornright3"]  # 6 letters
         self.code = self.update()
         return
 
     def update(self):
-        self.code = str(self.blood) + str(self.controls) + str(
-            self.hornleft1) + str(self.hornleft2) + str(self.hornleft3) + str(
-            self.hornright1) + str(self.hornright2) + str(self.hornright3)
+        self.code = str(self.blood) + str(self.controls) + "." + str(
+            self.hornleft1) + "." + str(self.hornleft2) + "." + str(self.hornleft3) + "." + str(
+            self.hornright1) + "." + str(self.hornright2) + "." + str(self.hornright3)
         return self.code
 
     def desc(self):
@@ -445,18 +445,24 @@ def codehorns(code):
     c = 0
     blood = code[c:c+3]
     c = c + 3
-    controls = code[c:c+6]
-    c = c + 6
+    controls = code[c:c+10]
+    c = c + 10
+    c = c + 1  # Because there's a "."
     hornleft1 = code[c:c+6]
     c = c + 6
+    c = c + 1  # Because there's a "."
     hornleft2 = code[c:c+6]
     c = c + 6
+    c = c + 1  # Because there's a "."
     hornleft3 = code[c:c+6]
     c = c + 6
+    c = c + 1  # Because there's a "."
     hornright1 = code[c:c+6]
     c = c + 6
+    c = c + 1  # Because there's a "."
     hornright2 = code[c:c+6]
     c = c + 6
+    c = c + 1  # Because there's a "."
     hornright3 = code[c:c+6]
     c = c + 6
     thing = {"blood": blood, "controls": controls,
