@@ -7,6 +7,14 @@ Original version written in freebasic in late 2017.  Being adapted to Python in 
 Approximate version history:
 =
 
+V. 0.2.5a: 2019-05-12
+
+-- added screenshot button to main menu
+
+-- began investigating teef graphics
+
+-- now using save format 9
+
 V. 0.2.5: 2019-05-11
 
 -- Horns now in genestrand format and functioning; multi-horn averager complete.
