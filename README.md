@@ -7,6 +7,16 @@ Original version written in freebasic in late 2017.  Being adapted to Python in 
 Approximate version history:
 =
 
+V. 0.2.6: 2019-05-26
+
+-- Writer's block sucks
+
+-- Entire engine transferred from libtcodpy to pygame
+
+-- Teef graphics enabled
+
+-- Save troll to .png enabled
+
 V. 0.2.5a: 2019-05-12
 
 -- added screenshot button to main menu
