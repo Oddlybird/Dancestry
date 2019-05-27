@@ -124,7 +124,7 @@ geneseasea = "SSSSSbbCCeeWwWwffBBSBFGGiGGiggiTTdEEAAAA"
 # no dorsal fins, strong biolum, any water, internal rib/neck gills, no face gills.
 genemouthlow = "64ddTTTTTT444444CCCPGGTTTTTT444444CCCPGGTTTTTT444444CCCCGGTTTTTT444444CCPPGG"
 genemouthhigh = "64ddTTTTTT445444PPPPPPTTTTTT445444PPPPPPTTTTTT444544PPPPGGTTTTTT444544PPPPGG"
-genemouthmutant = "46DdFFFFFF272727PPPPPPFFFFFF727272PPPPPPFFFFFF272729PPPPPPFFFFFF727272PPPPPP"
+genemouthmutant = "46DdFTFTFT272727PPPPPPTFTFTF727272PPPPPPFTFTFT272729PPPPPPTFTFTF727272PPPPPP"
 
 spectrumheight = {  # 5' = 60, 6' = 72, 7' = 84, 8' = 96, 9' = 108, 10' = 120, 11' = 132
     "RR": 70,  # Maroon
@@ -273,3 +273,75 @@ spectrumgeneseasocial = {
     "Rb": geneseasea,
     "rb": geneseasea,  # Tyrian
     }
+
+spectrumpowerstemp = {
+    "RR": "Psychic",  # Maroon
+    "Rr": "Psychic",
+    "rr": "Psychic",  # Bronze
+    "Rg": "Psychic",
+    "RG": "Very Psychic",  # Gold
+    "rG": "Very Psychic",
+    "rg": "Very Psychic",  # Lime
+    "GG": "None",  # Olive
+    "Gg": "None",
+    "gg": "None",  # Jade
+    "Gb": "None",
+    "GB": "None",  # Teal
+    "gB": "None",
+    "gb": "None",  # Ceru
+    "BB": "None",  # Bloo
+    "Bb": "Voodoo",
+    "bb": "Voodoo",  # Indigo
+    "rB": "Voodoo",
+    "RB": "None",  # Violet
+    "Rb": "None",
+    "rb": "None",  # Tyrian
+}
+
+spectrumbuildtemp = {
+    "RR": "Curvy",  # Maroon
+    "Rr": "Slight",
+    "rr": "Lanky",  # Bronze
+    "Rg": "Slight",
+    "RG": "Thin",  # Gold
+    "rG": "Thin",
+    "rg": "Athletic",  # Lime
+    "GG": "Athletic",  # Olive
+    "Gg": "Athletic",
+    "gg": "Slender",  # Jade
+    "Gb": "Slender",
+    "GB": "Twiggy",  # Teal
+    "gB": "Twiggy",
+    "gb": "Slim",  # Ceru
+    "BB": "Athletic",  # Bloo
+    "Bb": "Athletic",
+    "bb": "Athletic",  # Indigo
+    "rB": "Athletic",
+    "RB": "Athletic",  # Violet
+    "Rb": "Slim",
+    "rb": "Slim",  # Tyrian
+}
+
+spectrumhairtemp = {
+    "RR": "curly",  # Maroon
+    "Rr": "long",
+    "rr": "fauxhawk",  # Bronze
+    "Rg": "short",
+    "RG": "short",  # Gold
+    "rG": "short",
+    "rg": "wavy",  # Lime
+    "GG": "short",  # Olive
+    "Gg": "short",
+    "gg": "short",  # Jade
+    "Gb": "short",
+    "GB": "short",  # Teal
+    "gB": "wavy",
+    "gb": "long",  # Ceru
+    "BB": "long",  # Bloo
+    "Bb": "long",
+    "bb": "curly",  # Indigo
+    "rB": "curly",
+    "RB": "curly",  # Violet
+    "Rb": "curly",
+    "rb": "curly",  # Tyrian
+}

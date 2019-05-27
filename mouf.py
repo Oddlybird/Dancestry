@@ -65,8 +65,52 @@ def thetooth(moufstr):
     return jawtop, jawbot
 
 
+def thewholetooth(moufstr):
+    mouf = gene.Mouth(moufstr)
+    left = ["", "", "", "", "", ""]
+    right = ["", "", "", "", "", ""]
+    x = 0
+    while x < 6:
+        left[x] = mouf.typetopl[x] + mouf.typetopl[x] + mouf.lengthtopl[x]
+        right[x] = mouf.typetopr[x] + mouf.typetopr[x] + mouf.lengthtopr[x]
+        x = x + 1
+    jawtop = right[5] + right[4] + right[3] + right[2] + right[1] + right[0]
+    jawtop = jawtop + left[0] + left[1] + left[2] + left[3] + left[4] + left[5]
+    left = ["", "", "", "", "", ""]
+    right = ["", "", "", "", "", ""]
+    x = 0
+    while x < 6:
+        left[x] = mouf.typebotl[x] + mouf.typebotl[x] + mouf.lengthbotl[x]
+        right[x] = mouf.typebotr[x] + mouf.typebotr[x] + mouf.lengthbotr[x]
+        x = x + 1
+    jawbot = right[5] + right[4] + right[3] + right[2] + right[1] + right[0]
+    jawbot = jawbot + left[0] + left[1] + left[2] + left[3] + left[4] + left[5]
+    return jawtop, jawbot
+
+
 def jawprint(mouf):
+    offscreen = pygame.Surface((85, 21))
+    offscreen.fill((50, 50, 50))
+    # Showing Teeth
+    jawmain = jawprintgraphics(mouf, False)
+    jawmain.set_alpha(50)
+    # Recessive Teeth
+    jawtemp1 = jawprintgraphics(mouf, True)
+    jawtemp2 = pygame.transform.flip(jawtemp1, 1, 0)
+    jawtemp2.set_alpha(50)
+    jawtemp1.blit(jawtemp2, (0, 0), None, pygame.BLEND_ADD)
+    jawtemp1.set_alpha(25)
+    # Finalize
+    offscreen.blit(jawtemp1, (0, 0), None, pygame.BLEND_ADD)
+    offscreen.blit(jawtemp1, (0, 0), None, pygame.BLEND_MULT)
+    offscreen.blit(jawmain, (0, 0))
+    return offscreen
+
+
+def jawprintgraphics(mouf, whole=False):
     jawt, jawb = thetooth(mouf)
+    if whole:
+        jawt, jawb = thewholetooth(mouf)
     x = 0
     offscreen = pygame.Surface((85, 21))
     offscreen.fill((0, 0, 0))

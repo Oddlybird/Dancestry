@@ -142,8 +142,10 @@ def handlekeys(gameon=True):
                         updatescreen()
                         return gameon
                     if btncurrent == 53:
-                        # Btn 3 : Save troll3 to .sav file.
-                        savetroll(troll3)
+                        # Btn 3 : Put random default troll into slot 3
+                        troll3 = gene.trolldict()
+                        troll3 = gene.getpremadetroll(random.randint(1,13))
+                        updatescreen()
                         return gameon
                     if btncurrent == 54:
                         # Btn 4 : Load troll3 into troll 1
@@ -156,18 +158,23 @@ def handlekeys(gameon=True):
                         updatescreen()
                         return gameon
                     if btncurrent == 56:
-                        # Btn 6 : Save troll3.png
-                        savetrollpng(troll3)
+                        # Btn 6 : Save troll3.troll
+                        savetroll(troll3)
                         updatescreen()
                         return gameon
                     if btncurrent == 57:
-                        # Btn 6 : Save troll1.png
+                        # Btn 7 : Save troll1.png
                         savetrollpng(troll1)
                         updatescreen()
                         return gameon
                     if btncurrent == 58:
-                        # Btn 6 : Save troll2.png
+                        # Btn 8 : Save troll2.png
                         savetrollpng(troll2)
+                        updatescreen()
+                        return gameon
+                    if btncurrent == 59:
+                        # Btn 9 : Save troll3.png
+                        savetrollpng(troll3)
                         updatescreen()
                         return gameon
                     return gameon
@@ -267,7 +274,6 @@ def drawmenu(background):  # interface.  Contains Labels for all main and submen
     btnhbig = 20
     btnhsmall = 20
     menubg = fbs.btn("Menu", 232, screen_height, (60, 60, 60), (255, 255, 255))
-    background.blit(menubg, (screen_width - 232, 0))
 
     txtcol = (50, 50, 0)
     btn01 = fbs.btn("     MAKE TROLL     ", btnwbig, btnhbig, btnselect(1), txtcol, True, "Verdana")
@@ -283,29 +289,36 @@ def drawmenu(background):  # interface.  Contains Labels for all main and submen
     btn11 = fbs.btn("       Btn  11      ", btnwbig, btnhbig, btnselect(11), txtcol, True, "Verdana")
     btn12 = fbs.btn("       E X I T      ", btnwbig, btnhbig, btnselect(12), txtcol, True, "Verdana")
 
-    background.blit(btn01, (1064, 24))
-    background.blit(btn02, (1064, 72))
-    background.blit(btn03, (1064, 120))
-    background.blit(btn04, (1064, 168))
-    background.blit(btn05, (1064, 216))
-    background.blit(btn06, (1064, 264))
-    background.blit(btn07, (1064, 312))
-    background.blit(btn08, (1064, 360))
-    background.blit(btn09, (1064, 408))
-    background.blit(btn10, (1064, 456))
-    background.blit(btn11, (1064, 504))
-    background.blit(btn12, (1064, 552))
+    menubg.blit(btn01, (16, 24))
+    menubg.blit(btn02, (16, 72))
+    menubg.blit(btn03, (16, 120))
+    menubg.blit(btn04, (16, 168))
+    menubg.blit(btn05, (16, 216))
+    menubg.blit(btn06, (16, 264))
+    menubg.blit(btn07, (16, 312))
+    menubg.blit(btn08, (16, 360))
+    menubg.blit(btn09, (16, 408))
+    menubg.blit(btn10, (16, 456))
+    menubg.blit(btn11, (16, 504))
+    menubg.blit(btn12, (16, 552))
+    background.blit(menubg, (screen_width - 232, 0))
 
     if screencurrent == pagemaketroll:
-        btnA = fbs.btn("  Troll From Parents  ", btnwsmall, btnhsmall, btnselect(51), txtcol)
-        btnB = fbs.btn("  Troll From Slurry   ", btnwsmall, btnhsmall, btnselect(52), txtcol)
-        btnC = fbs.btn("  Save Offspring.sav  ", btnwsmall, btnhsmall, btnselect(53), txtcol)
-        btnD = fbs.btn("   Load Into Slot 1   ", btnwsmall, btnhsmall, btnselect(54), txtcol)
-        btnE = fbs.btn("   Load Into Slot 2   ", btnwsmall, btnhsmall, btnselect(55), txtcol)
-        btnF = fbs.btn("  Save Offspring.png  ", btnwsmall, btnhsmall, btnselect(56), txtcol)
-        btnG = fbs.btn("    Save slot1.png    ", btnwsmall, btnhsmall, btnselect(57), txtcol)
-        btnH = fbs.btn("    Save slot2.png    ", btnwsmall, btnhsmall, btnselect(58), txtcol)
-        btnI = fbs.btn("                      ", btnwsmall, btnhsmall, btnselect(59), txtcol)
+        btnA = fbs.btn("  Troll From Parents   ", btnwsmall, btnhsmall, btnselect(51), txtcol)
+        btnB = fbs.btn("  Troll From Slurry    ", btnwsmall, btnhsmall, btnselect(52), txtcol)
+        btnC = fbs.btn(" Rand.Normal to #3", btnwsmall, btnhsmall, btnselect(53), txtcol)
+        btnD = fbs.btn("  Load #3 Into #1  ", btnwsmall, btnhsmall, btnselect(54), txtcol)
+        btnE = fbs.btn("  Load #3 Into #2  ", btnwsmall, btnhsmall, btnselect(55), txtcol)
+        btnF = fbs.btn("  Save slot3.troll   ", btnwsmall, btnhsmall, btnselect(56), txtcol)
+        btnG = fbs.btn("    Save slot1.png   ", btnwsmall, btnhsmall, btnselect(57), txtcol)
+        btnH = fbs.btn("    Save slot2.png   ", btnwsmall, btnhsmall, btnselect(58), txtcol)
+        btnI = fbs.btn("    Save slot3.png   ", btnwsmall, btnhsmall, btnselect(59), txtcol)
+        btnJ = fbs.btn("", btnwsmall, btnhsmall, btnselect(60), txtcol)
+        btnK = fbs.btn("", btnwsmall, btnhsmall, btnselect(61), txtcol)
+        btnL = fbs.btn("", btnwsmall, btnhsmall, btnselect(62), txtcol)
+        btnM = fbs.btn("", btnwsmall, btnhsmall, btnselect(63), txtcol)
+        btnN = fbs.btn("", btnwsmall, btnhsmall, btnselect(64), txtcol)
+        btnO = fbs.btn("", btnwsmall, btnhsmall, btnselect(65), txtcol)
         background.blit(btnA, (8, 12))
         background.blit(btnB, (8, 36))
         background.blit(btnC, (8, 60))
@@ -315,6 +328,12 @@ def drawmenu(background):  # interface.  Contains Labels for all main and submen
         background.blit(btnG, (392, 12))
         background.blit(btnH, (392, 36))
         background.blit(btnI, (392, 60))
+        background.blit(btnJ, (584, 12))
+        background.blit(btnK, (584, 36))
+        background.blit(btnL, (584, 60))
+        background.blit(btnJ, (776, 12))
+        background.blit(btnK, (776, 36))
+        background.blit(btnL, (776, 60))
 
     if screencurrent == pageblood:
         btnA = fbs.btn("     Full Spectrum    ", btnwsmall, btnhsmall, btnselect(51), txtcol)
@@ -381,7 +400,7 @@ def btnselect(x):  # interface - controls which buttons are highlightable.
             # Unused Buttons
             btncol = (50, 50, 0)
     if screencurrent.name == "maketroll":
-        if x == 59 or x == 60:  # Unused Buttons
+        if x == 60:  # Unused Buttons
             btncol = (50, 50, 0)
         if x == 61 or x == 62 or x == 63 or x == 64 or x == 65 or x == 66 or x == 67 or x == 68 or x == 69 or x == 70:
             # Unused Buttons
@@ -574,8 +593,8 @@ def displaytroll(t0):  # interface -- prints a standard-format window display to
 
 # The display for individual screens.
 def trollmakepage():  # interface
-    global troll1, troll2, troll3, screen_height
-    page = fbs.btn("", 1048, screen_height - 60, (0, 0, 0), (255, 255, 255))
+    global troll1, troll2, troll3, screen_height, screen_width
+    page = fbs.btn("", screen_width - 232, screen_height - 60, (0, 0, 0), (255, 255, 255))
     page.blit(displaytroll(troll1), (8, 0))
     page.blit(displaytroll(troll2), (8, 264))
     page.blit(displaytroll(troll3), (528, 120))
@@ -584,8 +603,8 @@ def trollmakepage():  # interface
 
 # Testing ground for showing all the default teef.
 def moufpage():
-    page = fbs.pysurface(500, 250, 0, 0, 0)
-    page = fbs.rectolor(page, 0, 0, 500, 250, (50, 50, 50))
+    global screen_height, screen_width
+    page = fbs.pysurface(screen_width, screen_height, (0, 0, 0))
     page.blit(mouf.jawprint(slurry.spectrumgenemouth["RR"]), (10, 10))
     page.blit(mouf.jawprint(slurry.spectrumgenemouth["Rr"]), (10, 40))
     page.blit(mouf.jawprint(slurry.spectrumgenemouth["rr"]), (10, 70))
@@ -625,7 +644,8 @@ def moufpage():
 
 # Blood color examples and spectrum slice selection
 def bloodpage():
-    page = fbs.btn("", 1048, screen_height - 60, (0, 0, 0), (255, 255, 255))
+    global screen_height, screen_width
+    page = fbs.btn("", screen_width - 263, screen_height - 60, (0, 0, 0), (255, 255, 255))
     global spectrum
     z = spectrum
     spectrum.sort(key=gene.getcastenumstr, )
@@ -654,7 +674,8 @@ def namepage():
 
 
 def newnames():
-    page = fbs.btn("", 1048, screen_height, (0, 0, 0), (255, 255, 255))
+    global screen_height, screen_width
+    page = fbs.btn("", screen_width, screen_height, (0, 0, 0), (255, 255, 255))
     x = 12
     y = 10
     a = 0
@@ -677,7 +698,8 @@ def loadingzone():
 
 def checkloadable():
     # Make a basic page with some text on it
-    page = fbs.btn("", 1048, screen_height, (0, 0, 0), (255, 255, 255))
+    global screen_height, screen_width
+    page = fbs.btn("", screen_width, screen_height, (0, 0, 0), (255, 255, 255))
     page.blit(fbs.say("Arrow keys to navigate", (255, 255, 255)), (3 * 8, 2 * 12))
     page.blit(fbs.say("Press 1 to load to slot 1", (255, 255, 255)), (3 * 8, 3 * 12))
     page.blit(fbs.say("Press 2 to load to slot 2", (255, 255, 255)), (3 * 8, 4 * 12))
@@ -732,14 +754,18 @@ btncurrent = 1
 screencurrent = ScrPage()
 # screens: maketroll, loadingzone, bloodpage, donationpage,
 pageloadtroll = ScrPage("loadingzone", 101, 360, False, True)  # There is an artificial maxbtn limiter in loadtroll()
-pagemaketroll = ScrPage("maketroll", 51, 59, True, False)
+pagemaketroll = ScrPage("maketroll", 51, 60, True, False)
 pageblood = ScrPage("bloodpage", 51, 57, True, False)
 pagename = ScrPage("namepage", 51, 53, True, False)
 # Remove this unused thing eventually
 pagemouf = ScrPage("moufpage", 51, 55, False, False)
 # Project-specific globals, Data
-libbie = gene.getpremadetroll(3)
-lester = gene.getpremadetroll(2)
+libbie = gene.getpremadetroll(random.randint(1, 13))
+sametroll = True
+while sametroll:
+    lester = gene.getpremadetroll(random.randint(1, 13))
+    if lester != libbie:
+        sametroll = False
 troll1 = libbie
 troll2 = lester
 troll3 = gene.trolldict()
