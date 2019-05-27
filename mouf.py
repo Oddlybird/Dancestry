@@ -1,6 +1,6 @@
 import genome as gene
 import pygame
-import os
+import formattingbs as fbs
 # class Jaws:
 
 
@@ -71,11 +71,11 @@ def jawprint(mouf):
     offscreen = pygame.Surface((85, 21))
     offscreen.fill((0, 0, 0))
     toof = pygame.Surface((6, 10))
-    toof.fill((0,0,0))
+    toof.fill((0, 0, 0))
     here = 3 * x
     while (here+3) <= len(jawt):
         imgloc = str(jawt[here:here + 3]) + ".PNG"
-        toof, toofrect = load_png(imgloc, "teef")
+        toof, toofrect = fbs.load_png(imgloc, "teef")
 #        toof = pygame.transform.flip(toof, 1, 0)
         if 2*here >= len(jawt):
             toof = pygame.transform.flip(toof, 1, 0)
@@ -87,7 +87,7 @@ def jawprint(mouf):
     here = 3 * x
     while (here+3) <= len(jawb):
         imgloc = str(jawb[here:here + 3]) + ".PNG"
-        toof, toofrect = load_png(imgloc, "teef")
+        toof, toofrect = fbs.load_png(imgloc, "teef")
 #        toof = pygame.transform.flip(toof, 1, 0)
         if (2*here) >= len(jawt):
             toof = pygame.transform.flip(toof, 1, 0)
@@ -97,19 +97,3 @@ def jawprint(mouf):
         x = x + 1
         here = 3 * x
     return offscreen
-
-
-def load_png(name, fold=""):
-    """ Load image and return image object"""
-    fullname = os.path.join('data', fold)
-    fullname = os.path.join(fullname, name)
-    try:
-        image = pygame.image.load(fullname)
-        if image.get_alpha() is None:
-            image = image.convert()
-        else:
-            image = image.convert_alpha()
-    except pygame.error:
-        print('Cannot load image: ', fullname)
-        raise SystemExit
-    return image, image.get_rect()

@@ -1,24 +1,35 @@
-import json
-import os
-import biology as deets
-import libtcodpy as tcod
-import names
-import colorgarbage as colg
-import slurry
-import genome as gene
-import formattingbs as fbs
+# Blank pygame program, based on Tom's Pong tutorial, courtesy of tomchance.uklinux.net
+#
+try:
+    # Main Imports
+    import sys
+    import random
+    import math
+    import os
+    import getopt
+    import pygame
+    import json
+    from socket import *
+    from pygame.locals import *
+    # Parts of this project
+    import colorgarbage as colg
+    import formattingbs as fbs
+    import genome as gene
+    import slurry
+    import names
+    import mouf
+except ImportError:
+    print("couldn't load module.")
+    sys.exit(2)
+
+VERSION = "0.0"
+
 # getcastefromblood(b) is a function you can use to get the plaintext of a caste.  Put in the blood-code.
 # Will be tagging each function / class / etc
-# If I ever figure out modules, that will be which modules they go in.
-# tags so far:  #trolldeets, #interface,
 # screens:  maketroll, loadingzone, bloodpage, donationpage,
 # screens are named ""page, and their ScrPage objects are named page""
 # to activate a new main menu button, go to btnselect(), drawmenu(),
-
-# have Trolls (one contributor)
-# have Slurries (An array of trolls + genes, with some meta-data)
-
-# Pass colors around ONLY as tuples.  Only use tcod.Color when giving a command directly to tcod.
+# Pass colors around ONLY as tuples, except when communicating directly with pygame
 
 
 class ScrPage:  # interface.  An item to be used to define the shape of menus.
@@ -30,82 +41,324 @@ class ScrPage:  # interface.  An item to be used to define the shape of menus.
         self.excmenu = setexcmenu
 
 
-# main loop.
-def main():  # main / interface
-    # onprogramload()
-    while not tcod.console_is_window_closed():
+def main():  # Contains button functions
+    gameon = True
+    # Event loop
+    while gameon:
         updatescreen()
-        exitcase = handle_keys()
-        if exitcase:
-            break
-    return
+        gameon = handlekeys(gameon)
+    return 0
+
+
+def handlekeys(gameon=True):
+    # for event in pygame.event.get():
+    global btncurrent, screencurrent, pageblood, pagename, pageloadtroll, pagemaketroll
+    global troll1, troll2, troll3, libbie, lester, spectrum
+    event = pygame.event.wait()
+    if event.type == pygame.KEYDOWN:
+        if event.key == pygame.K_UP:
+            if btncurrent < 9000:
+                usedbuttons("-")
+        if event.key == pygame.K_DOWN:
+            if btncurrent < 9000:
+                usedbuttons("+")
+        if event.key == pygame.K_LEFT:
+            if btncurrent < 9000:
+                if btncurrent < 25:
+                    if screencurrent == pagemaketroll or screencurrent == pageblood or screencurrent == pagename:
+                        btncurrent = 51
+                    if screencurrent == pageloadtroll:
+                        btncurrent = screencurrent.maxbtn
+                # if btncurrent > 25  #  If pressing left while in submenu..
+                # Submenu stuff
+        if event.key == pygame.K_RIGHT:
+            if btncurrent > 25:
+                btncurrent = 1
+            # if btncurrent < 25
+            # Pressing right, from main menu.
+        if event.key == pygame.K_RETURN:
+            # This is the loop for when someone chooses a button.
+            if btncurrent == 1:
+                screencurrent = pagemaketroll
+                return gameon
+            if btncurrent == 2:
+                screenshot()
+                return gameon
+            if btncurrent == 3:
+                screencurrent = pagename
+                return gameon
+            if btncurrent == 4:
+                global loadablelist
+                loadablelist = checkloadable()
+                screencurrent = pageloadtroll
+                return gameon
+            if btncurrent == 5:
+                screencurrent = pageblood
+                # note : Change to 'eugenics' page once that's functional.
+                return gameon
+            if btncurrent == 6:
+                # code
+                return gameon
+            if btncurrent == 7:
+                # code that makes the button do something
+                return gameon
+            if btncurrent == 8:
+                # code that makes the button do something
+                return gameon
+            if btncurrent == 9:
+                # code that makes the button do something
+                return gameon
+            if btncurrent == 10:
+                # code that makes the button do something
+                return gameon
+            if btncurrent == 11:
+                # code that makes the button do something
+                return gameon
+            if btncurrent == 12:
+                gameon = False
+                return gameon
+            # End "main menu" portion of Enter loop.
+            if btncurrent > 25:
+                # NAME SCREEN BTNs
+                if screencurrent.name == "namepage":
+                    if btncurrent == 51:
+                        # Btn 1 : Gen Some Names
+                        global imgnamelist
+                        imgnamelist = newnames()
+                        updatescreen()
+                        return gameon
+                # TROLLMAKE SCREEN BTNs
+                if screencurrent.name == "maketroll":
+                    if btncurrent == 51:
+                        # Btn 1 : Troll from parents
+                        troll3 = gene.trolldict()
+                        troll3 = gene.blendtroll(troll1, troll2)
+                        updatescreen()
+                        return gameon
+                    if btncurrent == 52:
+                        # Btn 2 : Troll from slurry
+                        troll3 = gene.trolldict()
+                        troll3 = gene.slurrytroll(spectrum)
+                        updatescreen()
+                        return gameon
+                    if btncurrent == 53:
+                        # Btn 3 : Save troll3 to .sav file.
+                        savetroll(troll3)
+                        return gameon
+                    if btncurrent == 54:
+                        # Btn 4 : Load troll3 into troll 1
+                        troll1 = troll3
+                        updatescreen()
+                        return gameon
+                    if btncurrent == 55:
+                        # Btn 5 : Load troll3 into troll 2
+                        troll2 = troll3
+                        updatescreen()
+                        return gameon
+                    if btncurrent == 56:
+                        # Btn 6 : Save troll3.png
+                        savetrollpng(troll3)
+                        updatescreen()
+                        return gameon
+                    if btncurrent == 57:
+                        # Btn 6 : Save troll1.png
+                        savetrollpng(troll1)
+                        updatescreen()
+                        return gameon
+                    if btncurrent == 58:
+                        # Btn 6 : Save troll2.png
+                        savetrollpng(troll2)
+                        updatescreen()
+                        return gameon
+                    return gameon
+                # BLOOD SCREEN BTNs
+                if screencurrent == pageblood:
+                    if btncurrent == 51:
+                        # Btn 1 : Full Spectrum
+                        spectrum = slurry.spectrumfull
+                        spectrum.sort(key=gene.getcastenumstr, )
+                        updatescreen()
+                        return gameon
+                    if btncurrent == 52:
+                        # Btn 2 : Mini Spectrum
+                        spectrum = slurry.spectrummini
+                        spectrum.sort(key=gene.getcastenumstr, )
+                        updatescreen()
+                        return gameon
+                    if btncurrent == 53:
+                        # Btn 3 : Rando Spectrum
+                        spectrum = gene.spectrumrand()
+                        spectrum.sort(key=gene.getcastenumstr, )
+                        updatescreen()
+                        return gameon
+                    if btncurrent == 54:
+                        # Btn 4 : rustblood
+                        spectrum = slurry.spectrumrust
+                        spectrum.sort(key=gene.getcastenumstr, )
+                        updatescreen()
+                        return gameon
+                    if btncurrent == 55:
+                        # Btn 5 : greenblood
+                        spectrum = slurry.spectrumgreens
+                        spectrum.sort(key=gene.getcastenumstr, )
+                        updatescreen()
+                        return gameon
+                    if btncurrent == 56:
+                        # Btn 6 : blueblood
+                        spectrum = slurry.spectrumblues
+                        spectrum.sort(key=gene.getcastenumstr, )
+                        updatescreen()
+                        return gameon
+                    if btncurrent == 57:
+                        # Btn 7: purples
+                        spectrum = slurry.spectrumpurples
+                        spectrum.sort(key=gene.getcastenumstr, )
+                        updatescreen()
+                        return gameon
+                    return gameon
+                # Create a sub-menu here based off which other menu the cursor is in.
+                return gameon
+            # the loop for when someone presses enter to choose a button is over.
+        if event.key == pygame.K_1:
+            if screencurrent == pageloadtroll or screencurrent == pagemaketroll:
+                # load currently selected troll into slot 1.
+                troll1 = troll3
+                return gameon
+            return gameon
+        if event.key == pygame.K_2:
+            if screencurrent == pageloadtroll or screencurrent == pagemaketroll:
+                # load currently selected troll into slot 2.
+                troll2 = troll3
+                return gameon
+            return gameon
+        if event.key == pygame.K_ESCAPE:
+            gameon = False
+            return gameon
+    if event.type == QUIT:
+        gameon = False
+        return gameon
+    return gameon
 
 
 # Show what needs to be shown.
 def updatescreen():  # interface.  Choose which page to show.
-    tcod.console_clear(0)
-    tcod.console_set_default_foreground(0, tcod.Color(250, 250, 200))
-    tcod.console_set_default_background(0, tcod.black)
+    global background
 
+    if screencurrent.name == "moufpage":
+        background.blit(moufpage(), (0, 0))
     if screencurrent.name == "maketroll":
-        trollmakepage()
+        background.blit(trollmakepage(), (0, 82))
     if screencurrent.name == "loadingzone":
-        loadingzone()
+        background.blit(loadingzone(), (0, 0))
     if screencurrent.name == "bloodpage":
-        bloodpage()
+        background.blit(bloodpage(), (0, 82))
     if screencurrent.name == "namepage":
-        namepage()
-    drawmenu()
-    tcod.console_flush()
+        background.blit(namepage(), (0, 0))
+    background = drawmenu(background)
+    screen.blit(background, (0, 0))
+    pygame.display.flip()
     return
 
 
-def drawmenu():  # interface.  Contains Labels for all main and submenu buttons.
-    tcod.console_print_frame(0, 131, 0, 29, 50, True, 13, "MENU")
-    tcod.console_set_color_control(0, tcod.white, tcod.Color(60, 60, 60))
+def drawmenu(background):  # interface.  Contains Labels for all main and submenu buttons
+    global screen_height, screen_width
+    btnwbig = 190
+    btnwsmall = 190
+    btnhbig = 20
+    btnhsmall = 20
+    menubg = fbs.btn("Menu", 232, screen_height, (60, 60, 60), (255, 255, 255))
+    background.blit(menubg, (screen_width - 232, 0))
+
     txtcol = (50, 50, 0)
-    # Can add a tcod.Color(rrr,ggg,bbb) for:  drawbtn(x,y,"label",background,foreground)
-    drawbtn(133, 2,  "     MAKE TROLL     ", btnselect(1), txtcol)
-    drawbtn(133, 6,  "        SAVE        ", btnselect(2), txtcol)
-    drawbtn(133, 10, "        NAME        ", btnselect(3), txtcol)
-    drawbtn(133, 14, "    LOADING AREA    ", btnselect(4), txtcol)
-    drawbtn(133, 18, "    BLOOD COLORS    ", btnselect(5), txtcol)
-    drawbtn(133, 22, "       Btn   6      ", btnselect(6), txtcol)
-    drawbtn(133, 26, "       Btn   7      ", btnselect(7), txtcol)
-    drawbtn(133, 30, "       Btn   8      ", btnselect(8), txtcol)
-    drawbtn(133, 34, "       Btn   9      ", btnselect(9), txtcol)
-    drawbtn(133, 38, "       Btn  10      ", btnselect(10), txtcol)
-    drawbtn(133, 42, "       Btn  11      ", btnselect(11), txtcol)
-    drawbtn(133, 46, "       E X I T      ", btnselect(12), txtcol)
-    # reset defaults
-    tcod.console_set_color_control(0, tcod.black, tcod.white)
+    btn01 = fbs.btn("     MAKE TROLL     ", btnwbig, btnhbig, btnselect(1), txtcol, True, "Verdana")
+    btn02 = fbs.btn("     SCREENSHOT     ", btnwbig, btnhbig, btnselect(2), txtcol, True, "Verdana")
+    btn03 = fbs.btn("        NAME        ", btnwbig, btnhbig, btnselect(3), txtcol, True, "Verdana")
+    btn04 = fbs.btn("    LOADING AREA    ", btnwbig, btnhbig, btnselect(4), txtcol, True, "Verdana")
+    btn05 = fbs.btn("    BLOOD COLORS    ", btnwbig, btnhbig, btnselect(5), txtcol, True, "Verdana")
+    btn06 = fbs.btn("       Btn   6      ", btnwbig, btnhbig, btnselect(6), txtcol, True, "Verdana")
+    btn07 = fbs.btn("       Btn   7      ", btnwbig, btnhbig, btnselect(7), txtcol, True, "Verdana")
+    btn08 = fbs.btn("       Btn   8      ", btnwbig, btnhbig, btnselect(8), txtcol, True, "Verdana")
+    btn09 = fbs.btn("       Btn   9      ", btnwbig, btnhbig, btnselect(9), txtcol, True, "Verdana")
+    btn10 = fbs.btn("       Btn  10      ", btnwbig, btnhbig, btnselect(10), txtcol, True, "Verdana")
+    btn11 = fbs.btn("       Btn  11      ", btnwbig, btnhbig, btnselect(11), txtcol, True, "Verdana")
+    btn12 = fbs.btn("       E X I T      ", btnwbig, btnhbig, btnselect(12), txtcol, True, "Verdana")
+
+    background.blit(btn01, (1064, 24))
+    background.blit(btn02, (1064, 72))
+    background.blit(btn03, (1064, 120))
+    background.blit(btn04, (1064, 168))
+    background.blit(btn05, (1064, 216))
+    background.blit(btn06, (1064, 264))
+    background.blit(btn07, (1064, 312))
+    background.blit(btn08, (1064, 360))
+    background.blit(btn09, (1064, 408))
+    background.blit(btn10, (1064, 456))
+    background.blit(btn11, (1064, 504))
+    background.blit(btn12, (1064, 552))
 
     if screencurrent == pagemaketroll:
-        drawsmallbtn(1, 1,  "  Troll From Parents  ", btnselect(51), txtcol)
-        drawsmallbtn(1, 3,  "  Troll From Slurry   ", btnselect(52), txtcol)
-        drawsmallbtn(1, 5,  "        Save          ", btnselect(53), txtcol)
-        drawsmallbtn(25, 1, "   Load Into Slot 1   ", btnselect(54), txtcol)
-        drawsmallbtn(25, 3, "   Load Into Slot 2   ", btnselect(55), txtcol)
-        drawsmallbtn(25, 5, "                      ", btnselect(56), txtcol)
-        drawsmallbtn(49, 1, "                      ", btnselect(57), txtcol)
-        drawsmallbtn(49, 3, "                      ", btnselect(58), txtcol)
-        drawsmallbtn(49, 5, "                      ", btnselect(59), txtcol)
+        btnA = fbs.btn("  Troll From Parents  ", btnwsmall, btnhsmall, btnselect(51), txtcol)
+        btnB = fbs.btn("  Troll From Slurry   ", btnwsmall, btnhsmall, btnselect(52), txtcol)
+        btnC = fbs.btn("  Save Offspring.sav  ", btnwsmall, btnhsmall, btnselect(53), txtcol)
+        btnD = fbs.btn("   Load Into Slot 1   ", btnwsmall, btnhsmall, btnselect(54), txtcol)
+        btnE = fbs.btn("   Load Into Slot 2   ", btnwsmall, btnhsmall, btnselect(55), txtcol)
+        btnF = fbs.btn("  Save Offspring.png  ", btnwsmall, btnhsmall, btnselect(56), txtcol)
+        btnG = fbs.btn("    Save slot1.png    ", btnwsmall, btnhsmall, btnselect(57), txtcol)
+        btnH = fbs.btn("    Save slot2.png    ", btnwsmall, btnhsmall, btnselect(58), txtcol)
+        btnI = fbs.btn("                      ", btnwsmall, btnhsmall, btnselect(59), txtcol)
+        background.blit(btnA, (8, 12))
+        background.blit(btnB, (8, 36))
+        background.blit(btnC, (8, 60))
+        background.blit(btnD, (200, 12))
+        background.blit(btnE, (200, 36))
+        background.blit(btnF, (200, 60))
+        background.blit(btnG, (392, 12))
+        background.blit(btnH, (392, 36))
+        background.blit(btnI, (392, 60))
 
     if screencurrent == pageblood:
-        drawsmallbtn(1, 1,  "     Full Spectrum    ", btnselect(51), txtcol)
-        drawsmallbtn(1, 2,  "     Mini Spectrum    ", btnselect(52), txtcol)
-        drawsmallbtn(1, 3,  "   Random Spectrum    ", btnselect(53), txtcol)
-        drawsmallbtn(25, 1, "        Rusts         ", btnselect(54), txtcol)
-        drawsmallbtn(25, 2, "        Greens        ", btnselect(55), txtcol)
-        drawsmallbtn(25, 3, "        Blues         ", btnselect(56), txtcol)
-        drawsmallbtn(50, 1, "       Purples        ", btnselect(57), txtcol)
-        drawsmallbtn(50, 2, "                      ", btnselect(58), txtcol)
-        drawsmallbtn(50, 3, "                      ", btnselect(59), txtcol)
+        btnA = fbs.btn("     Full Spectrum    ", btnwsmall, btnhsmall, btnselect(51), txtcol)
+        btnB = fbs.btn("     Mini Spectrum    ", btnwsmall, btnhsmall, btnselect(52), txtcol)
+        btnC = fbs.btn("   Random Spectrum    ", btnwsmall, btnhsmall, btnselect(53), txtcol)
+        btnD = fbs.btn("        Rusts         ", btnwsmall, btnhsmall, btnselect(54), txtcol)
+        btnE = fbs.btn("        Greens        ", btnwsmall, btnhsmall, btnselect(55), txtcol)
+        btnF = fbs.btn("        Blues         ", btnwsmall, btnhsmall, btnselect(56), txtcol)
+        btnG = fbs.btn("       Purples        ", btnwsmall, btnhsmall, btnselect(57), txtcol)
+        btnH = fbs.btn("                      ", btnwsmall, btnhsmall, btnselect(58), txtcol)
+        btnI = fbs.btn("                      ", btnwsmall, btnhsmall, btnselect(59), txtcol)
+        background.blit(btnA, (8, 12))
+        background.blit(btnB, (8, 36))
+        background.blit(btnC, (8, 60))
+        background.blit(btnD, (200, 12))
+        background.blit(btnE, (200, 36))
+        background.blit(btnF, (200, 60))
+        background.blit(btnG, (392, 12))
+        background.blit(btnH, (392, 36))
+        background.blit(btnI, (392, 60))
 
-    return
+    if screencurrent == pagename:
+        btnA = fbs.btn("      New Names       ", btnwsmall, btnhsmall, btnselect(51), txtcol)
+        btnB = fbs.btn("                      ", btnwsmall, btnhsmall, btnselect(52), txtcol)
+        btnC = fbs.btn("                      ", btnwsmall, btnhsmall, btnselect(53), txtcol)
+        btnD = fbs.btn("                      ", btnwsmall, btnhsmall, btnselect(54), txtcol)
+        btnE = fbs.btn("                      ", btnwsmall, btnhsmall, btnselect(55), txtcol)
+        btnF = fbs.btn("                      ", btnwsmall, btnhsmall, btnselect(56), txtcol)
+        btnG = fbs.btn("                      ", btnwsmall, btnhsmall, btnselect(57), txtcol)
+        btnH = fbs.btn("                      ", btnwsmall, btnhsmall, btnselect(58), txtcol)
+        btnI = fbs.btn("                      ", btnwsmall, btnhsmall, btnselect(59), txtcol)
+        background.blit(btnA, (8, 12))
+        background.blit(btnB, (8, 36))
+        background.blit(btnC, (8, 60))
+        background.blit(btnD, (200, 12))
+        background.blit(btnE, (200, 36))
+        background.blit(btnF, (200, 60))
+        background.blit(btnG, (392, 12))
+        background.blit(btnH, (392, 36))
+        background.blit(btnI, (392, 60))
+
+    return background
 
 
-# make the menu buttons selectable
 def btnselect(x):  # interface - controls which buttons are highlightable.
     # main menu and main submenu only
     global btncurrent, pagename, pageloadtroll, pageblood, pagemaketroll
@@ -128,13 +381,19 @@ def btnselect(x):  # interface - controls which buttons are highlightable.
             # Unused Buttons
             btncol = (50, 50, 0)
     if screencurrent.name == "maketroll":
-        if x == 56 or x == 57 or x == 58 or x == 59 or x == 60:  # Unused Buttons
+        if x == 59 or x == 60:  # Unused Buttons
             btncol = (50, 50, 0)
         if x == 61 or x == 62 or x == 63 or x == 64 or x == 65 or x == 66 or x == 67 or x == 68 or x == 69 or x == 70:
             # Unused Buttons
             btncol = (50, 50, 0)
     if screencurrent == pageblood:
         if x == 58 or x == 59 or x == 60:  # Unused Buttons
+            btncol = (50, 50, 0)
+        if x == 61 or x == 62 or x == 63 or x == 64 or x == 65 or x == 66 or x == 67 or x == 68 or x == 69 or x == 70:
+            # Unused Buttons
+            btncol = (50, 50, 0)
+    if screencurrent == pagename:
+        if x == 54 or x == 55 or x == 56 or x == 57 or x == 58 or x == 59 or x == 60:  # Unused Buttons
             btncol = (50, 50, 0)
         if x == 61 or x == 62 or x == 63 or x == 64 or x == 65 or x == 66 or x == 67 or x == 68 or x == 69 or x == 70:
             # Unused Buttons
@@ -176,171 +435,9 @@ def usedbuttons(direction):  # interface
     return
 
 
-def handle_keys():  # interface - button functions, and loops as needed.
-    global btncurrent, screencurrent, pageblood, pagename, pageloadtroll, pagemaketroll
-    global troll1, troll2, troll3, libbie, lester, spectrum
-    key = tcod.console_wait_for_keypress(True)
-    if tcod.console_is_key_pressed(tcod.KEY_UP):
-        if btncurrent < 9000:
-            usedbuttons("-")
-    if tcod.console_is_key_pressed(tcod.KEY_DOWN):
-        if btncurrent < 9000:
-            usedbuttons("+")
-    if tcod.console_is_key_pressed(tcod.KEY_LEFT):
-        if btncurrent < 25:
-            if screencurrent == pagemaketroll or screencurrent == pageblood:
-                btncurrent = 51
-            if screencurrent == pageloadtroll:
-                btncurrent = screencurrent.maxbtn
-    #  if btncurrent > 25:
-    # submenu stuff  Pressing left while on a submenu
-    if tcod.console_is_key_pressed(tcod.KEY_RIGHT):
-        if btncurrent > 25:
-            btncurrent = 1
-    #  if btncurrent < 25:
-    # Pressing right while on the main menu
-
-    if tcod.console_is_key_pressed(tcod.KEY_ENTER):
-        # This is the loop for when someone chooses a button.
-        if btncurrent == 1:
-            screencurrent = pagemaketroll
-            return False
-        if btncurrent == 2:
-            if screencurrent == pagemaketroll:
-                savetroll(troll3)
-                draw(73, 20, "Saved")
-                return False
-        if btncurrent == 3:
-            screencurrent = pagename
-            return False
-        if btncurrent == 4:
-            screencurrent = pageloadtroll
-            return False
-        if btncurrent == 5:
-            screencurrent = pageblood
-            # note : Change to 'eugenics' page once that's functional.
-            return False
-        if btncurrent == 6:
-            # code
-            return False
-        if btncurrent == 7:
-            # code that makes the button do something
-            return False
-        if btncurrent == 8:
-            # code that makes the button do something
-            return False
-        if btncurrent == 9:
-            # code that makes the button do something
-            return False
-        if btncurrent == 10:
-            # code that makes the button do something
-            return False
-        if btncurrent == 11:
-            # code that makes the button do something
-            return False
-        if btncurrent == 12:
-            return True
-        # End "main menu" portion of Enter loop.
-        if btncurrent > 25:
-            # TROLLMAKE SCREEN BTNs
-            if screencurrent.name == "maketroll":
-                if btncurrent == 51:
-                    # Btn 1 : Troll from parents
-                    troll3 = gene.trolldict()
-                    troll3 = deets.blendtroll(troll1, troll2)
-                    updatescreen()
-                    return False
-                if btncurrent == 52:
-                    # Btn 2 : Troll from slurry
-                    troll3 = gene.trolldict()
-                    troll3 = deets.slurrytroll(spectrum)
-                    updatescreen()
-                    return False
-                if btncurrent == 53:
-                    # Btn 3 : Save.
-                    savetroll(troll3)
-                    draw(73, 20, "Saved")
-                    return False
-                if btncurrent == 54:
-                    # Btn 4 : Load into troll 1
-                    troll1 = troll3
-                    updatescreen()
-                    return False
-                if btncurrent == 55:
-                    # Btn 5 : Load into troll 2
-                    troll2 = troll3
-                    updatescreen()
-                    return False
-                return False
-            # TROLLMAKE SCREEN BTNs
-            if screencurrent == pageblood:
-                if btncurrent == 51:
-                    # Btn 1 : Full Spectrum
-                    spectrum = slurry.spectrumfull
-                    spectrum.sort(key=deets.getcastenumstr,)
-                    updatescreen()
-                    return False
-                if btncurrent == 52:
-                    # Btn 2 : Mini Spectrum
-                    spectrum = slurry.spectrummini
-                    spectrum.sort(key=deets.getcastenumstr,)
-                    updatescreen()
-                    return False
-                if btncurrent == 53:
-                    # Btn 3 : Rando Spectrum
-                    spectrum = slurry.spectrumrand()
-                    spectrum.sort(key=deets.getcastenumstr,)
-                    updatescreen()
-                    return False
-                if btncurrent == 54:
-                    # Btn 4 : rustblood
-                    spectrum = slurry.spectrumrust
-                    spectrum.sort(key=deets.getcastenumstr,)
-                    updatescreen()
-                    return False
-                if btncurrent == 55:
-                    # Btn 5 : greenblood
-                    spectrum = slurry.spectrumgreens
-                    spectrum.sort(key=deets.getcastenumstr,)
-                    updatescreen()
-                    return False
-                if btncurrent == 56:
-                    # Btn 6 : blueblood
-                    spectrum = slurry.spectrumblues
-                    spectrum.sort(key=deets.getcastenumstr,)
-                    updatescreen()
-                    return False
-                if btncurrent == 57:
-                    # Btn 7: purples
-                    spectrum = slurry.spectrumpurples
-                    spectrum.sort(key=deets.getcastenumstr,)
-                    updatescreen()
-                    return False
-                return False
-            # Create a sub-menu here based off which other menu the cursor is in.
-            return False
-        # the loop for when someone presses enter to choose a button is over.
-    if tcod.console_is_key_pressed(tcod.KEY_1):
-        if screencurrent == pageloadtroll or screencurrent == pagemaketroll:
-            # load currently selected troll into slot 1.
-            troll1 = troll3
-            return False
-        return False
-    if tcod.console_is_key_pressed(tcod.KEY_2):
-        if screencurrent == pageloadtroll or screencurrent == pagemaketroll:
-            # load currently selected troll into slot 2.
-            troll2 = troll3
-            return False
-        return False
-
-    elif key.vk == tcod.KEY_ESCAPE:
-        # reenable the above line to make hitting escape close the program.
-        return True
-
-
 # save and load to file.
 def savetroll(grub):  # interface     Save Troll
-    castenum = deets.getcastenumstr(grub["blood"])
+    castenum = gene.getcastenumstr(grub["blood"])
     saveloc = "Caverns/CaveB/" + castenum + "." + grub["firname"] + "." + grub["surname"] + "." + grub["blood"] + ".troll"
     c = 1
     int(c)
@@ -368,48 +465,44 @@ def loadtroll(filename):  # interface     Load Troll
     return trollobj
 
 
-# menu-related boxen.
-def drawbtn(x, y, label="", btncolor=(255, 255, 225), txtcolor=(50, 50, 0)):  # interface
-    rectolor(x, y, 24, 2, btncolor, txtcolor)
-    draw(x + 2, y + 1, label)
+def savimg(img, filename):
+    pix = img
+    saveloc = filename[0:len(filename)-4]
+    extension = filename[len(filename)-3:len(filename)]
+    c = 1
+    filename2 = filename
+    while os.path.exists(filename2):
+        c = c + 1
+        d = str(c)
+        filename2 = saveloc + d + "." + extension
+    pygame.image.save(pix, filename2)
     return
 
 
-def drawsmallbtn(x, y, label="", btncolor=(255, 255, 225), txtcolor=(50, 50, 0)):  # interface
-    rectolor(x, y, 21, 0, btncolor, txtcolor)
-    draw(x, y, label)
+def savetrollpng(grub):
+    castenum = gene.getcastenumstr(grub["blood"])
+    saveloc = castenum + "." + grub["firname"] + "." + grub["surname"] + "." + grub["blood"] + ".PNG"
+    c = 1
+    int(c)
+    while os.path.exists(saveloc):
+        c = c + 1
+        d = str(c)
+        saveloc = castenum + "." + grub["firname"] + "." + grub["surname"] + "." + grub["blood"] + "." + d + ".PNG"
+    pix = displaytroll(grub)
+    savimg(pix, saveloc)
     return
 
 
-def rectolor(x, y, ww, hh, btncolor=(255, 255, 225), txtcolor=(0, 0, 0)):  # interface
-    h = 0
-    w = 0
-    (btnr, btng, btnb) = btncolor
-    btnr = round(btnr)
-    btng = round(btng)
-    btnb = round(btnb)
-    (txtr, txtg, txtb) = txtcolor
-    txtr = round(txtr)
-    txtg = round(txtg)
-    txtb = round(txtb)
-    while h <= hh:
-        while w <= ww:
-            tcod.console_set_char_background(0, x + w, y + h, tcod.Color(btnr, btng, btnb), tcod.BKGND_SET)
-            tcod.console_set_char_foreground(0, x + w, y + h, tcod.Color(txtr, txtg, txtb))
-            w = w + 1
-        w = 0
-        h = h + 1
-    return
-
-
-def draw(x, y, thing):  # interface
-    # draws foreground text, no color specified.
-    tcod.console_print(0, x, y, thing)
+def screenshot():
+    global background
+    pix = background
+    saveloc = "screenshot.PNG"
+    savimg(pix, saveloc)
     return
 
 
 # items that get printed to screen a Lot.  Like trolls, donations, blood colors...
-def displaytroll(x, y, t0):  # interface -- prints a standard-format window display to the screen.
+def displaytroll(t0):  # interface -- prints a standard-format window display to the screen.
     # set some defaults
     # called when screencurrent.name = "maketroll"
     blood = t0["blood"][0:2]
@@ -421,18 +514,18 @@ def displaytroll(x, y, t0):  # interface -- prints a standard-format window disp
     t0["hornLdesc"] = hornl.desc()
     t0["hornRdesc"] = hornr.desc()
     h = t0["height"]
-    t0["heightstr"] = deets.heightstr(h)
+    t0["heightstr"] = gene.heightstr(h)
     seatemp = t0["sea"]
-    t0["seadesc"] = deets.describesea(blood, seatemp)
-    t0["dwell"] = deets.describedwell(seatemp)
-    t0["caste"] = deets.getcastefromblood(blood)
+    t0["seadesc"] = gene.describesea(blood, seatemp)
+    t0["dwell"] = gene.describedwell(seatemp)
+    t0["caste"] = gene.getcastefromblood(blood)
     castedefaultheight = slurry.spectrumheight[blood]
     seawrap = fbs.wordwrap2(t0["seadesc"], 60)
-    rectolor(x, y, 64, 20, colbg, colfg)
+    jawt, jawb = mouf.thetooth(t0["mouth"])
     string1 = t0["firname"] + " " + t0["surname"] + ", " + t0["blood"] + " " + t0["sex"]
     string2 = t0["caste"] + ", " + t0["dwell"]
     string3 = t0["donator1"] + " / " + t0["donator2"]
-    string4 = t0["heightstr"] + "/" + deets.heightstr(castedefaultheight) + ", " + t0["build"] + " build"
+    string4 = t0["heightstr"] + "/" + gene.heightstr(castedefaultheight) + ", " + t0["build"] + " build"
     string5 = seawrap[0]
     string6 = "  " + seawrap[1]
     string7 = "  " + seawrap[2]
@@ -443,41 +536,99 @@ def displaytroll(x, y, t0):  # interface -- prints a standard-format window disp
     string12 = "."  # t0["hair"] + " hair"
     string13 = "."  # t0["skin"] + " skin"
     string14 = "."
-    string15 = "."
-    string16 = "."
+    string15 = jawt[0:18] + "." + jawt[18:len(jawt)]
+    string16 = jawb[0:18] + "." + jawb[18:len(jawb)]
     string17 = t0["sea"]
     string18 = t0["horns"]
-    string19 = t0["mouth"]
-    string20 = "."
-    tcod.console_print_frame(0, x, y, 65, 21, True, 13, string1)
-    draw(x + 2, y + 1, string2)
-    draw(x + 2, y + 2, string3)
-    draw(x + 2, y + 3, string4)
-    draw(x + 2, y + 4, string5)
-    draw(x + 2, y + 5, string6)
-    draw(x + 2, y + 6, string7)
-    draw(x + 2, y + 7, string8)
-    draw(x + 2, y + 8, string9)
-    draw(x + 2, y + 9, string10)
-    draw(x + 2, y + 10, string11)
-    draw(x + 2, y + 11, string12)
-    draw(x + 2, y + 12, string13)
-    draw(x + 2, y + 13, string14)
-    draw(x + 2, y + 14, string15)
-    draw(x + 2, y + 15, string16)
-    draw(x + 2, y + 16, string17)
-    draw(x + 2, y + 17, string18)
-    draw(x + 2, y + 18, string19)
-    draw(x + 2, y + 19, string20)
-    return
+    string19 = t0["mouth"][0:40]
+    string20 = "    " + t0["mouth"][40:len(t0["mouth"])]
+
+    background = fbs.btn(string1, 512, 260, colbg, colfg)
+    x = 0
+    y = 0
+
+    jawprint = mouf.jawprint(t0["mouth"])
+    background.blit(jawprint, (400, 8))
+
+    background.blit(fbs.say(string2, colfg), (x + 16, y + 12))
+    background.blit(fbs.say(string3, colfg), (x + 16, y + 24))
+    background.blit(fbs.say(string4, colfg), (x + 16, y + 36))
+    background.blit(fbs.say(string5, colfg), (x + 16, y + 48))
+    background.blit(fbs.say(string6, colfg), (x + 16, y + 60))
+    background.blit(fbs.say(string7, colfg), (x + 16, y + 72))
+    background.blit(fbs.say(string8, colfg), (x + 16, y + 84))
+    background.blit(fbs.say(string9, colfg), (x + 16, y + 96))
+    background.blit(fbs.say(string10, colfg), (x + 16, y + 108))
+    background.blit(fbs.say(string11, colfg), (x + 16, y + 120))
+    background.blit(fbs.say(string12, colfg), (x + 16, y + 132))
+    background.blit(fbs.say(string13, colfg), (x + 16, y + 144))
+    background.blit(fbs.say(string14, colfg), (x + 16, y + 156))
+    background.blit(fbs.say(string15, colfg), (x + 16, y + 168))
+    background.blit(fbs.say(string16, colfg), (x + 16, y + 180))
+    background.blit(fbs.say(string17, colfg), (x + 16, y + 192))
+    background.blit(fbs.say(string18, colfg), (x + 16, y + 204))
+    background.blit(fbs.say(string19, colfg), (x + 16, y + 216))
+    background.blit(fbs.say(string20, colfg), (x + 16, y + 228))
+    return background
 
 
 # The display for individual screens.
-def bloodpage():  # interface - page of blood color examples
-    # screencurrent.name = bloodpage
+def trollmakepage():  # interface
+    global troll1, troll2, troll3, screen_height
+    page = fbs.btn("", 1048, screen_height - 60, (0, 0, 0), (255, 255, 255))
+    page.blit(displaytroll(troll1), (8, 0))
+    page.blit(displaytroll(troll2), (8, 264))
+    page.blit(displaytroll(troll3), (528, 120))
+    return page
+
+
+# Testing ground for showing all the default teef.
+def moufpage():
+    page = fbs.pysurface(500, 250, 0, 0, 0)
+    page = fbs.rectolor(page, 0, 0, 500, 250, (50, 50, 50))
+    page.blit(mouf.jawprint(slurry.spectrumgenemouth["RR"]), (10, 10))
+    page.blit(mouf.jawprint(slurry.spectrumgenemouth["Rr"]), (10, 40))
+    page.blit(mouf.jawprint(slurry.spectrumgenemouth["rr"]), (10, 70))
+    page.blit(mouf.jawprint(slurry.spectrumgenemouth["rG"]), (10, 100))
+    page.blit(mouf.jawprint(slurry.spectrumgenemouth["RG"]), (10, 130))
+    page.blit(mouf.jawprint(slurry.spectrumgenemouth["Rg"]), (10, 160))
+    page.blit(mouf.jawprint(slurry.spectrumgenemouth["rg"]), (10, 190))
+
+    page.blit(mouf.jawprint(slurry.spectrumgenemouth["GG"]), (100, 10))
+    page.blit(mouf.jawprint(slurry.spectrumgenemouth["Gg"]), (100, 40))
+    page.blit(mouf.jawprint(slurry.spectrumgenemouth["gg"]), (100, 70))
+    page.blit(mouf.jawprint(slurry.spectrumgenemouth["Gb"]), (100, 100))
+    page.blit(mouf.jawprint(slurry.spectrumgenemouth["GB"]), (100, 130))
+    page.blit(mouf.jawprint(slurry.spectrumgenemouth["gB"]), (100, 160))
+    page.blit(mouf.jawprint(slurry.spectrumgenemouth["gb"]), (100, 190))
+
+    page.blit(mouf.jawprint(slurry.spectrumgenemouth["BB"]), (190, 10))
+    page.blit(mouf.jawprint(slurry.spectrumgenemouth["Bb"]), (190, 40))
+    page.blit(mouf.jawprint(slurry.spectrumgenemouth["bb"]), (190, 70))
+    page.blit(mouf.jawprint(slurry.spectrumgenemouth["rB"]), (190, 100))
+    page.blit(mouf.jawprint(slurry.spectrumgenemouth["RB"]), (190, 130))
+    page.blit(mouf.jawprint(slurry.spectrumgenemouth["Rb"]), (190, 160))
+    page.blit(mouf.jawprint(slurry.spectrumgenemouth["rb"]), (190, 190))
+
+    page.blit(mouf.jawprint(slurry.spectrumgenemouth["low"]), (280, 10))
+    page.blit(mouf.jawprint(slurry.spectrumgenemouth["high"]), (280, 40))
+    page.blit(mouf.jawprint(slurry.spectrumgenemouth["mut"]), (280, 70))
+
+    # Text Updates
+    text = font.render("Hello There", 1, (255, 255, 255))
+#    textpos = text.get_rect()
+#    textpos.centerx = page.get_rect().centerx
+#    page.blit(text, textpos)
+    page.blit(text, (400, 0))
+    return page
+
+
+# Blood color examples and spectrum slice selection
+def bloodpage():
+    page = fbs.btn("", 1048, screen_height - 60, (0, 0, 0), (255, 255, 255))
     global spectrum
     z = spectrum
-    spectrum.sort(key=deets.getcastenumstr, )
+    spectrum.sort(key=gene.getcastenumstr, )
     h = 1
     w = 1
     numtotal = 0
@@ -489,51 +640,55 @@ def bloodpage():  # interface - page of blood color examples
         displayname = x
         (rgb1, rgb2, rgb3) = colg.bloodtorgb(x)
         displaycol = (rgb1, rgb2, rgb3)
-        # ----- To show bloodcode + Castenum
-        castename = deets.getcastefromcolor(rgb1, rgb2, rgb3)
-        rectolor(w, h, 12, 2, displaycol)
-# ----- To show bloodcode + Caste
-        draw(w + 1, h + 1, displayname)
-        draw(w + 5, h + 1, castename)
-# ----- To show rgb coords + bloodcode
-#        colname = str(displaycol.r) + "." + str(displaycol.g) + "." + str(displaycol.b)
-#        draw(w, h+1, displayname + " " + colname)
-# ----- To show Hue + Caste
-#        hue = round(colg.rgbtohue(displaycol.r, displaycol.g, displaycol.b))
-#        draw(w + 1, h + 1, str(hue) + "-" + castename)
+        castename = gene.getcastefromcolor(rgb1, rgb2, rgb3)
+        btn = fbs.btn(displayname + " " + castename, 100, 20, displaycol, (255, 255, 255), False)
+        page.blit(btn, (w*8, h*10))
         numtotal = numtotal + 1
-    return
+    return page
 
 
-# The display function for various screens
 def namepage():
+    global imgnamelist
+    page = imgnamelist
+    return page
+
+
+def newnames():
+    page = fbs.btn("", 1048, screen_height, (0, 0, 0), (255, 255, 255))
     x = 12
     y = 10
     a = 0
     while a < 330:
         t0 = names.newname()
-        draw(x, y, t0)
         a = a + 1
         y = y + 1
+        page.blit(fbs.say(t0, (255, 255, 255)), (x*8, y*12))
         if a == 30 or a == 60 or a == 90 or a == 120 or a == 150 or a == 180 or a == 210 or a == 240 or a == 270 or a == 300 or a == 330:
             x = x + 10
             y = 10
+    return page
 
 
-def loadingzone():  # interface - page to load trolls from file
-    tcod.console_print_frame(0, 1, 1, 35, 5, True, 13, "Instructions")
-    draw(3, 2, "Arrow keys to navigate.")
-    draw(3, 3, "Press 1 to load to slot 1.")  # currently nonfunctional
-    draw(3, 4, "      2 to load to slot 2.")
+def loadingzone():
+    global loadablelist
+    page = loadablelist
+    return page
 
+
+def checkloadable():
+    # Make a basic page with some text on it
+    page = fbs.btn("", 1048, screen_height, (0, 0, 0), (255, 255, 255))
+    page.blit(fbs.say("Arrow keys to navigate", (255, 255, 255)), (3 * 8, 2 * 12))
+    page.blit(fbs.say("Press 1 to load to slot 1", (255, 255, 255)), (3 * 8, 3 * 12))
+    page.blit(fbs.say("Press 2 to load to slot 2", (255, 255, 255)), (3 * 8, 4 * 12))
+    # Initialize variables
     global pageloadtroll
     z = os.listdir("Caverns/AncestralCave/")
-    tcod.console_set_default_foreground(0, tcod.Color(250, 250, 200))
     castlist = [""]
     h = 7
     w = 1
     numtotal = 0
-    # First load them into the cast-list.
+    # Load names into cast list.
     for arb in z:
         temp = arb
         if 20 < len(temp) < 35:
@@ -541,8 +696,7 @@ def loadingzone():  # interface - page to load trolls from file
                 castlist.insert(numtotal, temp)
                 numtotal = numtotal + 1
     numtotal = 0
-
-    # Print out the data you now have
+    # Print out the data onto the page
     for arb in castlist:
         temp = arb
         if 20 < len(temp) < 35:
@@ -556,55 +710,52 @@ def loadingzone():  # interface - page to load trolls from file
                 if bloodcol[2] == ".":
                     bloodcol = temp[20:22]
                 displaycol = colg.bloodtorgb(bloodcol)
-                rectolor(w, h, 15, 1, displaycol)
                 displayname = temp[6] + "." + temp[13:19] + ", " + bloodcol
-                if btncurrent != numtotal + 100:
-                    tcod.console_set_default_foreground(0, tcod.Color(10, 10, 10))
-                    draw(w + 1, h + 1, displayname)
-                    tcod.console_set_default_foreground(0, tcod.Color(250, 250, 200))
-                if btncurrent == numtotal + 100:
-                    draw(w + 1, h + 1, displayname)
+                guy = fbs.btn(displayname, 16*8, 2*12, displaycol, (255, 255, 255), False)
+                page.blit(guy, (w*8, h*12))
     pageloadtroll.maxbtn = numtotal + 100
     # pageloadtroll artificial maxbtn limiter
     if pageloadtroll.maxbtn > 360:
         pageloadtroll.maxbtn = 360
     pageloadtroll.minbtn = 101
     global screencurrent
-    screencurrent = pageloadtroll
+    return page
 
-
-def trollmakepage():  # interface
-    global troll1, troll2, troll3
-    displaytroll(1, 7, troll1)
-    displaytroll(1, 29, troll2)
-    displaytroll(66, 17, troll3)
-    return
-
-
+# Gamestart
 # GLOBALS
 
-screen_width = 160
-screen_height = 50
-versionnum = "0.2.3"
-font_path = 'terminal8x12_gs_tc.png'
-font_flags = tcod.FONT_TYPE_GREYSCALE | tcod.FONT_LAYOUT_TCOD
-tcod.console_set_custom_font(font_path, font_flags)
-window_title = "Dancestry " + versionnum
-fullscreen = False
-tcod.console_init_root(screen_width, screen_height, window_title, fullscreen)
-libbie = slurry.getpremadetroll(3)
-lester = slurry.getpremadetroll(2)
-troll1 = libbie
-troll2 = lester
-troll3 = deets.trollblank
-spectrum = slurry.spectrumfull
+# Project-specific globals, Menu/misc
+screen_width = 1280
+screen_height = 600
+versionnum = "0.2.4"
 btncurrent = 1
-
 screencurrent = ScrPage()
 # screens: maketroll, loadingzone, bloodpage, donationpage,
 pageloadtroll = ScrPage("loadingzone", 101, 360, False, True)  # There is an artificial maxbtn limiter in loadtroll()
-pagemaketroll = ScrPage("maketroll", 51, 55, True, False)
+pagemaketroll = ScrPage("maketroll", 51, 59, True, False)
 pageblood = ScrPage("bloodpage", 51, 57, True, False)
-pagename = ScrPage("namepage", 101, 101, False, False)
+pagename = ScrPage("namepage", 51, 53, True, False)
+# Remove this unused thing eventually
+pagemouf = ScrPage("moufpage", 51, 55, False, False)
+# Project-specific globals, Data
+libbie = gene.getpremadetroll(3)
+lester = gene.getpremadetroll(2)
+troll1 = libbie
+troll2 = lester
+troll3 = gene.trolldict()
+trollblank = gene.trolldict()
+spectrum = slurry.spectrumfull
+
+# Initialize pygame and graphics window
+pygame.init()
+screen = pygame.display.set_mode((screen_width, screen_height))
+background = fbs.pysurface(screen_width, screen_height, (0, 0, 0))
+imgnamelist = fbs.btn("", 1048, screen_height, (0, 0, 0), (255, 255, 255))
+loadablelist = fbs.btn("", 1048, screen_height, (0, 0, 0), (255, 255, 255))
+# Ready text                              Bold   Italic
+font = pygame.font.SysFont("Verdana", 12, False, False)
+pygame.display.set_caption("Dancestry " + versionnum)
+
 # Invoke Main
-main()
+if __name__ == '__main__':
+    main()

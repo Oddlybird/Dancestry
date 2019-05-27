@@ -1,196 +1,13 @@
-import biology as deets
 import genome as gene
 import random
 
 
 # This file contains:
-# -- hardcoded trolls who have contributed to slurry,
 # -- source data to produce random trolls from slurry
 # -- source data for mutations in genesourced trolls
 # -- bias-by-caste for height, aquatic traits, etc
 # -- which blood codes are default
 # -- spectrum groupings (high, mid, low, reds, blues, greens..)
-
-
-def getpremadetroll(x=random.randint(1, 3)):
-
-    t0 = gene.trolldict()
-
-    # Things that aren't really enabled yet.
-    # Go through and give each troll a different one once the systems exist.
-    strpowers = "None"
-    strskin = "grey"
-    donator1 = "The Mists"
-    donator2 = "Of Time"
-    height = "84"  # 7 feet
-    strbuild = "thin"
-    mouth = genemouthlow
-    strhair = "short"
-    if (x % 2) == 0:
-        strbuild = "big"
-        strhair = "long"
-
-    if x == 1:
-        t0["firname"] = "Libbie"
-        t0["surname"] = "Pickle"
-        t0["sex"] = "F"
-        t0["blood"] = "rGg"
-        t0["sea"] = genesealand
-        t0["powers"] = strpowers
-        t0["mouth"] = genemouthlow
-        t0["horns"] = spectrumgenehorn["rG"]
-        t0["height"] = 64
-        t0["build"] = strbuild
-        t0["hair"] = strhair
-        t0["skin"] = strskin
-        t0["donator1"] = donator1
-        t0["donator2"] = donator2
-    if x == 2:
-        t0["firname"] = "Lester"
-        t0["surname"] = "Pebble"
-        t0["sex"] = "M"
-        t0["blood"] = "RBb"
-        t0["mouth"] = genemouthhigh
-        t0["sea"] = geneseasea
-        t0["powers"] = strpowers
-        t0["horns"] = spectrumgenehorn["RB"]
-        t0["height"] = 89
-        t0["build"] = strbuild
-        t0["hair"] = strhair
-        t0["skin"] = strskin
-        t0["donator1"] = "The Mists"
-        t0["donator2"] = "Of Time"
-    if x == 3:
-        t0["firname"] = "Lobbah"
-        t0["surname"] = "Parkle"
-        t0["sex"] = "N"
-        t0["blood"] = "bbb"
-        t0["sea"] = geneseamutant
-        t0["mouth"] = genemouthmutant
-        t0["powers"] = strpowers
-        # doubled genes, make just one horn doubled.
-        t0["horns"] = spectrumgenehorn["bb"]
-        t0["height"] = 72
-        t0["build"] = strbuild
-        t0["hair"] = strhair
-        t0["skin"] = strskin
-        t0["donator1"] = "The Mists"
-        t0["donator2"] = "Of Time"
-
-    h = t0["height"]
-    t0["heightstr"] = deets.heightstr(h)
-
-    return t0
-
-
-def randhorns(inblood="Rg"):
-    inblood = inblood[0:2]
-    basehorn = spectrumgenehorn[inblood]
-    horn1 = deets.genecombine(basehorn, spectrumgenehorn[deets.neighborcaste(inblood, "-", 1)])
-    horn2 = deets.genecombine(horn1, spectrumgenehorn[deets.neighborcaste(inblood, "+", 1)])
-    horn3 = deets.genecombine(horn2, spectrumgenehorn[inblood])
-    outhorn = inblood
-    while len(outhorn) < 3:
-        outhorn = outhorn + "x"
-    outhorn = outhorn + horn3[3:len(horn3)]
-    return outhorn
-
-
-def randhorn(inhorn=""):
-    # be able to specify particular parts of the horn for randomization via the input?
-    horn = ""
-    if len(inhorn) < 2:
-        # length in handspans
-        x = random.randint(1, 4)
-        horn = str(x)
-        # curliness (straight, 45 degree, 90 degree, 180, 270, 360, ampora.)
-        x = random.randint(1, 7)
-        horn = horn + str(x)
-        # Cross-section shape.  R = round, O = oval, T = triangular/edged, S = spiral/twisted like goat.
-        x = random.randint(1, 6)
-        if x == 1:
-            horn = horn + "S"
-        if x == 2:
-            horn = horn + "T"
-        if x == 3:
-            horn = horn + "O"
-        if x > 3:
-            horn = horn + "R"
-        # Primary growth direction.  F = forward, B = back, O = outward/side, I = inwards/up/default.
-        x = random.randint(1, 7)
-        if x == 1:
-            horn = horn + "F"
-        if x == 2:
-            horn = horn + "B"
-        if x == 3:
-            horn = horn + "O"
-        if x == 4:
-            horn = horn + "S"
-        if x > 4:
-            horn = horn + "I"
-        # Width.  w = nepetalike, n = normal.
-        x = random.randint(1, 15)
-        if x == 1:
-            horn = horn + "w"
-        if x > 1:
-            horn = horn + "n"
-        # Point shape
-        # change xmax to match
-        x = random.randint(1, 15)
-        if x == 1:
-            horn = horn + "B"  # bump
-        if x == 2:
-            horn = horn + "b"  # branching
-        if x == 3:
-            horn = horn + "C"  # cone
-        if x == 4:
-            horn = horn + "F"  # flat
-        if x == 5:
-            horn = horn + "H"  # hook
-        if x == 6:
-            horn = horn + "J"  # jagged
-        if x == 7:
-            horn = horn + "N"  # notched
-        if x == 8:
-            horn = horn + "P"  # point
-        if x == 9:
-            horn = horn + "p"  # pincher
-        if x == 10:
-            horn = horn + "R"  # round
-        if x == 11:
-            horn = horn + "S"  # split
-        if x == 12:
-            horn = horn + "s"  # spade
-        if x > 12:
-            horn = horn + "P"  # point
-    return horn
-
-
-def getoneblood():
-    blood = ""
-    x = random.randint(1, 15)
-    if 1 <= x < 5:
-        blood = "R"
-    if 5 <= x < 9:
-        blood = "r"
-    if 9 <= x < 12:
-        blood = "G"
-    if 12 <= x < 14:
-        blood = "g"
-    if 14 <= x < 15:
-        blood = "B"
-    if 15 <= x:
-        blood = "b"
-    return blood
-
-
-def premadeblood():
-    blood = getoneblood() + getoneblood()
-    blood = deets.bloodsort(blood)
-    x = random.randint(1, 4)
-    if x > 2:
-        blood = blood + getoneblood()
-    return blood
 
 
 def eugenics(t0):
@@ -299,41 +116,6 @@ spectrumpurples = [
     ]
 
 
-def spectrumrand():
-    spectrum = [
-        premadeblood(), premadeblood(), premadeblood(), premadeblood(), premadeblood(),
-        premadeblood(), premadeblood(), premadeblood(), premadeblood(), premadeblood(),
-        premadeblood(), premadeblood(), premadeblood(), premadeblood(), premadeblood(),
-        premadeblood(), premadeblood(), premadeblood(), premadeblood(), premadeblood(),
-        premadeblood(), premadeblood(), premadeblood(), premadeblood(), premadeblood(),
-        premadeblood(), premadeblood(), premadeblood(), premadeblood(), premadeblood(),
-        premadeblood(), premadeblood(), premadeblood(), premadeblood(), premadeblood(),
-        premadeblood(), premadeblood(), premadeblood(), premadeblood(), premadeblood(),
-        premadeblood(), premadeblood(), premadeblood(), premadeblood(), premadeblood(),
-        premadeblood(), premadeblood(), premadeblood(), premadeblood(), premadeblood(),
-        premadeblood(), premadeblood(), premadeblood(), premadeblood(), premadeblood(),
-        premadeblood(), premadeblood(), premadeblood(), premadeblood(), premadeblood(),
-        premadeblood(), premadeblood(), premadeblood(), premadeblood(), premadeblood(),
-        premadeblood(), premadeblood(), premadeblood(), premadeblood(), premadeblood(),
-        premadeblood(), premadeblood(), premadeblood(), premadeblood(), premadeblood(),
-        premadeblood(), premadeblood(), premadeblood(), premadeblood(), premadeblood(),
-        premadeblood(), premadeblood(), premadeblood(), premadeblood(), premadeblood(),
-        premadeblood(), premadeblood(), premadeblood(), premadeblood(), premadeblood(),
-        premadeblood(), premadeblood(), premadeblood(), premadeblood(), premadeblood(),
-        premadeblood(), premadeblood(), premadeblood(), premadeblood(), premadeblood(),
-        premadeblood(), premadeblood(), premadeblood(), premadeblood(), premadeblood(),
-        premadeblood(), premadeblood(), premadeblood(), premadeblood(), premadeblood(),
-        premadeblood(), premadeblood(), premadeblood(), premadeblood(), premadeblood(),
-        premadeblood(), premadeblood(), premadeblood(), premadeblood(), premadeblood(),
-        premadeblood(), premadeblood(), premadeblood(), premadeblood(), premadeblood(),
-        premadeblood(), premadeblood(), premadeblood(), premadeblood(), premadeblood(),
-        premadeblood(), premadeblood(), premadeblood(), premadeblood(), premadeblood(),
-        premadeblood(), premadeblood(), premadeblood(), premadeblood(), premadeblood(),
-        premadeblood(), premadeblood(), premadeblood(), premadeblood(), premadeblood(),
-        premadeblood(), premadeblood(), premadeblood(), premadeblood(), premadeblood(),
-    ]
-    return spectrum
-
 # Possibly put these constants into the spectrum objects?  spectrumheight["short"], ...
 geneseamutant = "SsSSsBBCcEewWwWFFBbsBFGgeGgeggiTtDEeaaaa"  # Weird Shit.
 genesealand = "sssssbbccEEwwwwffbbsbfggiggiggittdeeAAAA"    # no aquatic traits, no biolum, ears and no fins.
@@ -438,6 +220,9 @@ spectrumgenemouth = {
     "RB": "64ddTTTTTT445444PPPPPPTTTTTT445444PPPPPPTTTTTT444544PPPPPPTTTTTT444544PPPPPP",  # Violet
     "Rb": "64ddTTTTTT445444PPPPPPTTTTTT445444PPPPPPTTTTTT444544PPPPPPTTTTTT444544PPPPPP",
     "rb": "64ddTTTTTT445444PPPPPPTTTTTT445444PPPPPPTTTTTT444544PPPPPPTTTTTT444544PPPPPP",  # Tyrian
+    "low": "64ddTTTTTT444444CCCPGGTTTTTT444444CCCPGGTTTTTT444444CCCCGGTTTTTT444444CCPPGG",
+    "high": "64ddTTTTTT445444PPPPPPTTTTTT445444PPPPPPTTTTTT444544PPPPGGTTTTTT444544PPPPGG",
+    "mut": "46DdFFFFFF272727PPPPPPFFFFFF727272PPPPPPFFFFFF272729PPPPPPFFFFFF727272PPPPPP",
 }
 
 spectrumgenehorn = {

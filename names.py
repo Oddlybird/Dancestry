@@ -2,6 +2,12 @@ import random
 
 
 def newname():
+    w0 = ""
+    w1 = ""
+    w2 = ""
+    w3 = ""
+    w4 = ""
+    w5 = ""
     working = ""
     # strucs contains the valid name structures.  assign one at random.
     # original strucs = ["PLOPOF", "PLOFFO", "PLONOF", "POPPOL", "POPFOF", "POFLOF", "POFLOF", "PONPLO", "PONFOO",
@@ -25,22 +31,38 @@ def newname():
               "FOFFOP", "NOPOLO", "ONPOLO", "POOPOF", "FOFFOP", "NOPOLO", "ONPOLO", "POOPOF", "LFOLON", "POOFOP"]
     a = random.randint(0, len(strucs) - 1)
     structure = strucs[a]
-    # translate each letter of the structure into a name, in "working".
-    for b in structure:
+    # translate each letter of the structure into a name, stored in working and w0 - w5
+    a = 0
+    while a < 6:
+        b = structure[a]
+        working = ""
         if b == "P":
-            working = working + getstop()
+            working = getstop()
         if b == "F":
-            working = working + getaffricate()
+            working = getaffricate()
         if b == "L":
-            working = working + getliquid()
+            working = getliquid()
         if b == "N":
-            working = working + getnasal()
+            working = getnasal()
         if b == "O":
-            working = working + getvowel()
-    # "working"   now contains a name
+            working = getvowel()
+        if a == 0:
+            w0 = working
+        if a == 1:
+            w1 = working
+        if a == 2:
+            w2 = working
+        if a == 3:
+            w3 = working
+        if a == 4:
+            w4 = working
+        if a == 5:
+            w5 = working
+        a = a + 1
+    # w0-w5 contain individual letters of a name
     # "structure" now contains the structure of that name.
 
-    working = qc(working)
+    working = qc(structure, w0, w1, w2, w3, w4, w5)
     working = working.capitalize()
     return working
 
@@ -80,8 +102,9 @@ def getvowel():
     return letter
 
 
-def qc(qcin):
+def qc(struc, w0, w1, w2, w3, w4, w5):
     # Quality Control
+    qcin = w0 + w1 + w2 + w3 + w4 + w5
     qcout = qcin
     a = 0
     while a <= len(qcin):
@@ -123,8 +146,8 @@ def qc(qcin):
     return qcout
 
 
-def isvowel(suspectedv):
-    if suspectedv == "a" or suspectedv == "e" or suspectedv == "i" or suspectedv == "o" or suspectedv == "u":
+def isvowel(suspect):
+    if suspect == "a" or suspect == "e" or suspect == "i" or suspect == "o" or suspect == "u":
         return True
     return False
 
