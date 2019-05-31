@@ -1,0 +1,61 @@
+Split it up into icons:
+------------------
+x15 tips - can be tacked on, but need to be placed correctly.
+---------30---------up to 30 icons needed, 60ish if use 4/7 instead of 3/5.
+x4 lengths  -  (change to 3) (finger-length, 1-2 handspan, 2+ handspans)
+x7 curlinesses ( change to 5: straight, light curve, deep curve (<180 degrees), coil, zigjag.)
+x2 Angular / smooth curves
+------------------ 8 - 12 icons
+x4 radials (Triangular, Round, Oval, Spiraling)  (C-shape?  Irregular?)
+x2 widths  (narrow / wide)
+------------------16 icons
+x4 directions  (front, back, out, in. remove sidemounted from code.)
+x4 Odd Mounting (Sides, back, unicorn, mohawk)
+------------------
+------------------
+------------------
+------------------ : Indicated by special graphics-overrides, or applies to All Horns Equally
+XX........: Left Doubled / Right Doubled, Both or neither.  Secondary horn maxlength 1, clone of which horn, etc.
+            Dd = left Double, dD = right double, DD = both.  horn 1R +modified 2R, and 1L + modified 2L.
+            1?, 2?, 3?:  Whether using horn 1L, 2L, or 3L.   1D, 2d, 3d, etc, count the which-horn, but no doubling.
+            ?1, ?2, ?3:                horn 1R, 2R, or 3R    d1, D2, d3, etc, count which horn but no doubling.
+            xX : no left horn, only right.   Xx, no right horn, only left.  XD/DX; both horns on same side.
+            Total possibilities:  1, 2, 3, D, d, x, X.
+            if horn to use is not specified, use #1 by default.
+..XX......: Stunted horn, blunted, withered, nub.  Right+Left
+            possibilities: SsBbWwNn, Aa, Cc, Dd, Ee, Ff, Gg.
+            (something akin to the doubling gene's structure)
+....XX....: Keratin, ElectroSensory, sheddable antler, Power-regulating, Balance,
+            K/k,     E/e             A/a               P/p               B/b
+            Capital = active, lowercase = recessive, can have two separate active genes if desired.
+......X...: Angular / smooth curves / Both
+            A / S / B
+.......X..: Growing in unsafe directions that could impact skin or horn (if length/direction/curliness allows)
+            C/E/J/L/N/S/U are safe.  X is not.
+            To be in danger, must have X gene, *and* horns shaped in a way that can impact.
+            - spiraling: treat curl as 1 greater than it actually is.
+            - All Curl > 5
+            - Inward, with curl > 2 and length > 1.
+            - Back direction, curl > 1, length > 1.
+            - side + wide = ear deformity
+            - front + wide = forehead deformity
+            - Side + in = mild skull deformities.
+........X.: Odd Mounting (Sides, back, unicorn, mohawk)  Top/normal
+                          S /    B /   U /      M.          TtNn
+.........X: Notches / holes, location nonspecific, or Hollowness.
+            N/n,      H/h,                             Oo, or none of the above Xx.
+            Capital Letter = 1 gap, lowercase letter = several smaller ones.
+------------------
+
+...
+...
+...
+
+XX........: Left Doubled / Right Doubled, Both or neither.  Secondary horn maxlength 1, clone of which horn, etc.
+..XX......: Stunted horn, blunted, withered, nub.  Right+Left
+....XX....: Keratin, Sensory, sheddable antler, Other
+......X...: Angular / smooth curves
+.......X..: Growing in unsafe directions that will impact skin or horn
+........X.: Odd Mounting (Sides, back, unicorn, mohawk)
+.........X: Notches / holes, location nonspecific, or Hollowness.
+

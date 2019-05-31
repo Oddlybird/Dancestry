@@ -1,7 +1,6 @@
 import genome as gene
 import pygame
 import formattingbs as fbs
-# class Jaws:
 
 
 def thetooth(moufstr):
@@ -90,20 +89,22 @@ def thewholetooth(moufstr):
 
 def jawprint(mouf):
     offscreen = pygame.Surface((85, 21))
-    offscreen.fill((50, 50, 50))
+    offscreen.fill((128, 128, 128))
     # Showing Teeth
     jawmain = jawprintgraphics(mouf, False)
-    jawmain.set_alpha(50)
     # Recessive Teeth
     jawtemp1 = jawprintgraphics(mouf, True)
-    jawtemp2 = pygame.transform.flip(jawtemp1, 1, 0)
-    jawtemp2.set_alpha(50)
-    jawtemp1.blit(jawtemp2, (0, 0), None, pygame.BLEND_ADD)
+#    jawtemp2 = pygame.transform.flip(jawtemp1, 1, 0)
+#    jawtemp2.set_alpha(50)
+#    jawtemp1.blit(jawtemp2, (0, 0))
     jawtemp1.set_alpha(25)
     # Finalize
-    offscreen.blit(jawtemp1, (0, 0), None, pygame.BLEND_ADD)
-    offscreen.blit(jawtemp1, (0, 0), None, pygame.BLEND_MULT)
+    jawmain.set_alpha(90)
     offscreen.blit(jawmain, (0, 0))
+    offscreen.blit(jawmain, (0, 0), None, pygame.BLEND_MULT)
+    offscreen.blit(jawtemp1, (0, 0))
+    offscreen.blit(jawtemp1, (0, 0), None, pygame.BLEND_ADD)
+    # If dissatisfied, change jawmain alpha to 96 and remove the Blend Flag statements.
     return offscreen
 
 
@@ -120,7 +121,6 @@ def jawprintgraphics(mouf, whole=False):
     while (here+3) <= len(jawt):
         imgloc = str(jawt[here:here + 3]) + ".PNG"
         toof, toofrect = fbs.load_png(imgloc, "teef")
-#        toof = pygame.transform.flip(toof, 1, 0)
         if 2*here >= len(jawt):
             toof = pygame.transform.flip(toof, 1, 0)
         place = ((7*x)+1, 0)
@@ -132,7 +132,7 @@ def jawprintgraphics(mouf, whole=False):
     while (here+3) <= len(jawb):
         imgloc = str(jawb[here:here + 3]) + ".PNG"
         toof, toofrect = fbs.load_png(imgloc, "teef")
-#        toof = pygame.transform.flip(toof, 1, 0)
+        toof = pygame.transform.flip(toof, 1, 0)  # Flip just the lower jaw.  Remove?
         if (2*here) >= len(jawt):
             toof = pygame.transform.flip(toof, 1, 0)
         toof = pygame.transform.flip(toof, 0, 1)

@@ -52,7 +52,7 @@ def main():  # Contains button functions
 
 def handlekeys(gameon=True):
     # for event in pygame.event.get():
-    global btncurrent, screencurrent, pageblood, pagename, pageloadtroll, pagemaketroll
+    global btncurrent, screencurrent, pageblood, pagename, pageloadtroll, pagemaketroll, pagemouf
     global troll1, troll2, troll3, libbie, lester, spectrum
     event = pygame.event.wait()
     if event.type == pygame.KEYDOWN:
@@ -78,26 +78,26 @@ def handlekeys(gameon=True):
             # Pressing right, from main menu.
         if event.key == pygame.K_RETURN:
             # This is the loop for when someone chooses a button.
-            if btncurrent == 1:
+            if btncurrent == 1:  # Troll Breeding Screen
                 screencurrent = pagemaketroll
                 return gameon
-            if btncurrent == 2:
+            if btncurrent == 2:  # Screenshot current screen
                 screenshot()
                 return gameon
-            if btncurrent == 3:
+            if btncurrent == 3:  # Test out some names
                 screencurrent = pagename
                 return gameon
-            if btncurrent == 4:
+            if btncurrent == 4:  # Look in the save folder
                 global loadablelist
                 loadablelist = checkloadable()
                 screencurrent = pageloadtroll
                 return gameon
-            if btncurrent == 5:
+            if btncurrent == 5:  # Fiddle with hemospectrum
                 screencurrent = pageblood
                 # note : Change to 'eugenics' page once that's functional.
                 return gameon
-            if btncurrent == 6:
-                # code
+            if btncurrent == 6:  # Look at teeth norms
+                screencurrent = pagemouf
                 return gameon
             if btncurrent == 7:
                 # code that makes the button do something
@@ -144,7 +144,7 @@ def handlekeys(gameon=True):
                     if btncurrent == 53:
                         # Btn 3 : Put random default troll into slot 3
                         troll3 = gene.trolldict()
-                        troll3 = gene.getpremadetroll(random.randint(1,13))
+                        troll3 = gene.getpremadetroll()
                         updatescreen()
                         return gameon
                     if btncurrent == 54:
@@ -250,7 +250,7 @@ def handlekeys(gameon=True):
 # Show what needs to be shown.
 def updatescreen():  # interface.  Choose which page to show.
     global background
-
+    background.fill((0, 0, 0))
     if screencurrent.name == "moufpage":
         background.blit(moufpage(), (0, 0))
     if screencurrent.name == "maketroll":
@@ -281,7 +281,7 @@ def drawmenu(background):  # interface.  Contains Labels for all main and submen
     btn03 = fbs.btn("        NAME        ", btnwbig, btnhbig, btnselect(3), txtcol, True, "Verdana")
     btn04 = fbs.btn("    LOADING AREA    ", btnwbig, btnhbig, btnselect(4), txtcol, True, "Verdana")
     btn05 = fbs.btn("    BLOOD COLORS    ", btnwbig, btnhbig, btnselect(5), txtcol, True, "Verdana")
-    btn06 = fbs.btn("       Btn   6      ", btnwbig, btnhbig, btnselect(6), txtcol, True, "Verdana")
+    btn06 = fbs.btn("    CHECK TEETH     ", btnwbig, btnhbig, btnselect(6), txtcol, True, "Verdana")
     btn07 = fbs.btn("       Btn   7      ", btnwbig, btnhbig, btnselect(7), txtcol, True, "Verdana")
     btn08 = fbs.btn("       Btn   8      ", btnwbig, btnhbig, btnselect(8), txtcol, True, "Verdana")
     btn09 = fbs.btn("       Btn   9      ", btnwbig, btnhbig, btnselect(9), txtcol, True, "Verdana")
@@ -388,7 +388,7 @@ def btnselect(x):  # interface - controls which buttons are highlightable.
         btncol = (120, 120, 0)
 
     # unused main menu buttons.
-    if x == 6 or x == 7 or x == 8 or x == 9 or x == 10 or x == 11:  # Unused Buttons
+    if x == 7 or x == 8 or x == 9 or x == 10 or x == 11:  # Unused Buttons
         btncol = (50, 50, 0)
 
     # submenu buttons
@@ -527,11 +527,6 @@ def displaytroll(t0):  # interface -- prints a standard-format window display to
     blood = t0["blood"][0:2]
     colbg = colg.bloodtorgb(t0["blood"])
     colfg = (255, 255, 255)
-    hornsgene = gene.Horns(t0["horns"])
-    hornl = gene.HornObj(hornsgene.hornleft1)
-    hornr = gene.HornObj(hornsgene.hornright1)
-    t0["hornLdesc"] = hornl.desc()
-    t0["hornRdesc"] = hornr.desc()
     h = t0["height"]
     t0["heightstr"] = gene.heightstr(h)
     seatemp = t0["sea"]
@@ -544,23 +539,24 @@ def displaytroll(t0):  # interface -- prints a standard-format window display to
     string1 = t0["firname"] + " " + t0["surname"] + ", " + t0["blood"] + " " + t0["sex"]
     string2 = t0["caste"] + ", " + t0["dwell"]
     string3 = t0["donator1"] + " / " + t0["donator2"]
-    string4 = t0["heightstr"] + "/" + gene.heightstr(castedefaultheight) + ", " + t0["build"] + " build"
+    string4 = t0["heightstr"] + "/" + gene.heightstr(castedefaultheight) + ", " + t0["build"] + " build, "
+    string4 = string4 + t0["hair"] + " hair, " + t0["skin"] + " skin"
     string5 = seawrap[0]
     string6 = "  " + seawrap[1]
     string7 = "  " + seawrap[2]
     string8 = "  " + seawrap[3]
-    string9 = "LHorn: " + t0["hornLdesc"]
-    string10 = "RHorn: " + t0["hornRdesc"]
-    string11 = "."  # t0["powers"]
-    string12 = "."  # t0["hair"] + " hair"
-    string13 = "."  # t0["skin"] + " skin"
-    string14 = "."
-    string15 = jawt[0:18] + "." + jawt[18:len(jawt)]
-    string16 = jawb[0:18] + "." + jawb[18:len(jawb)]
-    string17 = t0["sea"]
-    string18 = t0["horns"]
-    string19 = t0["mouth"][0:40]
-    string20 = "    " + t0["mouth"][40:len(t0["mouth"])]
+    string9 = "Horns: " + t0["hornsdesc"]
+    string10 = "LHorn: " + t0["hornLdesc"]
+    string11 = "RHorn: " + t0["hornRdesc"]
+    string12 = t0["powers"]
+    string13 = "."
+    string14 = " "
+    string15 = "Jaw1:  " + jawt[0:18] + "." + jawt[18:len(jawt)]
+    string16 = "Jaw2:  " + jawb[0:18] + "." + jawb[18:len(jawb)]
+    string17 = "Sea:   " + t0["sea"]
+    string18 = "Horns: " + t0["horns"]
+    string19 = "Mouth: " + t0["mouth"][0:40]
+    string20 = "Mouth: " + "      " + t0["mouth"][40:len(t0["mouth"])]
 
     background = fbs.btn(string1, 512, 260, colbg, colfg)
     x = 0
@@ -601,44 +597,51 @@ def trollmakepage():  # interface
     return page
 
 
+# Just for the mouf screen...
+def displaybigdefaultmouf(blood):
+    global font
+    page = fbs.pysurface(170, 42, (0, 0, 0))
+    page.blit(pygame.transform.scale2x(mouf.jawprint(slurry.spectrumgenemouth[blood])), (0, 0))
+    page.blit(font.render(blood, 1, colg.bloodtorgb(blood)), (0, 10))
+    return page
+
+
 # Testing ground for showing all the default teef.
 def moufpage():
-    global screen_height, screen_width
+    global screen_height, screen_width, font
     page = fbs.pysurface(screen_width, screen_height, (0, 0, 0))
-    page.blit(mouf.jawprint(slurry.spectrumgenemouth["RR"]), (10, 10))
-    page.blit(mouf.jawprint(slurry.spectrumgenemouth["Rr"]), (10, 40))
-    page.blit(mouf.jawprint(slurry.spectrumgenemouth["rr"]), (10, 70))
-    page.blit(mouf.jawprint(slurry.spectrumgenemouth["rG"]), (10, 100))
-    page.blit(mouf.jawprint(slurry.spectrumgenemouth["RG"]), (10, 130))
-    page.blit(mouf.jawprint(slurry.spectrumgenemouth["Rg"]), (10, 160))
-    page.blit(mouf.jawprint(slurry.spectrumgenemouth["rg"]), (10, 190))
+    font = pygame.font.SysFont("Verdana", 16, True, False)
+    page.blit(displaybigdefaultmouf("RR"), (50, 50))
+    page.blit(displaybigdefaultmouf("Rr"), (50, 125))
+    page.blit(displaybigdefaultmouf("rr"), (50, 200))
+    page.blit(displaybigdefaultmouf("rG"), (50, 275))
+    page.blit(displaybigdefaultmouf("RG"), (50, 350))
+    page.blit(displaybigdefaultmouf("Rg"), (50, 425))
+    page.blit(displaybigdefaultmouf("rg"), (50, 500))
 
-    page.blit(mouf.jawprint(slurry.spectrumgenemouth["GG"]), (100, 10))
-    page.blit(mouf.jawprint(slurry.spectrumgenemouth["Gg"]), (100, 40))
-    page.blit(mouf.jawprint(slurry.spectrumgenemouth["gg"]), (100, 70))
-    page.blit(mouf.jawprint(slurry.spectrumgenemouth["Gb"]), (100, 100))
-    page.blit(mouf.jawprint(slurry.spectrumgenemouth["GB"]), (100, 130))
-    page.blit(mouf.jawprint(slurry.spectrumgenemouth["gB"]), (100, 160))
-    page.blit(mouf.jawprint(slurry.spectrumgenemouth["gb"]), (100, 190))
+    page.blit(displaybigdefaultmouf("GG"), (300, 50))
+    page.blit(displaybigdefaultmouf("Gg"), (300, 125))
+    page.blit(displaybigdefaultmouf("gg"), (300, 200))
+    page.blit(displaybigdefaultmouf("Gb"), (300, 275))
+    page.blit(displaybigdefaultmouf("GB"), (300, 350))
+    page.blit(displaybigdefaultmouf("gB"), (300, 425))
+    page.blit(displaybigdefaultmouf("gb"), (300, 500))
 
-    page.blit(mouf.jawprint(slurry.spectrumgenemouth["BB"]), (190, 10))
-    page.blit(mouf.jawprint(slurry.spectrumgenemouth["Bb"]), (190, 40))
-    page.blit(mouf.jawprint(slurry.spectrumgenemouth["bb"]), (190, 70))
-    page.blit(mouf.jawprint(slurry.spectrumgenemouth["rB"]), (190, 100))
-    page.blit(mouf.jawprint(slurry.spectrumgenemouth["RB"]), (190, 130))
-    page.blit(mouf.jawprint(slurry.spectrumgenemouth["Rb"]), (190, 160))
-    page.blit(mouf.jawprint(slurry.spectrumgenemouth["rb"]), (190, 190))
+    page.blit(displaybigdefaultmouf("BB"), (550, 50))
+    page.blit(displaybigdefaultmouf("Bb"), (550, 125))
+    page.blit(displaybigdefaultmouf("bb"), (550, 200))
+    page.blit(displaybigdefaultmouf("rB"), (550, 275))
+    page.blit(displaybigdefaultmouf("RB"), (550, 350))
+    page.blit(displaybigdefaultmouf("Rb"), (550, 425))
+    page.blit(displaybigdefaultmouf("rb"), (550, 500))
 
-    page.blit(mouf.jawprint(slurry.spectrumgenemouth["low"]), (280, 10))
-    page.blit(mouf.jawprint(slurry.spectrumgenemouth["high"]), (280, 40))
-    page.blit(mouf.jawprint(slurry.spectrumgenemouth["mut"]), (280, 70))
-
-    # Text Updates
-    text = font.render("Hello There", 1, (255, 255, 255))
-#    textpos = text.get_rect()
-#    textpos.centerx = page.get_rect().centerx
-#    page.blit(text, textpos)
-    page.blit(text, (400, 0))
+    page.blit(pygame.transform.scale2x(mouf.jawprint(slurry.spectrumgenemouth["high"])), (800, 50))
+    page.blit(font.render("high", 1, colg.bloodtorgb("BB")), (800, 60))
+    page.blit(pygame.transform.scale2x(mouf.jawprint(slurry.spectrumgenemouth["low"])), (800, 275))
+    page.blit(font.render("low", 1, colg.bloodtorgb("RR")), (800, 285))
+    page.blit(pygame.transform.scale2x(mouf.jawprint(slurry.spectrumgenemouth["mut"])), (800, 500))
+    page.blit(font.render("mutant1", 1, (255, 0, 0)), (800, 510))
+    font = pygame.font.SysFont("Verdana", 12, False, False)
     return page
 
 
@@ -649,13 +652,13 @@ def bloodpage():
     global spectrum
     z = spectrum
     spectrum.sort(key=gene.getcastenumstr, )
-    h = 1
+    h = 0
     w = 1
     numtotal = 0
     for x in z:
-        if numtotal == 15 or numtotal == 30 or numtotal == 45 or numtotal == 60 or numtotal == 75 or numtotal == 90 or numtotal == 105 or numtotal == 120 or numtotal == 135:
+        if numtotal == 16 or numtotal == 32 or numtotal == 48 or numtotal == 64 or numtotal == 80 or numtotal == 96 or numtotal == 112 or numtotal == 128 or numtotal == 144:
             w = w + 13
-            h = 1
+            h = 0
         h = h + 3
         displayname = x
         (rgb1, rgb2, rgb3) = colg.bloodtorgb(x)
@@ -749,15 +752,14 @@ def checkloadable():
 # Project-specific globals, Menu/misc
 screen_width = 1280
 screen_height = 600
-versionnum = "0.2.4"
+versionnum = "0.2.9"
 btncurrent = 1
 screencurrent = ScrPage()
 # screens: maketroll, loadingzone, bloodpage, donationpage,
 pageloadtroll = ScrPage("loadingzone", 101, 360, False, True)  # There is an artificial maxbtn limiter in loadtroll()
-pagemaketroll = ScrPage("maketroll", 51, 60, True, False)
+pagemaketroll = ScrPage("maketroll", 51, 59, True, False)
 pageblood = ScrPage("bloodpage", 51, 57, True, False)
 pagename = ScrPage("namepage", 51, 53, True, False)
-# Remove this unused thing eventually
 pagemouf = ScrPage("moufpage", 51, 55, False, False)
 # Project-specific globals, Data
 libbie = gene.getpremadetroll(random.randint(1, 13))
