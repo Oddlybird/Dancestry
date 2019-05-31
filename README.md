@@ -7,6 +7,16 @@ Original version written in freebasic in late 2017.  Being adapted to Python in 
 Approximate version history:
 =
 
+V. 0.2.9: 2019-05-31
+
+-- Upgraded genecombine to include probability weighting
+
+-- added slurry spectrum entries for hair, skin, build, and powers.  Currently vacuous.
+
+-- added 9 mutant horn gene entries and premade trolls that have them
+
+-- enabled all horn control genes, including odd numbers / placements of them.  Description function is still buggy.  Should be replaced with graphical icons.  Goal for 0.3.0 :  graphical icons.
+
 V. 0.2.6: 2019-05-26
 
 -- Writer's block sucks
