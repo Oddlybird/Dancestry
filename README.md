@@ -7,6 +7,12 @@ Original version written in freebasic in late 2017.  Being adapted to Python in 
 Approximate version history:
 =
 
+V. 0.2.9b: 2019-06-04
+
+-- Replaced horndescribe with graphical icons.
+
+-- Horn mount location is all that's left to do.
+
 V. 0.2.9: 2019-05-31
 
 -- Upgraded genecombine to include probability weighting
