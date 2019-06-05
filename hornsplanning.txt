@@ -1,16 +1,77 @@
+Not yet implemented:
+- Placement
+- Direction
+- Blunt/stunt/withered/nub/cancerous overrides
+- notch/notches Nn, hole/holes Hh
+
+* Add a system to calculate horn weight per horn, and rotate final face picture by appropriate angle.
+  (length * width(n=2,w=3), + curvature.   hollows = * .75.  One Hollow = * 0.35)
+
+* Add a system to calculate horn weight per horn, and rotate final face picture by appropriate angle.
+  (length * width(n=2,w=3), + curvature.   hollows = * .75.  One Hollow = * 0.35)
+
+ideal icon size seems to be 35x35
+
 Split it up into icons:
-------------------
-x15 tips - can be tacked on, but need to be placed correctly.
----------30---------up to 30 icons needed, 60ish if use 4/7 instead of 3/5.
-x4 lengths  -  (change to 3) (finger-length, 1-2 handspan, 2+ handspans)
-x7 curlinesses ( change to 5: straight, light curve, deep curve (<180 degrees), coil, zigjag.)
-x2 Angular / smooth curves
------------------- 8 - 12 icons
-x4 radials (Triangular, Round, Oval, Spiraling)  (C-shape?  Irregular?)
+---------11-------
+x11 tips -
+    # P(point), B(bump), b(branching), C(cone), F(flat), H(hook), J(jagged)
+    # R(round), S(split), s(spade), L(bolt), p(Pincher)
+---------90---------
+x4 lengths -
+    1 (0-1 handspans, Terezi),
+    2 (1-2 handspans, Eridan),
+    3 (2-3 handspans, Aradia),
+    4 (3+  handspans, Gamzee)
+x8 curlinesses
+    1 (straight),
+    2 (up to 45 degrees),
+    3 (90 degrees +/- 45),
+    4 ( S-shape curves)
+    5 (180 degrees +/- 45),
+    6 (270 degrees +/- 45),
+    7 (360 degrees +/- 45),
+    8 = Back-and-forth waves (Ampora)
+x3 Angular / smooth curves
+    A = angular
+    S = smooth
+    B = both
+---------24-------
+x4 radials
+    R round
+    O Oval
+    T triangular/edged
+    S spiraling
+    C C-shaped
+    I Irregular
 x2 widths  (narrow / wide)
-------------------16 icons
+    w Wide
+    n Narrow
+x2 Hollownesses
+    H One big hollow
+    h several smaller hollows
+---------16-------16 icons
+# Consider replacing this system with a 5x5 grid of horn placement, allowing (centered, Straight Up, normal, Wide, and Side) x (Face, Temple, Ear, Back-diagonal, Back-center)
+# Plus a direction-of-curvature:  N/S/E/W, with North being the face, S = Back, E = top of head, W = shoulders.
+# Would require an icon for each of 25 locations on a side profile head;
+# --------times an arrow pointing each of 4 directions, from each location.
+# Total: 100, but only trivially different from eachother.
 x4 directions  (front, back, out, in. remove sidemounted from code.)
+    F Front
+    B Back
+    I Inward/upward/towards other horn
+    O Outward/downward/away from other horn
 x4 Odd Mounting (Sides, back, unicorn, mohawk)
+    S Side
+    B Back
+    U Unicorn
+    M Mohawk (combine mohawk/unicorn into C Centered?)
+---------4--------
+x4 stunt/blunt/withered/nub.
+---------4--------
+Notch, Notches, Hole, Holes
+------------------
+------------------
 ------------------
 ------------------
 ------------------
@@ -18,22 +79,22 @@ x4 Odd Mounting (Sides, back, unicorn, mohawk)
 XX........: Left Doubled / Right Doubled, Both or neither.  Secondary horn maxlength 1, clone of which horn, etc.
             Dd = left Double, dD = right double, DD = both.  horn 1R +modified 2R, and 1L + modified 2L.
             1?, 2?, 3?:  Whether using horn 1L, 2L, or 3L.   1D, 2d, 3d, etc, count the which-horn, but no doubling.
-            ?1, ?2, ?3:                horn 1R, 2R, or 3R    d1, D2, d3, etc, count which horn but no doubling.
+    0       ?1, ?2, ?3:                horn 1R, 2R, or 3R    d1, D2, d3, etc, count which horn but no doubling.
             xX : no left horn, only right.   Xx, no right horn, only left.  XD/DX; both horns on same side.
             Total possibilities:  1, 2, 3, D, d, x, X.
             if horn to use is not specified, use #1 by default.
 ..XX......: Stunted horn, blunted, withered, nub.  Right+Left
-            possibilities: SsBbWwNn, Aa, Cc, Dd, Ee, Ff, Gg.
+    4       possibilities: SsBbWwNn, Aa, Cc, Dd, Ee, Ff, Gg.
             (something akin to the doubling gene's structure)
 ....XX....: Keratin, ElectroSensory, sheddable antler, Power-regulating, Balance,
             K/k,     E/e             A/a               P/p               B/b
             Capital = active, lowercase = recessive, can have two separate active genes if desired.
 ......X...: Angular / smooth curves / Both
-            A / S / B
+     0       A / S / B
 .......X..: Growing in unsafe directions that could impact skin or horn (if length/direction/curliness allows)
             C/E/J/L/N/S/U are safe.  X is not.
             To be in danger, must have X gene, *and* horns shaped in a way that can impact.
-            - spiraling: treat curl as 1 greater than it actually is.
+     0      - spiraling: treat curl as 1 greater than it actually is.
             - All Curl > 5
             - Inward, with curl > 2 and length > 1.
             - Back direction, curl > 1, length > 1.
@@ -41,9 +102,9 @@ XX........: Left Doubled / Right Doubled, Both or neither.  Secondary horn maxle
             - front + wide = forehead deformity
             - Side + in = mild skull deformities.
 ........X.: Odd Mounting (Sides, back, unicorn, mohawk)  Top/normal
-                          S /    B /   U /      M.          TtNn
+     0                    S /    B /   U /      M.          TtNn
 .........X: Notches / holes, location nonspecific, or Hollowness.
-            N/n,      H/h,                             Oo, or none of the above Xx.
+    0       N/n,      H/h,                             Oo, or none of the above Xx.
             Capital Letter = 1 gap, lowercase letter = several smaller ones.
 ------------------
 

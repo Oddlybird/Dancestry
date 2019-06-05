@@ -1,0 +1,32 @@
+Clout (strength)
+Acumen (logic)
+Womangrit (constitution)
+
+Alacrity (agility)
+Hunch (intuition)
+Resolve (willpower)
+
+Moxie (charisma)
+Psyche (magic)
+
+20 pts, 1 pt to upgrade a stat
+max of 6 baseline
+average of 3
+--- generated trolls get 15-25 points.
+
+Hope <- FAITH -> Rage
+Life <- ORDER -> Doom
+Time <- ENTROPY -> Space
+Blood <- Connection -> Breath
+Heart <- SELF -> Mind
+Light <- LUCK -> Void
+
+List stats in order of priority, based on personality.
+- apply modifiers / mins and maxes based on actual caste(s nearest to hue)
+- Generalist vs Specialist stat order (highest to lowest, lowest to highest, ..)
+			Semi-randomized.  ( may have stat order from different caste)
+- Generalist vs Specialist stat spreads (minmax vs even spread vs semi-even)
+
+
+
+

@@ -41,41 +41,138 @@ import slurry
 # genestrand: face structure, eye hollowness/bug-eyed, chin, nose, eyebrows, eyelashes
 
 
+# Incomplete
+class Troll:
+    # Genetics
+    code = ""
+    blood = ""
+    eyes = ""
+    horns = ""
+    mouth = ""
+    sea = ""
+    # not fully implemented
+    powers = ""
+    build = ""
+    hair = ""
+    skin = ""
+    height = ""
+    # Traits
+    firname = ""
+    surname = ""
+    sex = ""
+    donator1 = ""
+    donator2 = ""
 
-# Make a troll class instead?
-def trolldict():  # trolldeets
-    bloodreal = premadeblood()
-    blood = bloodreal[0:2]
-    sea = slurry.genesealand
-    if slurry.spectrumdwell[blood] != "landdweller":
-        sea = slurry.geneseasea
-    horns = slurry.spectrumgenehorn[blood]
+    def __init__(self, code):
+        if len(code) < 10:
+            self.code = ""
+            self.blood = code
+            self.eyes = ""
+            self.horns = slurry.spectrumgenehorn[self.blood]
+            self.mouth = slurry.spectrumgenemouth[self.blood]
+            self.sea = slurry.spectrumgenesea[self.blood]
+            # not fully implemented
+            self.powers = slurry.spectrumpowerstemp[self.blood]
+            self.build = slurry.spectrumbuildtemp[self.blood]
+            self.hair = slurry.spectrumhairtemp[self.blood]
+            self.skin = slurry.spectrumskintemp[self.blood]
+            self.height = slurry.spectrumheight[self.blood]
+            # Traits
+            self.firname = "FIRNAM"
+            self.surname = "SURNAM"
+            self.sex = "N"
+            self.donator1 = "?.?"
+            self.donator2 = "?.?"
+#        self.code = self.update()
+
+    def update(self):
+        code = self.code
+        return code
+
+
+# Make a troll class /As Well/.
+def trolldict(introll=""):  # trolldeets
+    if introll == "":
+        introll = Troll("rr")
+    if introll != "":
+        introll = introll
+    blood = "rr"
+    bloodreal = ""
+    horns = ""
+    sea = ""
+    mouth = ""
+    height = 0
+    build = ""
+    hair = ""
+    skin = ""
+    powers = ""
+    firname = ""
+    surname = ""
+    sex = ""
+    donator1 = ""
+    donator2 = ""
+    if introll == "":
+        bloodreal = premadeblood()
+        sea = slurry.genesealand
+        if slurry.spectrumdwell[blood] != "landdweller":
+            sea = slurry.geneseasea
+        horns = slurry.spectrumgenehorn[blood]
+        mouth = slurry.spectrumgenemouth[blood]
+        height = slurry.spectrumheight[blood]
+        build = slurry.spectrumbuildtemp[blood]
+        hair = slurry.spectrumhairtemp[blood]
+        skin = slurry.spectrumskintemp[blood]
+        powers = slurry.spectrumpowerstemp[blood]
+        firname = "FIRNAM"
+        surname = "SURNAM"
+        sex = "N"
+        donator1 = "?.?"
+        donator2 = "?.?"
+    if introll != "":
+        bloodreal = introll.blood
+        sea = introll.sea
+        horns = introll.horns
+        mouth = introll.mouth
+        height = introll.height
+        build = introll.build
+        hair = introll.hair
+        skin = introll.skin
+        powers = introll.powers
+        firname = introll.firname
+        surname = introll.surname
+        sex = introll.sex
+        donator1 = introll.donator1
+        donator2 = introll.donator2
+
     strhorns, strhornl, strhornr = describehorns2(horns)
+    blood = bloodreal[0:2]
+
     t0 = {
         "savetype": "10",  # Save Version
-        "firname": "FIRNAM",  # six letters
-        "surname": "SURNAM",  # six letters
-        "sex": "N",  # M/N/F
+        "firname": firname,  # six letters
+        "surname": surname,  # six letters
+        "sex": sex,          # M/N/F
         "caste": getcastefromblood(blood),
         "dwell": slurry.spectrumdwell[blood],
         # Genes
         "blood": bloodreal,  # RGB rgb
-        "seadesc": describesea(blood, sea),
-        "mouth": slurry.spectrumgenemouth[blood],
+        "mouth": mouth,
         "sea": sea,
         "horns": horns,
+        "powers": powers,  # psychic, voodoo, eldritch, none.  specify type later.
+                           # Make psychics eyes glow colors?
+        "height": height,                     # height in inches
+        "heightstr":  heightstr(height),      # human-readable
+        "build": build,   # more detailed data later
+        "hair": hair,     # more detailed data later.  medium/long.
+        "skin": skin,      # freckles, stripes, birthmarks, vitiligo, melanism, albinism, etc.
         # pawfeet, tail, wing, hairstreaks, grubscars, ?
-        "powers": "powers",  # psychic, voodoo, eldritch, none.  specify type later.  Make psychics eyes glow colors?
+        "donator1": donator1,   # higher caste donator
+        "donator2": donator2,   # lower caste donator
+        "seadesc": describesea(blood, sea),
         "hornLdesc": strhornl,
         "hornRdesc": strhornr,
         "hornsdesc": strhorns,
-        "height": slurry.spectrumheight[blood],                     # height in inches
-        "heightstr":  heightstr(slurry.spectrumheight[blood]),  # human-readable
-        "build": "medium",   # more detailed data later
-        "hair": "short",     # more detailed data later.  medium/long.
-        "skin": "grey",      # freckles, stripes, birthmarks, vitiligo, melanism, albinism, etc.
-        "donator1": "?.?",   # higher caste donator
-        "donator2": "?.?",   # lower caste donator
     }
     return t0
 
@@ -330,9 +427,9 @@ class Horns:
         return
 
     def update(self):
-        self.code = str(self.blood) + str(self.controls) + "." + str(
-            self.hornleft1) + "." + str(self.hornleft2) + "." + str(self.hornleft3) + "." + str(
-            self.hornright1) + "." + str(self.hornright2) + "." + str(self.hornright3)
+        self.code = str(self.blood) + str(self.controls) + str(
+            self.hornleft1) + str(self.hornleft2) + str(self.hornleft3) + str(
+            self.hornright1) + str(self.hornright2) + str(self.hornright3)
         return self.code
 
     def desc(self):
@@ -576,9 +673,9 @@ def aquaticcode(code):
 def horncode(code):
     # Produces the individual stats from the code, on a per-horn basis
     c = 0
-    curl = code[c]
-    c = c + 1
     length = code[c]
+    c = c + 1
+    curl = code[c]
     c = c + 1
     radial = code[c]
     c = c + 1
@@ -598,22 +695,16 @@ def codehorns(code):
     c = c + 3
     controls = code[c:c+10]
     c = c + 10
-    c = c + 1  # Because there's a "."
     hornleft1 = code[c:c+6]
     c = c + 6
-    c = c + 1  # Because there's a "."
     hornleft2 = code[c:c+6]
     c = c + 6
-    c = c + 1  # Because there's a "."
     hornleft3 = code[c:c+6]
     c = c + 6
-    c = c + 1  # Because there's a "."
     hornright1 = code[c:c+6]
     c = c + 6
-    c = c + 1  # Because there's a "."
     hornright2 = code[c:c+6]
     c = c + 6
-    c = c + 1  # Because there's a "."
     hornright3 = code[c:c+6]
     c = c + 6
 
@@ -916,40 +1007,238 @@ def blendtroll(trolla, trollb, trollblank=""):  # trolldeets
     return t1
 
 
-def randhorns(inblood="Rg"):
-    inblood = inblood[0:2]
-    basehorn = slurry.spectrumgenehorn[inblood]
-    horn1 = genecombine(basehorn, slurry.spectrumgenehorn[neighborcaste(inblood, "-", 1)])
-    horn2 = genecombine(horn1, slurry.spectrumgenehorn[neighborcaste(inblood, "+", 1)])
-    randomhornset = ""
-    a = random.randint(0, 20)
+def muttroll(spectrum=slurry.spectrumfull):
+    # Record Donators
+    strdonator1 = "A.Mutant"
+    strdonator2 = "B.Mutant"
+    # Blood + Caste:
+    a = 0
+    strblood = "rrx"
+    while a == 0:
+        strblood = premadeblood()
+        for arb in spectrum:
+            if arb == strblood:
+                a = a + 1
+    strcaste = getcastefromblood(strblood)
+
+    # height
+    a = random.randint(85, 115)
+    a = a / 100
+    a = a * slurry.spectrumheight[strblood[0:2]]
+    a = round(a)
+    b = random.randint(1, 24)
+    if b%2 == 1:
+        a = a + b
+    if b%2 != 1:
+        a = a - b
+    strheight = a
+
+    # The sea-activating gene CAN be anything.
+    a = random.randint(0, 12)
+    strsea = slurry.spectrumgenesea[strblood[0:2]]
     if a == 1:
-        randomhornset = slurry.spectrumgenehorn["m1"]
+        strsea = slurry.spectrumgenesea["m1"]
     if a == 2:
-        randomhornset = slurry.spectrumgenehorn["m2"]
+        strsea = slurry.spectrumgenesea["m2"]
     if a == 3:
-        randomhornset = slurry.spectrumgenehorn["m3"]
+        strsea = slurry.spectrumgenesea["m3"]
     if a == 4:
-        randomhornset = slurry.spectrumgenehorn["m4"]
+        strsea = slurry.spectrumgenesea["m4"]
     if a == 5:
-        randomhornset = slurry.spectrumgenehorn["m5"]
+        strsea = slurry.spectrumgenesea["m5"]
     if a == 6:
-        randomhornset = slurry.spectrumgenehorn["m6"]
+        strsea = slurry.spectrumgenesea["m6"]
     if a == 7:
-        randomhornset = slurry.spectrumgenehorn["m7"]
+        strsea = slurry.spectrumgenesea["m7"]
     if a == 8:
-        randomhornset = slurry.spectrumgenehorn["m8"]
+        strsea = slurry.spectrumgenesea["m8"]
     if a == 9:
-        randomhornset = slurry.spectrumgenehorn["m9"]
-    if randomhornset == "":
-        randblood = premadeblood()
-        randomhornset = slurry.spectrumgenehorn[randblood[0:2]]
-    horn3 = genecombine(horn2, randomhornset, 15, 2)
-    horn4 = genecombine(horn3, slurry.spectrumgenehorn[inblood], 5, 2)
-    outhorn = inblood
-    while len(outhorn) < 3:
-        outhorn = outhorn + "x"
-    outhorn = outhorn + horn4[3:len(horn4)]
+        strsea = slurry.spectrumgenesea["m9"]
+    if a == 10 or a == 11:
+        bloodtemp = premadeblood()
+        strsea = slurry.spectrumgenesea[bloodtemp[0:2]]
+    gene1 = Aquatic(strblood, strsea)
+    strseadesc = gene1.desc()
+
+    bloodtemp = premadeblood()
+    strmouthgene = slurry.spectrumgenemouth[strblood[0:2]]
+    a = 0
+    while a < 5:
+        b = random.randint(0, 8)
+        gene2 = slurry.spectrumgenemouth[strblood[0:2]]
+        if b == 2:
+            gene2 = slurry.spectrumgenemouth["high"]
+        if b == 3:
+            gene2 = slurry.spectrumgenemouth["low"]
+        if b == 4:
+            gene2 = slurry.spectrumgenemouth["m1"]
+        if b == 5:
+            gene2 = slurry.spectrumgenemouth["m2"]
+        if b > 5:
+            gene2 = slurry.spectrumgenemouth[bloodtemp[0:2]]
+        strmouthgene = genecombine(strmouthgene, gene2, 5, 2)
+        a = a + 1
+    strmouthgene = mouthaverager(strmouthgene)
+
+    tempblood = premadeblood()
+    strbuild = slurry.spectrumbuildtemp[tempblood[0:2]]
+
+    tempblood = premadeblood()
+    strhair = slurry.spectrumhairtemp[tempblood[0:2]]
+
+    tempblood = premadeblood()
+    strskin = slurry.spectrumskintemp[tempblood[0:2]]
+
+    # traits come later.
+
+    # sex
+    strsex = getsex(strblood)
+
+    # Make Horns.
+    gene1 = slurry.spectrumgenehorn[strblood[0:2]]
+    a = 2
+    while a < 5:
+        bloodtemp = premadeblood()
+        b = random.randint(0, 12)
+        gene2 = slurry.spectrumgenehorn[strblood[0:2]]
+        if b == 1:
+            gene2 = slurry.spectrumgenehorn["m1"]
+        if b == 2:
+            gene2 = slurry.spectrumgenehorn["m2"]
+        if b == 3:
+            gene2 = slurry.spectrumgenehorn["m3"]
+        if b == 4:
+            gene2 = slurry.spectrumgenehorn["m4"]
+        if b == 5:
+            gene2 = slurry.spectrumgenehorn["m5"]
+        if b == 6:
+            gene2 = slurry.spectrumgenehorn["m6"]
+        if b == 7:
+            gene2 = slurry.spectrumgenehorn["m7"]
+        if b == 8:
+            gene2 = slurry.spectrumgenehorn["m8"]
+        if b == 9:
+            gene2 = slurry.spectrumgenehorn["m9"]
+        if b > 9:
+            gene2 = slurry.spectrumgenehorn[bloodtemp[0:2]]
+        gene1 = genecombine(gene1, gene2, 5, 2)
+        a = a + 1
+    gene3 = randhorns("mutant")
+    gene1 = genecombine(gene1, gene3, 2, 2)
+    hornsfinal = hornsetaverager(gene1)
+    strhornsdesc, strhornl, strhornr = describehorns2(hornsfinal)
+
+    # names
+    firstname = names.newname()
+    lastname = "Mutant"
+
+    t1 = trolldict()
+    t1["firname"] = firstname
+    t1["surname"] = lastname
+    t1["sex"] = strsex
+    t1["blood"] = strblood
+    t1["caste"] = strcaste
+    t1["seadesc"] = strseadesc
+    t1["horns"] = hornsfinal
+    t1["hornLdesc"] = strhornl
+    t1["hornRdesc"] = strhornr
+    t1["hornsdesc"] = strhornsdesc
+    t1["sea"] = strsea
+    t1["mouth"] = strmouthgene
+    t1["powers"] = slurry.spectrumpowerstemp[strblood[0:2]]
+    t1["height"] = strheight
+    t1["build"] = strbuild
+    t1["hair"] = strhair
+    t1["skin"] = strskin
+    t1["donator1"] = strdonator1
+    t1["donator2"] = strdonator2
+    return t1
+
+
+def randhorns(inblood="Rg"):
+    outhorn = ""
+    if inblood != "mutant":
+        inblood = inblood[0:2]
+        basehorn = slurry.spectrumgenehorn[inblood]
+        horn1 = genecombine(basehorn, slurry.spectrumgenehorn[neighborcaste(inblood, "-", 1)])
+        horn2 = genecombine(horn1, slurry.spectrumgenehorn[neighborcaste(inblood, "+", 1)])
+        randomhornset = ""
+        a = random.randint(0, 20)
+        if a == 1:
+            randomhornset = slurry.spectrumgenehorn["m1"]
+        if a == 2:
+            randomhornset = slurry.spectrumgenehorn["m2"]
+        if a == 3:
+            randomhornset = slurry.spectrumgenehorn["m3"]
+        if a == 4:
+            randomhornset = slurry.spectrumgenehorn["m4"]
+        if a == 5:
+            randomhornset = slurry.spectrumgenehorn["m5"]
+        if a == 6:
+            randomhornset = slurry.spectrumgenehorn["m6"]
+        if a == 7:
+            randomhornset = slurry.spectrumgenehorn["m7"]
+        if a == 8:
+            randomhornset = slurry.spectrumgenehorn["m8"]
+        if a == 9:
+            randomhornset = slurry.spectrumgenehorn["m9"]
+        if randomhornset == "":
+            randblood = premadeblood()
+            randomhornset = slurry.spectrumgenehorn[randblood[0:2]]
+        horn3 = genecombine(horn2, randomhornset, 15, 2)
+        horn4 = genecombine(horn3, slurry.spectrumgenehorn[inblood], 5, 2)
+        outhorn = inblood
+        while len(outhorn) < 3:
+            outhorn = outhorn + "x"
+        outhorn = outhorn + horn4[3:len(horn4)]
+    if inblood == "mutant":
+        outhorn = "xxx"
+        # Hornselect
+        a = 0
+        while a < 2:
+            b = random.randint(0, 8)
+            c = ["T", "D", "d", "1", "2", "3", "X", "x", "d"]
+            outhorn = outhorn + c[b]
+            a = a + 1
+        # Stunting
+        a = 0
+        while a < 2:
+            b = random.randint(0, 21)
+            c = ["A", "a", "C", "c", "D", "d", "E", "e", "F", "f",
+                 "G", "g", "S", "s", "B", "b", "W", "w", "N", "n", "A", "A"]
+            outhorn = outhorn + c[b]
+            a = a + 1
+        # Horn Type
+        a = 0
+        while a < 2:
+            b = random.randint(0, 11)
+            c = ["K", "k", "E", "e", "A", "a", "P", "p", "B", "b", "P", "B"]
+            outhorn = outhorn + c[b]
+            a = a + 1
+        # Angularity
+        b = random.randint(0, 3)
+        c = ["A", "B", "S", "S"]
+        outhorn = outhorn + c[b]
+        # noclip
+        b = random.randint(0, 9)
+        c = ["C", "E", "J", "L", "N", "S", "U", "X", "X", "X"]
+        outhorn = outhorn + c[b]
+        # Mounting
+        b = random.randint(0, 7)
+        c = ["S", "B", "U", "M", "T", "t", "N", "n"]
+        outhorn = outhorn + c[b]
+        # Gaps
+        b = random.randint(0, 9)
+        c = ["O", "o", "N", "n", "H", "h", "X", "x", "x", "x"]
+        outhorn = outhorn + c[b]
+
+        outhorn = outhorn + randhorn()
+        outhorn = outhorn + randhorn()
+        outhorn = outhorn + randhorn()
+        outhorn = outhorn + randhorn()
+        outhorn = outhorn + randhorn()
+        outhorn = outhorn + randhorn()
+
     return outhorn
 
 
@@ -960,40 +1249,42 @@ def randhorn(inhorn=""):
         # length in handspans
         x = random.randint(1, 4)
         horn = str(x)
-        # curliness (straight, 45 degree, 90 degree, 180, 270, 360, ampora.)
-        x = random.randint(1, 7)
+        # curliness (straight, 45 degree, 90 degree, S-curve, 180, 270, 360, 360+.)
+        x = random.randint(1, 8)
         horn = horn + str(x)
-        # Cross-section shape.  R = round, O = oval, T = triangular/edged, S = spiral/twisted like goat.
-        x = random.randint(1, 6)
-        if x == 1:
-            horn = horn + "S"
-        if x == 2:
-            horn = horn + "T"
-        if x == 3:
-            horn = horn + "O"
-        if x > 3:
-            horn = horn + "R"
-        # Primary growth direction.  F = forward, B = back, O = outward/side, I = inwards/up/default.
+        # Cross-section shape.
         x = random.randint(1, 7)
+        if x == 1:
+            horn = horn + "S"  # Spiral/twisted
+        if x == 2:
+            horn = horn + "T"  # Triangular
+        if x == 3:
+            horn = horn + "O"  # Oval
+        if x == 4:
+            horn = horn + "C"  # Curl
+        if x == 5:
+            horn = horn + "I"  # Irregular
+        if x > 5:
+            horn = horn + "R"  # Round
+        # Primary growth direction.  F = forward, B = back, O = outward/side, I = inwards/up/default.
+        x = random.randint(1, 5)
         if x == 1:
             horn = horn + "F"
         if x == 2:
             horn = horn + "B"
         if x == 3:
             horn = horn + "O"
-        if x == 4:
-            horn = horn + "S"
-        if x > 4:
+        if x > 3:
             horn = horn + "I"
         # Width.  w = nepetalike, n = normal.
-        x = random.randint(1, 15)
+        x = random.randint(1, 4)
         if x == 1:
             horn = horn + "w"
         if x > 1:
             horn = horn + "n"
         # Point shape
         # change xmax to match
-        x = random.randint(1, 15)
+        x = random.randint(1, 13)
         if x == 1:
             horn = horn + "B"  # bump
         if x == 2:
@@ -1007,18 +1298,16 @@ def randhorn(inhorn=""):
         if x == 6:
             horn = horn + "J"  # jagged
         if x == 7:
-            horn = horn + "P"  # point
-        if x == 8:
-            horn = horn + "P"  # point
-        if x == 9:
             horn = horn + "p"  # pincher
-        if x == 10:
+        if x == 8:
             horn = horn + "R"  # round
-        if x == 11:
+        if x == 9:
             horn = horn + "S"  # split
-        if x == 12:
+        if x == 10:
             horn = horn + "s"  # spade
-        if x > 12:
+        if x == 11:
+            horn = horn + "L"  # bolt
+        if x > 11:
             horn = horn + "P"  # point
     return horn
 
@@ -1093,7 +1382,7 @@ def hornsetaverager(horned):
     outhorn = strblood
     while len(outhorn) < 3:
         outhorn = outhorn + "x"
-    hornsfinal = outhorn + horns.code[3:13] + "." + hornleft1 + "." + hornleft2 + "." + hornleft3 + "." + hornright1 + "." + hornright2 + "." + hornright3
+    hornsfinal = outhorn + horns.code[3:13] + hornleft1 + hornleft2 + hornleft3 + hornright1 + hornright2 + hornright3
     return hornsfinal
 
 
@@ -1354,7 +1643,8 @@ def heightstr(h):
     h = int(h)
     feet = h // 12
     inches = h % 12
-    hstr = str(feet) + "'" + str(inches) + '"'
+    hstr = str(feet) + "'" + str(inches)
+    hstr = hstr + '"'
     return hstr
 
 
@@ -1764,12 +2054,6 @@ def describehorns2(inhorn=slurry.spectrumgenehorn["Rg"]):
             hornright3 = "1" + hornright3[1:len(hornright3)]
             temp = "+ a " + describehorn(hornright3)
             right = fbs.lyst(right, temp)
-
-    if me.mountpt == "U" or me.mountpt == "M":
-        if left != "" and left != "none":
-            left = fbs.lyst("centered", left)
-        if right != "" and right != "none":
-            right = fbs.lyst("centered", left)
 
     return descr, left, right
 

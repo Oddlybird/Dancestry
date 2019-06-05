@@ -88,8 +88,8 @@ def thewholetooth(moufstr):
     return jawtop, jawbot
 
 
-def jawprint(mouf):
-    offscreen = pygame.Surface((85, 21))
+def jawprint(mouf, closed=False):
+    offscreen = pygame.Surface((85, 20))
     offscreen.fill((128, 128, 128))
     # Showing Teeth
     jawmain = jawprintgraphics(mouf, False)
@@ -106,6 +106,29 @@ def jawprint(mouf):
     offscreen.blit(jawtemp1, (0, 0))
     offscreen.blit(jawtemp1, (0, 0), None, pygame.BLEND_ADD)
     # If dissatisfied, change jawmain alpha to 96 and remove the Blend Flag statements.
+
+    if closed:
+        # Assemble Variables
+        mouth = gene.Mouth(mouf)
+        maxlength = int(mouth.lipl)
+        maxwidth = int(mouth.lipw) * 7
+        middle = 42  # 85//2 round down
+        # Make temporary screen
+        offscreen2 = pygame.Surface((85, 20))
+        offscreen2.fill((0, 0, 0))
+        offscreen2.set_colorkey((0, 0, 0))
+        # Clip toothtips out of main jaw img
+        toptoofers = offscreen.subsurface(pygame.Rect(middle - maxwidth, maxlength, 2*maxwidth, 9-maxlength))
+        bottoofers = offscreen.subsurface(pygame.Rect(middle - maxwidth, 10, 2*maxwidth, 9-maxlength))
+        # Put them onto temporary screen
+        offscreen2.blit(toptoofers, (middle - maxwidth, 11))
+        offscreen2.blit(bottoofers, (middle - maxwidth, 1+maxlength))
+        # Fill original image with blank color and some transparency
+        offscreen.fill((0, 255, 255))
+        offscreen.blit(offscreen2, (0, 0))
+        offscreen.set_colorkey((0, 255, 255))
+        # Draw black line across middle to show the lip
+        pygame.draw.line(offscreen, (0, 0, 0), (middle - maxwidth - 3, 10), (middle + maxwidth + 3, 10), 1)
     return offscreen
 
 
@@ -114,7 +137,7 @@ def jawprintgraphics(mouf, whole=False):
     if whole:
         jawt, jawb = thewholetooth(mouf)
     x = 0
-    offscreen = pygame.Surface((85, 21))
+    offscreen = pygame.Surface((85, 20))
     offscreen.fill((0, 0, 0))
     toof = pygame.Surface((6, 10))
     toof.fill((0, 0, 0))
@@ -122,9 +145,10 @@ def jawprintgraphics(mouf, whole=False):
     while (here+3) <= len(jawt):
         imgloc = str(jawt[here:here + 3]) + ".PNG"
         toof, toofrect = fbs.load_png(imgloc, "teef")
+        toof = toof.subsurface(pygame.Rect(0, 1, 6, 9))
         if 2*here >= len(jawt):
             toof = pygame.transform.flip(toof, 1, 0)
-        place = ((7*x)+1, 0)
+        place = ((7*x)+1, 1)
         offscreen.blit(toof, place)
         x = x + 1
         here = 3 * x
@@ -134,6 +158,7 @@ def jawprintgraphics(mouf, whole=False):
         imgloc = str(jawb[here:here + 3]) + ".PNG"
         toof, toofrect = fbs.load_png(imgloc, "teef")
         toof = pygame.transform.flip(toof, 1, 0)  # Flip just the lower jaw.  Remove?
+        toof = toof.subsurface(pygame.Rect(0, 1, 6, 9))
         if (2*here) >= len(jawt):
             toof = pygame.transform.flip(toof, 1, 0)
         toof = pygame.transform.flip(toof, 0, 1)
@@ -178,6 +203,7 @@ def hornsprint(inhorns):
     hornleft1 = ""
     hornleft2 = ""
     hornleft3 = ""
+    descr = ""
     drh1 = False  # Describe Horn Right 1
     drh2 = False  # Describe Horn Right 2
     drh3 = False
@@ -239,7 +265,7 @@ def hornsprint(inhorns):
         hornright1 = me.hornright1
         hornright2 = "none"
         hornright3 = "none"
-    if me.select == "Td":
+    if me.select == "dT":
         numhorns = 4
         dlh1 = True
         hornleft1 = me.hornleft1
@@ -353,6 +379,7 @@ def hornsprint(inhorns):
         hornright1 = "none"
         hornright2 = "none"
         hornright3 = "none"
+        descr = "no horns"
     if numhorns == 22:  # If the troll has the default number of horns
         dlh1 = True
         drh1 = True
@@ -374,11 +401,34 @@ def hornsprint(inhorns):
         hornright1 = me.hornright3
     # hornright1, hornright2, hornleft1, hornleft2, and numhorns know what we're describing.
 
+    # horn length adjustments:
+    if dlh2:
+        hornleft2 = shornten(hornleft2, 1)
+        if hornleft1[0] == "4":
+            hornleft2 = shornten(hornleft2, 3)
+        if hornleft1[0] == "3":
+            hornleft2 = shornten(hornleft2, 2)
+    if dlh3:
+        hornleft3 = shornten(hornleft3, 1)
+        if hornleft2[0] == "3":
+            hornleft3 = shornten(hornleft3, 2)
+    if drh2:
+        hornright2 = shornten(hornright2, 1)
+        if hornright1[0] == "4":
+            hornright2 = shornten(hornright2, 3)
+        if hornright1[0] == "3":
+            hornright2 = shornten(hornright2, 2)
+    if drh3:
+        hornright3 = shornten(hornright3, 1)
+        if hornright2[0] == "3":
+            hornright3 = shornten(hornright3, 2)
+
     iconw = 33
-    background = pygame.Surface(((iconw*6), (iconw * 4)))
+    background = pygame.Surface(((iconw*6+5), (iconw * 4)))
     background.fill((0, 255, 255))
     background.set_colorkey((0, 255, 255))
     pos = 3*iconw
+
     if dlh3:
         img = hornprint(hornleft3, me.controls)
         img = pygame.transform.flip(img, 1, 0)
@@ -393,15 +443,63 @@ def hornsprint(inhorns):
         background.blit(img, (pos-iconw, 0))
     if drh1:
         img = hornprint(hornright1, me.controls)
-        background.blit(img, (pos, 0))
+        background.blit(img, (pos+5, 0))
     if drh2:
         img = hornprint(hornright2, me.controls)
-        background.blit(img, (pos+(1*iconw), 0))
+        background.blit(img, (pos+5+(1*iconw), 0))
     if drh3:
         img = hornprint(hornright3, me.controls)
-        background.blit(img, (pos+(2*iconw), 0))
+        background.blit(img, (pos+5+(2*iconw), 0))
 
-    return background
+    # Horn type
+    ht = ""
+    if me.horntype[0] == "K" or me.horntype[1] == "K":
+        ht = ht + "/Keratin"
+    if me.horntype[0] == "E" or me.horntype[1] == "E":
+        ht = ht + "/Electrosensory"
+    if me.horntype[0] == "A" or me.horntype[1] == "A":
+        ht = ht + "/Antler"
+    if me.horntype[0] == "P" or me.horntype[1] == "P":
+        ht = ht + "/Power"
+    if me.horntype[0] == "B" or me.horntype[1] == "B":
+        ht = ht + "/Balance"
+    if ht != "":
+        descr = fbs.lyst(descr, ht[1:len(ht)])
+
+        # Self-impact test.
+        if me.noclip == "X":
+            descr = fbs.lyst(descr, "Potentially clipping")
+    #    To be in danger, must have X gene, * and *horns shaped in a way that can impact.
+    #    - spiraling: treat curl as 1 greater than it actually is.
+    #    - All Curl > 5
+    #    - Inward,with curl > 2 and length > 1.
+    #    - Outward, curl > 180 degrees, length > 2
+    #    - Back direction, curl > 1, length > 1.
+    #    - side + wide = ear deformity
+    #    - front + wide = forehead deformity
+    #    - Side + in = mild skull deformities.
+
+    # Gaps
+    if me.gaps == "N":
+        descr = fbs.lyst(descr, "a notch")
+    if me.gaps == "n":
+        descr = fbs.lyst(descr, "small notches")
+    if me.gaps == "H":
+        descr = fbs.lyst(descr, "a hole")
+    if me.gaps == "h":
+        descr = fbs.lyst(descr, "small holes")
+
+    if me.mountpt == "U" or me.mountpt == "M":
+        if dlh1 or drh1:
+            descr = fbs.lyst("centered", descr)
+
+    return background, descr
+
+
+def shornten(inhorn, length=1):
+    leng = str(length)
+    inhorn2 = leng + inhorn[1:len(inhorn)]
+    return inhorn2
 
 
 def hornarch(inhorn, angle):
@@ -510,7 +608,7 @@ def horntip(tip):
 
     # Rows
     y = 0
-    if tip == "?" or tip == "?" or tip == "?":
+    if tip == "p" or tip == "?" or tip == "?":
         # List of tips on row 1.
         y = 1
     if tip == "?" or tip == "?" or tip == "?":
@@ -519,7 +617,7 @@ def horntip(tip):
 
     # Rows
     x = 0
-    if tip == "P" or tip == "P":
+    if tip == "P" or tip == "p":
         # row 1
         x = 0
     if tip == "B" or tip == "B":

@@ -196,7 +196,15 @@ spectrumgenesea = {
     "RB": "SSSSSBbCCeeWwWwffBbSbFGGiGGiggiTTdEEAAAA",  # Violet
     "Rb": "SSSSSBbCCeeWwWWFfBBSBFGGiGGiGgitTdEEaAaA",
     "rb": "SSSSSBbCCeeWwWwffBBSbfGGiGGiggiTTdEEAAAA",  # Tyrian
-    "m1": "SSSSSBbCCeeWwWwffBBSbfGGiGGiggiTTdEEaaaa",  # Deepdweller
+    "m1": "SSSSSBBCCeeWWWWFFBBSbfGGeGGeGGeTTDEeaaaa",  # Deepdweller
+    "m2": "sssssBbCcEeWwWwffbbsbFGGiGGiggittdEEAAAA",  # Recessive Riverdweller
+    "m3": "SSssSbbccEEwwWwffbbSBFggiggiGGittdEeAAAA",  # Hidden Amphibian
+    "m4": "SSSSSbbccEEwwwwffbbsbfggiggiggittdeeAAAA",  # Land-dweller, technically
+    "m5": "sssssBbCCeeWwWwffBbSbFGGiGGiggiTTdEEAAAA",  # Seadweller, technically
+    "m6": "SssssbbccEEwwWwffbbsbfggiggiggittdeeAAAA",  # Webbed Toes
+    "m7": "ssSssBbccEEwwwwffbbsbfggiggiggittdeeAAAA",  # Swimbladder
+    "m8": "ssssSbbccEEwwwwFFbbsbfggiggiggittdeeAAAA",  # Body Fins
+    "m9": "Sssssbbcceewwwwffbbsbfggiggiggittdeeaaaa",  # No ears/fins, can't breathe.
     }
 
 spectrumgenemouth = {
@@ -224,43 +232,45 @@ spectrumgenemouth = {
     "low": "64ddTTTTTT444444CCCPGGTTTTTT444444CCCPGGTTTTTT444444CCCCGGTTTTTT444444CCPPGG",
     "high": "64ddTTTTTT445444PPPPPPTTTTTT445444PPPPPPTTTTTT444544PPPPGGTTTTTT444544PPPPGG",
     "mut": "46DdFFFFFF272727PPPPPPFFFFFF727272PPPPPPFFFFFF272729PPPPPPFFFFFF727272PPPPPP",
-    "m2": "64dDFFFFFF272727PPPPPPFFFFFF727272PPPPPPFFFFFF272729PPPPPPFFFFFF727272PPPPPP",
+    "m1": "46DdFFFFFF272727PPPPPPFFFFFF727272PPPPPPFFFFFF272727PPPPPPFFFFFF727272PPPPPP",
+    "m2": "64dDFFFFFF727272PPPPPPFFFFFF272727PPPPPPFFFFFF727272PPPPPPFFFFFF272727PPPPPP",
+
     # Add more mutant mouth types
 }
 
 spectrumgenehorn = {
-    # "xx": "xxxDDNNTTaxmh.22RInS.22RInP.33RSnP.22RInS.33RSnP.22RInP",# format
-    "RR": "RRx11AAPBSCTX.26RBnP.26RBnB.26RBwJ.26RBnP.26RBnR.26RBwb",  # Maroon
-    "Rr": "Rrx31aaPBBESO.25RSnR.24ISnR.24RSnR.25RSnR.25RSnR.24ISnB",  #
-    "rr": "rrx11AAPBSJSX.33RSnP.43RSnP.43RSnP.33RSnP.43RSnP.43RSnP",  # Bronze
-    "rG": "rGxd2aaPBAESo.22RInS.22RInS.24IInS.22RInS.22RInS.24IInb",  #
-    "RG": "RGxDDCCPBAJTx.22RInP.22RInS.22RSwH.22RInP.22RInH.22RIwS",  # Gold
-    "Rg": "Rgx2dccPBACTn.12RSnH.12CSnH.12RSnH.12RSnH.12RSnH.12RSnH",  #
-    "rg": "rgx11ccPBSLTX.11RInP.11RInP.11CInP.11RInP.14CInP.11CInL",  # Lime
-    "GG": "GGx11DDPBSETX.12OSwb.12CSwP.12OSwS.14OSwS.12CSwb.12OSwL",  # Olive
-    "Gg": "Ggx1dddPBBEtx.12RInP.12CInL.12CInP.12RInP.12CInL.14CInS",  #
-    "gg": "ggx11EEPBSCTX.22RInH.24RInJ.22RInH.22RInP.22RInP.22RInP",  # Jade
-    "Gb": "Gbxd2ddPBBJth.21RInF.21RInF.24RInF.21RInF.21RInF.21RInF",  #
-    "GB": "GBx11DDPBSJTX.11RSnP.11TSnH.11RSnF.11RSnR.11TSnP.11RSnH",  # Teal
-    "gB": "gBx3dddPBBJnn.21RInH.21TInH.21RInH.21RInH.21TInH.21RIns",  #
-    "gb": "gbx11eePBSCTN.22RInp.24RInP.22RInP.22RInH.22RInb.24RInp",  # Ceru
-    "BB": "BBx11FfPBSLTx.21RInC.21RInF.24RInH.24RInC.21RInF.21RInH",  # Bloo
-    "Bb": "Bbxd3fFPBBEno.21RInH.21RInH.21RInH.21RInH.24RInH.21RInH",  #
-    "bb": "bbx11FFPBSNNX.38SInP.38TInP.38SInP.38SInP.38TInP.38SInP",  # Indigo
-    "rB": "rBx2dffPBBLnx.28RInP.28TInP.28RInP.28RInP.28TInP.28SIns",  #
-    "RB": "RBx11GGPBASNX.28RInP.28TInL.28RInP.28RInP.28TInP.28TInL",  # Violet
-    "Rb": "Rbx13ggPBBLno.25RInP.24RInL.24RIns.24RInP.24RInP.24RInL",  #
-    "rb": "rbx11GGPBSUNx.22ROnP.22ROnP.22ROnP.22ROnP.24ROnP.22ROnP",  # Tyrian
+    # "xx": "xxxDDNNTTaxmh22RInS22RInP33RSnP22RInS33RSnP22RInP",# format
+    "RR": "RRx11AAPBSCTX26RBnP26RBnB26RBwJ26RBnP26RBnR26RBwb",  # Maroon
+    "Rr": "Rrx31aaPBBESO25RSnR24ISnR24RSnR25RSnR25RSnR24ISnB",  #
+    "rr": "rrx11AAPBSJSX33RSnP43RSnP43RSnP33RSnP43RSnP43RSnP",  # Bronze
+    "rG": "rGxd2aaPBAESo22RInS22RInS24IInS22RInS22RInS24IInb",  #
+    "RG": "RGxDDCCPBAJTx22RInP22RInS22RSwH22RInP22RInH22RIwS",  # Gold
+    "Rg": "Rgx2dccPBACTn12RSnH12CSnH12RSnH12RSnH12RSnH12RSnH",  #
+    "rg": "rgx11ccPBSLTX11RInP11RInP11CInP11RInP14CInP11CInL",  # Lime
+    "GG": "GGx11DDPBSETX12OSwb12CSwP12OSwS14OSwS12CSwb12OSwL",  # Olive
+    "Gg": "Ggx1dddPBBEtx12RInP12CInL12CInP12RInP12CInL14CInS",  #
+    "gg": "ggx11EEPBSCTX22RInH24RInJ22RInH22RInP22RInP22RInP",  # Jade
+    "Gb": "Gbxd2ddPBBJth21RInF21RInF24RInF21RInF21RInF21RInF",  #
+    "GB": "GBx11DDPBSJTX11RSnP11TSnH11RSnF11RSnR11TSnP11RSnH",  # Teal
+    "gB": "gBx3dddPBBJnn21RInH21TInH21RInH21RInH21TInH21RIns",  #
+    "gb": "gbx11eePBSCTN22RInp24RInP22RInP22RInH22RInb24RInp",  # Ceru
+    "BB": "BBx11FfPBSLTx22RInC21RInF24RInH22RInC21RInF24RInH",  # Bloo
+    "Bb": "Bbxd3fFPBBEno21RInH21RInH21RInH21RInH24RInH21RInH",  #
+    "bb": "bbx11FFPBSNNX38SInP38TInP38SInP38SInP38TInP38SInP",  # Indigo
+    "rB": "rBx2dffPBBLnx28RInP28TInP28RInP28RInP28TInP28SIns",  #
+    "RB": "RBx11GGPBASNX28RInP28TInL28RInP28RInP28TInP28TInL",  # Violet
+    "Rb": "Rbx13ggPBBLno25RInP24RInL24RIns24RInP24RInP24RInL",  #
+    "rb": "rbx11GGPBSUNx22ROnP22ROnP22ROnP22ROnP24ROnP22ROnP",  # Tyrian
     #
-    "m1": "rgxXXSspbAXSN.11CFnB.21COwB.31CBwb.41IFnb.11IOwb.24IFwB",  # mutant1
-    "m2": "rgxXDsSbpAXBn.22OBnb.32OFwb.42OOwF.12OBnF.22OFwb.32OBwb",  # mutant2
-    "m3": "rgxDXBbKkBXUN.33OOnC.43OBwC.13IFwH.23OOnH.33OBwF.43OOwF",  # mutant3
-    "m4": "rgxXxbBkKBXMH.44OFnF.14OOwF.24OBwJ.34OFnJ.44OOwH.14OFwH",  # mutant4
-    "m5": "rgxxXWwEeBXSh.16TBnH.26TFwH.35TOwp.45TBnp.15TFwJ.25TBwJ",  # mutant5
-    "m6": "rgx22wWeEAXBH.27TOnJ.37TBwJ.46TFwR.16TOnR.26TBwp.36TOwp",  # mutant6
-    "m7": "rgx33NnAaAXSO.38TFnp.48TOwp.18TBwS.27TFnS.37TOwR.47TFwR",  # mutant7
-    "m8": "rgxTTnNaABXBo.41SBnS.11SFwR.28SOws.38SBnJ.41SFwS.11SBwS",  # mutant8
-    "m9": "rgxTTWWEPBXBh.13SOns.23SBwS.33SFws.43SOns.13SBws.23SOws",  # mutant9
+    "m1": "rgxXXSspbAXSN11CFnB21COwB31CBwb41IFnb11IOwb24IFwB",  # mutant1
+    "m2": "rgxXDsSbpAXBn22OBnb32OFwb42OOwF12OBnF22OFwb32OBwb",  # mutant2
+    "m3": "rgxDXBbKkBXUN33OOnC43OBwC13IFwH23OOnH33OBwF43OOwF",  # mutant3
+    "m4": "rgxXxbBkKBXMH44OFnF14OOwF24OBwJ34OFnJ44OOwH14OFwH",  # mutant4
+    "m5": "rgxxXWwEeBXSh16TBnH26TFwH35TOwp45TBnp15TFwJ25TBwJ",  # mutant5
+    "m6": "rgx22wWeEAXBH27TOnJ37TBwJ46TFwR16TOnR26TBwp36TOwp",  # mutant6
+    "m7": "rgx33NnAaAXSO38TFnp48TOwp18TBwS27TFnS37TOwR47TFwR",  # mutant7
+    "m8": "rgxTTnNaABXBo41SBnS11SFwR28SOws38SBnJ41SFwS11SBwS",  # mutant8
+    "m9": "rgxTTWWEPBXBh13SOns23SBwS33SFws43SOns13SBws23SOws",  # mutant9
 }
 
 spectrumgeneseasocial = {
