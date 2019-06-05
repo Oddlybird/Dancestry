@@ -7,6 +7,18 @@ Original version written in freebasic in late 2017.  Being adapted to Python in 
 Approximate version history:
 =
 
+V. 0.3.0: 2019-06-04
+
+-- Still need to implement horn mount location
+
+-- Bug-fixing
+
+-- Added closed mouth graphic
+
+-- began stat planning
+
+-- hornlengths of secondary horns max out at 1 less than next most important horn
+
 V. 0.2.9b: 2019-06-04
 
 -- Replaced horndescribe with graphical icons.
