@@ -13,10 +13,16 @@ import slurry
 # -- Objects and Genes contain a "code" text string, summarizing all other contents
 # -- Objects and Genes have an init, where they can be fed a code, which will populate it with data
 
-# Need a horn genestrand class that contains 4-6 horn objects
-# Need to add horn headcanons to genestrand: keratin, sensory horns,
-# Doubled-horn gene primarily activates in trolls with rG, RG, or Rg blood.
-# Possibly only when there are recessive seadweller genes and active psychic ones?
+# genestrand: gender dimorphism, XY, build / body shape
+# -- pearshaped, thin rectangle, hourglass, apple, dorito, ...
+# -- seadwellers have slightly more fat, lowbloods often skinny
+# -- presence/absence of chesticles, bias gender determination with this but not completely
+# -- combine height into this
+# -- hip, butt, shoulders, chest, waist.
+# -- don't bother with X/Y genes.
+# -- gender-biased height and musculature
+# -- caste-biased height and musculature
+# -- gender/caste biased fat stores
 
 # genestrand: epigenetics.  Contains blood + copies of epigenetic genes
 # genestrand: psychic, eldritch, voodoo, etc
@@ -25,13 +31,15 @@ import slurry
 # genestrand: wings
 # genestrand: tail
 # genestrand: organ systems, internal differences based on headcanons, genetic diseased/syndromes/mutations
+#           - Vantas color mutation, 3 letters long.  "X" sets that 1 color to 0, another sets a color to 255.
 # genestrand: hands/fingers, toes/feet
 # genestrand: discolorations (hair, skin, blood, hello karkat)
-# genestrand: gender dimorphism, XY, build / body shape
 # genestrand: physical / mental stats, that effect traits / interests.
 #             match trolls to occupations/interests similar to dwarf therapist
 # genestrand: skin issues, scales/fur/feather patches, weird hair textures, strange claws
 # ----------: misc other mutations?
+# genestrand: face structure, eye hollowness/bug-eyed, chin, nose, eyebrows, eyelashes
+
 
 
 # Make a troll class instead?
@@ -202,42 +210,65 @@ def getpremadetroll(x=9001):
 # Incomplete
 class EyeObj:
     code = ""           #
-    active = "AA"       # eye present or unexpressed?
-    multipupil = "PP"   # multiple pupils Y/N?  PP = Y, all else = no.
-    colors = "CC"       # solid color eye?  CC = Y, all else = no.
-    glow = "GG"         # eye glow?   Leave this piece unused for now.  Replace at will.
-    sym = "Y"           # symmetry.  blend Y eyes together, N's together, Y's overwrite N's.
+    active = ""         # eye present or unexpressed?
+    shape = ""          # Almond-shaped, narrow slits, big wide round, boxy, ...
+    multipupil = ""     # multiple pupils Y/N?  PP = Y, all else = no.
+    onecol = ""         # solid color eye?  CC = Y, all else = no.
+    col = (0, 0, 0)     # the color of glow / solid for this eye
+    glow = ""           # eye glow?
+    sym = "T"           # symmetry.  blend Y eyes together, N's together, Y's overwrite N's.
     pupilnum = 1        # number of pupils in this eye
-    pupilshape = "RR"   # R = round.  Capital dominant, lowercase not dominant.
+    pupilshape = ""     # R = round.  Capital dominant, lowercase not dominant.
     # Octopus, goat, round, triangle, symbols, oval, slit pupil, diamond, star, ?
-    nearsighted = "nn"  # capital letters = yes
-    farsighted = "ff"   #
-    astigmatism = "aa"  #
-    blindness = "bb"    #
-    colorblind = "cc"   #
 
     def __init__(self, code):
         self.code = code
         # When activating eye objects, include code parsing data here
 
 
+# Incomplete
+class Eyes:
+    Eye1 = EyeObj  # left main, active
+    Eye2 = EyeObj  # right main, active
+    Eye3 = EyeObj  # inactive, left
+    Eye4 = EyeObj  # inactive, right
+    Eye5 = EyeObj  # inactive, center
+    focus = ""           # nearsight, farsight, astigmatism
+    colorsense = ""      # red/green colorblind, tetrachromaticism, infravision, ultraviolet, etc.
+    movevision = ""      # How well the vision tracks movement
+    lightvision = ""     # Daylight sight, vs. eye damage taken from daylight
+    darkvision = ""      # How well see in the dark?
+    polarityvision = ""  # Can you see polarization of light?
+    xfoldvision = ""     # Fancy bullshit vision senses
+    independence = ""    # Can each eye move independently? (cross-eyed, lazy eye, gecko eye)
+
+    # need a bio function for blending and producing these
+    # bio function: describe eyes
+
+    def __init__(self, code):
+        self.code = code
+        # When activating Eye genes, include code parsing data here
+
+
 class HornObj:  # trolldeets
     # Horns are stored in trolls as just the code part.  Use this class when manipulating.
-    # create a horn by going horn-variable = HornObj("21RIn.f point"), or horn-variable = HornObj(troll.hornL)
+    # create a horn by going horn-variable = HornObj("21RInf"), or horn-variable = HornObj(troll.hornL)
     code = "21RInP"
-    length = 2  # 1 = 0-1 handspans, 2 = 1-2 handspans, 3 = 2-3 handspans, 4 = 3+ handspans.
+    length = 2
+    # 1 = 0-1 handspans, 2 = 1-2 handspans, 3 = 2-3 handspans, 4 = 3+ handspans.
     curl = 1
-    # 1 = straight, 2 = up to 45 degrees, 3 = 90 degrees +/- 45, 4 = 180 +/- 45,
-    # 5 = 270 +/- 45, 6 = 360 +/-45, 7 = ampora wave-like curves
-    radial = "R"  # cross-section shape.  R = round, O = Oval, T = triangular, S = spiraling like a goat.
+    # 1 = straight, 2 = up to 45 degrees, 3 = 90 degrees +/- 45, 4 = S-curve
+    # 5 = 180 +/- 45, 6 = 270 +/- 45, 7 = 360 +/-45, 8 = ampora wave-like curves
+    radial = "R"  # cross-section shape.
+    # R = round, O = Oval, T = triangular, S = spiraling, C = C-shaped, I = Irregular
     dir = "I"
-    # primary growth direction.  F = frontwards, B = backwards, O = outwards (usually up), I = inwards (usually up).
-    wide = "n"  # n = normal width like terezi.  w = wide base, like nepeta.
-    tip = "P"  # shape of the point.  Point, Cone, Split/Pincher, Jagged, Round, hook, ...
-    # P, C, S, J, R, H
-    # Add :  HornObj bumps, doubled horns, notched and rounded-notched horns
-    # bolt-tipped
-    # branched / antler horns, sheet-like moose horns
+    # primary growth direction.  F = frontwards, B = backwards, O = outwards/down, I = inwards/up.
+    # Treat head like a compass.  Face = N, Back = S, Towards top-center of head = E, towards shoulders = W.
+    wide = "n"
+    # n = normal width like terezi.  w = wide base, like nepeta.
+    tip = "P"  # shape of the tip
+    # P(point), B(bump), b(branching), C(cone), F(flat), H(hook), J(jagged)
+    # R(round), S(split), s(spade), L(bolt),
 
     def __init__(self, code):
         t0 = horncode(code)
@@ -250,7 +281,6 @@ class HornObj:  # trolldeets
         self.code = self.update()
 
     def desc(self):
-        # convert the current features of the horn into a verbal description as in basic version.
         # use by going description-string = horn-temp.desc()
         descr = str(describehorn(self.code))
         return descr
@@ -259,22 +289,6 @@ class HornObj:  # trolldeets
         code = str(self.length) + str(self.curl) + str(self.radial) + str(
             self.dir) + str(self.wide) + str(self.tip)
         return code
-
-
-# Incomplete
-class Eyes:
-    Eye1 = EyeObj  # left main, active
-    Eye2 = EyeObj  # right main, active
-    Eye3 = EyeObj  # inactive, left
-    Eye4 = EyeObj  # inactive, right
-    Eye5 = EyeObj  # inactive, center
-    # need a bio function for blending and producing these
-    # bio function: describe eyes
-
-    def __init__(self, code):
-        self.code = code
-        # When activating Eye genes, include code parsing data here
-# eye mutations:  octopus pupils, vision 8fold, 1 eye,
 
 
 class Horns:
@@ -287,7 +301,7 @@ class Horns:
     hornright1 = ""  # Primary
     hornright2 = ""  # Secondary
     hornright3 = ""  # Ultra-recessive
-    select = ""      # XX, 23DdXx, 1
+    select = ""      # XX, 23TDdXx, 1
     stunt = ""       # XX, SsBbWwNn, AaCcDdEeFfGg
     horntype = ""    # XX, KkEeAaPpBb
     angle = ""       # X, ASB
@@ -705,11 +719,9 @@ def slurrytroll(spectrum):
         sgenetype = slurry.genesealand
     if slurry.spectrumdwell == "seadweller":
         sgenetype = slurry.geneseasea
-    strsea1 = genecombine(slurry.geneseamutant, sgenetype)  # Mutant + dweller type
-    strsea2 = genecombine(strsea1, sgenetype)             # Dilute that with dweller type again.
+    strsea1 = genecombine(slurry.geneseamutant, sgenetype, 2, 15)  # Mutant + dweller type
     sgenetype = slurry.spectrumgenesea[strblood[0:2]]
-    strsea3 = genecombine(strsea2, sgenetype)   # Caste-specific...
-    strsea = genecombine(strsea3, sgenetype)    # Caste-specific...
+    strsea = genecombine(strsea1, sgenetype, 4, 2)  # Blend it with caste-specific traits
     gene1 = Aquatic(strblood, strsea)
     strseadesc = gene1.desc()
 
@@ -816,7 +828,6 @@ def blendtroll(trolla, trollb, trollblank=""):  # trolldeets
     # Height
     x = random.randint(95, 105)
     x = x / 100
-
     ph1 = int(p1["height"]) / slurry.spectrumheight[p1["blood"][0:2]]
     ph2 = int(p2["height"]) / slurry.spectrumheight[p2["blood"][0:2]]
     ph3 = (ph1 + ph2) / 2
@@ -824,9 +835,11 @@ def blendtroll(trolla, trollb, trollblank=""):  # trolldeets
     y = round(y)
     strheight = int(y)
 
-    # str-sea = Phenotype shit comes later.
+    # str-sea
     strsea = genecombine(p1["sea"], p2["sea"])
-    gene1 = Aquatic(strblood, strsea)
+    sgenetype = slurry.spectrumgenesea[strblood[0:2]]
+    strsea2 = genecombine(strsea, sgenetype, 2, 3)
+    gene1 = Aquatic(strblood, strsea2)
     strseadesc = gene1.desc()
 
     castemouth = slurry.spectrumgenemouth[strblood[0:2]]
@@ -1337,7 +1350,6 @@ def premadeblood():
     return blood
 
 
-# Create text descriptions out of raw code input
 def heightstr(h):
     h = int(h)
     feet = h // 12
@@ -1370,12 +1382,14 @@ def describehorn(inhorn="22RInP"):
     if temp.curl == "3":
         descr = descr + "curved "
     if temp.curl == "4":
-        descr = descr + "curled "
+        descr = descr + "S-curved "
     if temp.curl == "5":
-        descr = descr + "curling "
+        descr = descr + "curled "
     if temp.curl == "6":
-        descr = descr + "coiled "
+        descr = descr + "curling "
     if temp.curl == "7":
+        descr = descr + "coiled "
+    if temp.curl == "8":
         descr = descr + "zig-jag "
     # tip shape
     if temp.tip == "B":
@@ -1390,8 +1404,8 @@ def describehorn(inhorn="22RInP"):
         descr = descr + "hook"
     if temp.tip == "J":
         descr = descr + "jagged"
-    if temp.tip == "N":
-        descr = descr + "notched"
+    if temp.tip == "L":
+        descr = descr + "bolt"
     if temp.tip == "P":
         descr = descr + "point"
     if temp.tip == "p":
@@ -1410,6 +1424,10 @@ def describehorn(inhorn="22RInP"):
         descr = descr + "edged horn"
     if temp.radial == "S":
         descr = descr + "twisting horn"
+    if temp.radial == "I":
+        descr = descr + "irregular horn"
+    if temp.radial == "C":
+        descr = descr + "half-circular horn"
     if temp.radial == "R":
         descr = descr + " horn"
         # strip spaces
@@ -1418,23 +1436,90 @@ def describehorn(inhorn="22RInP"):
     return descr
 
 
-# Change this one to describe a full set of Horns, containing 6 horn objects and some metagenes
+# In progress.  Buggy around stunted, withered, centered, and missing horns.
 def describehorns2(inhorn=slurry.spectrumgenehorn["Rg"]):
     descr = ""
     numhorns = 22
     hornright1 = ""
     hornright2 = ""
+    hornright3 = ""
     hornleft1 = ""
     hornleft2 = ""
+    hornleft3 = ""
     drh1 = False  # Describe Horn Right 1
     drh2 = False  # Describe Horn Right 2
+    drh3 = False
     dlh1 = False  # Describe Horn Left 1
     dlh2 = False  # Describe Horn left 2
+    dlh3 = False
     me = Horns(inhorn)
     left = ""
     right = ""
 
     # Horn presence...
+    if me.select == "TT":
+        numhorns = 6
+        hornleft1 = me.hornleft1
+        hornleft2 = me.hornleft2
+        hornleft3 = me.hornleft3
+        hornright1 = me.hornright1
+        hornright2 = me.hornright2
+        hornright3 = me.hornright3
+        drh1 = True
+        drh2 = True
+        drh3 = True
+        dlh1 = True
+        dlh2 = True
+        dlh3 = True
+        descr = "tripled horns"
+    if me.select == "TD":
+        numhorns = 5
+        hornleft1 = me.hornleft1
+        hornleft2 = me.hornleft2
+        hornleft3 = me.hornleft3
+        hornright1 = me.hornright1
+        hornright2 = me.hornright2
+        drh1 = True
+        drh2 = True
+        dlh1 = True
+        dlh2 = True
+        dlh3 = True
+        descr = "3 left / 2 right horns"
+    if me.select == "DT":
+        numhorns = 5
+        hornleft1 = me.hornleft1
+        hornleft2 = me.hornleft2
+        hornright1 = me.hornright1
+        hornright2 = me.hornright2
+        hornright3 = me.hornright3
+        drh1 = True
+        drh2 = True
+        drh3 = True
+        dlh1 = True
+        dlh2 = True
+        descr = "3 right / 2 left horns"
+    if me.select == "Td":
+        numhorns = 4
+        hornleft1 = me.hornleft1
+        hornleft2 = me.hornleft2
+        hornleft3 = me.hornleft3
+        hornright1 = me.hornright1
+        drh1 = True
+        dlh1 = True
+        dlh2 = True
+        dlh3 = True
+        descr = "3 left / 1 right horn"
+    if me.select == "Td":
+        numhorns = 4
+        hornleft1 = me.hornleft1
+        hornright1 = me.hornright1
+        hornright2 = me.hornright2
+        hornright3 = me.hornright3
+        drh1 = True
+        drh2 = True
+        drh3 = True
+        dlh1 = True
+        descr = "3 right / 1 left horn"
     if me.select == "DD":
         numhorns = 4
         hornleft1 = me.hornleft1
@@ -1482,6 +1567,30 @@ def describehorns2(inhorn=slurry.spectrumgenehorn["Rg"]):
         hornleft2 = "none"
         dlh1 = True
         descr = "no right horn"
+    if me.select == "TX":
+        numhorns = 3
+        hornleft1 = me.hornleft1
+        hornleft2 = me.hornleft2
+        hornleft3 = me.hornleft3
+        hornright1 = "none"
+        hornright2 = "none"
+        hornright3 = "none"
+        descr = "just 3 left horns"
+        dlh1 = True
+        dlh2 = True
+        dlh3 = True
+    if me.select == "XT":
+        numhorns = 3
+        hornright1 = me.hornright1
+        hornright2 = me.hornright2
+        hornright3 = me.hornright3
+        hornleft1 = "none"
+        hornleft2 = "none"
+        hornleft3 = "none"
+        descr = "just 3 right horns"
+        drh1 = True
+        drh2 = True
+        drh3 = True
     if me.select == "DX":
         numhorns = 2
         hornleft1 = me.hornleft1
@@ -1546,10 +1655,14 @@ def describehorns2(inhorn=slurry.spectrumgenehorn["Rg"]):
         left = "stunted horn"
         if dlh2:
             left = "two stunted horns"
+        if dlh3:
+            left = "three stunted horns"
     if me.stunt[1] == "S":
         right = "stunted horn"
         if drh2:
             right = "two stunted horns"
+        if drh3:
+            right = "three stunted horns"
     if me.stunt[0] == "B":
         left = "blunted, "
     if me.stunt[1] == "B":
@@ -1562,14 +1675,20 @@ def describehorns2(inhorn=slurry.spectrumgenehorn["Rg"]):
         left = "nub horn"
         if dlh2:
             left = "two nub horns"
+            if dlh3:
+                left = "three nub horns"
         dlh1 = False
         dlh2 = False
+        dlh3 = False
     if me.stunt[1] == "N":
         right = "nub horn"
         if drh2:
             right = "two nub horns"
+            if drh3:
+                right = "three nub horns"
         drh1 = False
         drh2 = False
+        drh3 = False
 
     # Horn type
     ht = ""
@@ -1626,16 +1745,24 @@ def describehorns2(inhorn=slurry.spectrumgenehorn["Rg"]):
     if dlh1:  # If there's a left horn...
         if hornleft1 != "none":
             left = describehorn(hornleft1)
-        if dlh2 and left[0:3] != "two" and hornleft2 != "none":
-            hornleft2 = "2" + hornleft2[1:len(hornleft2)]
-            temp = "and a tiny " + describehorn(hornleft2)
+        if dlh2 and left[0:3] != "two" and left[0:5] != "three" and hornleft2 != "none":
+            hornleft2str = "1" + hornleft2[1:len(hornleft2)]
+            temp = "+ a " + describehorn(hornleft2str)
+            left = fbs.lyst(left, temp)
+        if dlh3 and left[0:3] != "two" and left[0:5] != "three" and hornleft3 != "none":
+            hornleft3str = "1" + hornleft3[1:len(hornleft3)]
+            temp = "+ a " + describehorn(hornleft3str)
             left = fbs.lyst(left, temp)
     if drh1:  # If there's a right horn...
         if hornright1 != "none":
             right = describehorn(hornright1)
-        if drh2 and right[0:3] != "two" and hornright2 != "none":
-            hornright2 = "2" + hornright2[1:len(hornright2)]
-            temp = "and a tiny " + describehorn(hornright2)
+        if drh2 and right[0:3] != "two" and right[0:5] != "three" and hornright2 != "none":
+            hornright2 = "1" + hornright2[1:len(hornright2)]
+            temp = "+ a " + describehorn(hornright2)
+            right = fbs.lyst(right, temp)
+        if drh3 and right[0:3] != "two" and right[0:5] != "three" and hornright3 != "none":
+            hornright3 = "1" + hornright3[1:len(hornright3)]
+            temp = "+ a " + describehorn(hornright3)
             right = fbs.lyst(right, temp)
 
     if me.mountpt == "U" or me.mountpt == "M":
@@ -2020,9 +2147,9 @@ def genedesc1(my, cy, a, atxt, b, btxt, abtxt):
     return txt
 
 
-# Not actually used yet.
-def genedesc2(my, cy, a, atxt, b, btxt, abtxt, batxt):
-    # ab and ba have different text strings.
+def genedesc2(my, cy, a, atxt, b, btxt, abtxt, batxt=""):
+    if batxt == "":
+        batxt = abtxt
     txt = ""
     if my != cy:
         if my == a + a:

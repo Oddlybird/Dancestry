@@ -176,27 +176,27 @@ spectrumdwell = {
 
 spectrumgenesea = {
     "RR": "sssssbbccEEwwwwffbbsbfggiggiggittdeeAAAA",  # Maroon
-    "Rr": "sssssbbccEEwwwwffbbsbfggiggiggittdeeaAAA",
+    "Rr": "sssssbbccEEwwwwffbbsbfggiggiggittdeeAAAA",
     "rr": "sssssbbccEEwwwwffbbsbfggiggiggittdeeAAAA",  # Bronze
     "rG": "sssssbbccEEwwwwffbbsbfggiggiggittdeeAAaA",
     "RG": "sssSsbbccEEwwwwffbBsbfggiggiggittdEeAAAA",  # Gold
     "Rg": "sssssbbccEEwwwwffbbsbfggiggiggittdeeAaAA",
     "rg": "sssssbbccEEwwwwffbbsbfggiggiggittdeeAAAA",  # Lime
     "GG": "sssssbbccEEwwwwffbbsbfggiggiggittdeeAAAA",  # Olive
-    "Gg": "sssssbbccEEwwwwffbbsbfggiggiggittdeeAAAa",
+    "Gg": "sssssbbccEEwwwwffbbsbfggiggiggittdeeAAAA",
     "gg": "sssssbbccEEwwwwffBBsbfggiggiggittdeeAAAA",  # Jade
     "Gb": "sssSsbbccEEwwwwffbbsbfggiggiggittdeeaAAA",
     "GB": "sssssbbccEEwwwwffbbsbfggiggiggittdeeAAAA",  # Teal
-    "gB": "sssssbbccEEwwwwffbbsbfggiggiggittdeeAaAA",
+    "gB": "sssssbbccEEwwwwffbbsbfggiggiggittdeeAAAA",
     "gb": "sssssbbccEEwwwwffbbsbfggiggiggittdeeAAAA",  # Ceru
     "BB": "sssssbbccEEwwwwffbbsbfggiggiggittdeeAAAA",  # Bloo
-    "Bb": "sssssbbccEEwwwwffbbsbfggiggiggittdeeAAaA",
+    "Bb": "sssssbbccEEwwwwffbbsbfggiggiggittdeeAAAA",
     "bb": "sssssbbCcEEwwWwFfbbsbfGgiGgiggittdeeAAAA",  # Indigo
-    "rB": "SSsssbbCcEewwWwffbbsbfGgiGgiggiTtdEeAaAa",
+    "rB": "SSsssbbCcEewwWwffbbsbfGgiGgiggiTtdEeAAAa",
     "RB": "SSSSSBbCCeeWwWwffBbSbFGGiGGiggiTTdEEAAAA",  # Violet
-    "Rb": "SSSSSBbCCeeWwWWFfBBSBFGGiGGiGgitTdEEaaaA",
+    "Rb": "SSSSSBbCCeeWwWWFfBBSBFGGiGGiGgitTdEEaAaA",
     "rb": "SSSSSBbCCeeWwWwffBBSbfGGiGGiggiTTdEEAAAA",  # Tyrian
-    # Add a mutant entry or three
+    "m1": "SSSSSBbCCeeWwWwffBBSbfGGiGGiggiTTdEEaaaa",  # Deepdweller
     }
 
 spectrumgenemouth = {
@@ -230,36 +230,37 @@ spectrumgenemouth = {
 
 spectrumgenehorn = {
     # "xx": "xxxDDNNTTaxmh.22RInS.22RInP.33RSnP.22RInS.33RSnP.22RInP",# format
-    "RR": "RRx11AAPBSCTX.25RBnP.25RBnB.25RBwJ.25RBnP.25RBnR.25RBwb",  # Maroon
-    "Rr": "Rrx31aaPBBESx.24RSnR.24RSnR.24RSnR.24RSnR.24RSnR.24RSnB",  #
+    "RR": "RRx11AAPBSCTX.26RBnP.26RBnB.26RBwJ.26RBnP.26RBnR.26RBwb",  # Maroon
+    "Rr": "Rrx31aaPBBESO.25RSnR.24ISnR.24RSnR.25RSnR.25RSnR.24ISnB",  #
     "rr": "rrx11AAPBSJSX.33RSnP.43RSnP.43RSnP.33RSnP.43RSnP.43RSnP",  # Bronze
-    "rG": "rGxd2aaPBAESn.22RInS.22RInS.22RInS.22RInS.22RInS.22RInb",  #
+    "rG": "rGxd2aaPBAESo.22RInS.22RInS.24IInS.22RInS.22RInS.24IInb",  #
     "RG": "RGxDDCCPBAJTx.22RInP.22RInS.22RSwH.22RInP.22RInH.22RIwS",  # Gold
-    "Rg": "Rgx2dccPBACTn.12RSnH.12RSnH.12RSnH.12RSnH.12RSnH.12RSnH",  #
-    "rg": "rgx11ccPBSLTX.11RInP.11RInP.11RInP.11RInP.11RInP.11RInP",  # Lime
-    "GG": "GGx11DDPBSETX.12OSwb.12OSwP.12OSwS.12OSwS.12OSwb.12OSwP",  # Olive
-    "Gg": "Ggx1dddPBBEtx.12RInP.12RInP.12RInP.12RInP.12RInP.12RInS",  #
-    "gg": "ggx11EEPBSCTX.22RInH.22RInJ.22RInH.22RInP.22RInP.22RInP",  # Jade
-    "Gb": "Gbxd2ddPBBJto.21RInF.21RInF.21RInF.21RInF.21RInF.21RInF",  #
-    "GB": "GBx11DDPBSJTX.11RSnP.11RSnH.11RSnF.11RSnR.11RSnP.11RSnH",  # Teal
-    "gB": "gBx3dddPBBJnn.21RInH.21RInH.21RInH.21RInH.21RInH.21RIns",  #
-    "gb": "gbx11eePBSCTN.22RInp.22RInP.22RInP.22RInH.22RInb.22RInp",  # Ceru
-    "BB": "BBx11FfPBSLTx.21RInC.21RInF.21RInH.21RInC.21RInF.21RInH",  # Bloo
-    "Bb": "Bbxd3fFPBBEno.21RInH.21RInH.21RInH.21RInH.21RInH.21RInH",  #
-    "bb": "bbx11FFPBSNNX.37SInP.37RInP.37SInP.37SInP.37RInP.37SInP",  # Indigo
-    "rB": "rBx2dffPBBLnx.27RInP.27RInP.27RInP.27RInP.27RInP.27RIns",  #
-    "RB": "RBx11GGPBASNX.27RInP.27RInP.27RInP.27RInP.27RInP.27RInP",  # Violet
-    "Rb": "Rbx13ggPBBLno.24RInP.24RInP.24RIns.24RInP.24RInP.24RInP",  #
-    "rb": "rbx11GGPBSUNx.22ROnP.22ROnP.22ROnP.22ROnP.22ROnP.22ROnP",  # Tyrian
-    "m1": "rgxXXSspbAXSN.11RFnB.21ROwB.31RBwb.41RFnb.11ROwb.21RFwB",  # mutant1
+    "Rg": "Rgx2dccPBACTn.12RSnH.12CSnH.12RSnH.12RSnH.12RSnH.12RSnH",  #
+    "rg": "rgx11ccPBSLTX.11RInP.11RInP.11CInP.11RInP.14CInP.11CInL",  # Lime
+    "GG": "GGx11DDPBSETX.12OSwb.12CSwP.12OSwS.14OSwS.12CSwb.12OSwL",  # Olive
+    "Gg": "Ggx1dddPBBEtx.12RInP.12CInL.12CInP.12RInP.12CInL.14CInS",  #
+    "gg": "ggx11EEPBSCTX.22RInH.24RInJ.22RInH.22RInP.22RInP.22RInP",  # Jade
+    "Gb": "Gbxd2ddPBBJth.21RInF.21RInF.24RInF.21RInF.21RInF.21RInF",  #
+    "GB": "GBx11DDPBSJTX.11RSnP.11TSnH.11RSnF.11RSnR.11TSnP.11RSnH",  # Teal
+    "gB": "gBx3dddPBBJnn.21RInH.21TInH.21RInH.21RInH.21TInH.21RIns",  #
+    "gb": "gbx11eePBSCTN.22RInp.24RInP.22RInP.22RInH.22RInb.24RInp",  # Ceru
+    "BB": "BBx11FfPBSLTx.21RInC.21RInF.24RInH.24RInC.21RInF.21RInH",  # Bloo
+    "Bb": "Bbxd3fFPBBEno.21RInH.21RInH.21RInH.21RInH.24RInH.21RInH",  #
+    "bb": "bbx11FFPBSNNX.38SInP.38TInP.38SInP.38SInP.38TInP.38SInP",  # Indigo
+    "rB": "rBx2dffPBBLnx.28RInP.28TInP.28RInP.28RInP.28TInP.28SIns",  #
+    "RB": "RBx11GGPBASNX.28RInP.28TInL.28RInP.28RInP.28TInP.28TInL",  # Violet
+    "Rb": "Rbx13ggPBBLno.25RInP.24RInL.24RIns.24RInP.24RInP.24RInL",  #
+    "rb": "rbx11GGPBSUNx.22ROnP.22ROnP.22ROnP.22ROnP.24ROnP.22ROnP",  # Tyrian
+    #
+    "m1": "rgxXXSspbAXSN.11CFnB.21COwB.31CBwb.41IFnb.11IOwb.24IFwB",  # mutant1
     "m2": "rgxXDsSbpAXBn.22OBnb.32OFwb.42OOwF.12OBnF.22OFwb.32OBwb",  # mutant2
-    "m3": "rgxDXBbKkBXUN.33OOnC.43OBwC.13OFwH.23OOnH.33OBwF.43OOwF",  # mutant3
+    "m3": "rgxDXBbKkBXUN.33OOnC.43OBwC.13IFwH.23OOnH.33OBwF.43OOwF",  # mutant3
     "m4": "rgxXxbBkKBXMH.44OFnF.14OOwF.24OBwJ.34OFnJ.44OOwH.14OFwH",  # mutant4
-    "m5": "rgxxXWwEeBXSh.15TBnH.25TFwH.35TOwp.45TBnp.15TFwJ.25TBwJ",  # mutant5
-    "m6": "rgx22wWeEAXBH.26TOnJ.36TBwJ.46TFwR.16TOnR.26TBwp.36TOwp",  # mutant6
-    "m7": "rgx33NnAaAXSO.37TFnp.47TOwp.17TBwS.27TFnS.37TOwR.47TFwR",  # mutant7
-    "m8": "rgx32nNaABXBo.41SBnS.11SFwR.21SOws.31SBnJ.41SFwS.11SBwS",  # mutant8
-    "m9": "rgx23WWEPBXBh.13SOns.23SBwS.33SFws.43SOns.13SBws.23SOws",  # mutant9
+    "m5": "rgxxXWwEeBXSh.16TBnH.26TFwH.35TOwp.45TBnp.15TFwJ.25TBwJ",  # mutant5
+    "m6": "rgx22wWeEAXBH.27TOnJ.37TBwJ.46TFwR.16TOnR.26TBwp.36TOwp",  # mutant6
+    "m7": "rgx33NnAaAXSO.38TFnp.48TOwp.18TBwS.27TFnS.37TOwR.47TFwR",  # mutant7
+    "m8": "rgxTTnNaABXBo.41SBnS.11SFwR.28SOws.38SBnJ.41SFwS.11SBwS",  # mutant8
+    "m9": "rgxTTWWEPBXBh.13SOns.23SBwS.33SFws.43SOns.13SBws.23SOws",  # mutant9
 }
 
 spectrumgeneseasocial = {
