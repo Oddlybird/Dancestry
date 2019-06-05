@@ -17,7 +17,7 @@ try:
     import genome as gene
     import slurry
     import names
-    import mouf
+    import graphics
 except ImportError:
     print("couldn't load module.")
     sys.exit(2)
@@ -177,6 +177,12 @@ def handlekeys(gameon=True):
                         savetrollpng(troll3)
                         updatescreen()
                         return gameon
+                    if btncurrent == 60:
+                        # Btn 10 : Put random default troll into slot 3
+                        troll3 = gene.trolldict()
+                        troll3 = gene.muttroll()
+                        updatescreen()
+                        return gameon
                     return gameon
                 # BLOOD SCREEN BTNs
                 if screencurrent == pageblood:
@@ -313,7 +319,7 @@ def drawmenu(background):  # interface.  Contains Labels for all main and submen
         btnG = fbs.btn("    Save slot1.png   ", btnwsmall, btnhsmall, btnselect(57), txtcol)
         btnH = fbs.btn("    Save slot2.png   ", btnwsmall, btnhsmall, btnselect(58), txtcol)
         btnI = fbs.btn("    Save slot3.png   ", btnwsmall, btnhsmall, btnselect(59), txtcol)
-        btnJ = fbs.btn("", btnwsmall, btnhsmall, btnselect(60), txtcol)
+        btnJ = fbs.btn("    Acquire Mutant   ", btnwsmall, btnhsmall, btnselect(60), txtcol)
         btnK = fbs.btn("", btnwsmall, btnhsmall, btnselect(61), txtcol)
         btnL = fbs.btn("", btnwsmall, btnhsmall, btnselect(62), txtcol)
         btnM = fbs.btn("", btnwsmall, btnhsmall, btnselect(63), txtcol)
@@ -331,9 +337,9 @@ def drawmenu(background):  # interface.  Contains Labels for all main and submen
         background.blit(btnJ, (584, 12))
         background.blit(btnK, (584, 36))
         background.blit(btnL, (584, 60))
-        background.blit(btnJ, (776, 12))
-        background.blit(btnK, (776, 36))
-        background.blit(btnL, (776, 60))
+        background.blit(btnM, (776, 12))
+        background.blit(btnN, (776, 36))
+        background.blit(btnO, (776, 60))
 
     if screencurrent == pageblood:
         btnA = fbs.btn("     Full Spectrum    ", btnwsmall, btnhsmall, btnselect(51), txtcol)
@@ -400,8 +406,6 @@ def btnselect(x):  # interface - controls which buttons are highlightable.
             # Unused Buttons
             btncol = (50, 50, 0)
     if screencurrent.name == "maketroll":
-        if x == 60:  # Unused Buttons
-            btncol = (50, 50, 0)
         if x == 61 or x == 62 or x == 63 or x == 64 or x == 65 or x == 66 or x == 67 or x == 68 or x == 69 or x == 70:
             # Unused Buttons
             btncol = (50, 50, 0)
@@ -522,8 +526,8 @@ def screenshot():
 
 # items that get printed to screen a Lot.  Like trolls, donations, blood colors...
 def displaytroll(t0):  # interface -- prints a standard-format window display to the screen.
-    # set some defaults
     # called when screencurrent.name = "maketroll"
+    # behind-the-scenes-logic to find things out
     blood = t0["blood"][0:2]
     colbg = colg.bloodtorgb(t0["blood"])
     colfg = (255, 255, 255)
@@ -535,7 +539,12 @@ def displaytroll(t0):  # interface -- prints a standard-format window display to
     t0["caste"] = gene.getcastefromblood(blood)
     castedefaultheight = slurry.spectrumheight[blood]
     seawrap = fbs.wordwrap2(t0["seadesc"], 60)
-    jawt, jawb = mouf.thetooth(t0["mouth"])
+    # Graphics-related logic
+    jawprint = graphics.jawprint(t0["mouth"])
+    jawprint2 = graphics.jawprint(t0["mouth"], True)
+    hornsprint, horndescr = graphics.hornsprint(t0["horns"])
+
+    # Text string definition
     string1 = t0["firname"] + " " + t0["surname"] + ", " + t0["blood"] + " " + t0["sex"]
     string2 = t0["caste"] + ", " + t0["dwell"]
     string3 = t0["donator1"] + " / " + t0["donator2"]
@@ -545,26 +554,28 @@ def displaytroll(t0):  # interface -- prints a standard-format window display to
     string6 = "  " + seawrap[1]
     string7 = "  " + seawrap[2]
     string8 = "  " + seawrap[3]
-    string9 = "Horns: " + t0["hornsdesc"]
-    string10 = "LHorn: " + t0["hornLdesc"]
-    string11 = "RHorn: " + t0["hornRdesc"]
-    string12 = t0["powers"]
+    string9 = t0["powers"]
+    string10 = "Horns: " + horndescr
+    string11 = "."
+    string12 = "."
     string13 = "."
-    string14 = " "
-    string15 = "Jaw1:  " + jawt[0:18] + "." + jawt[18:len(jawt)]
-    string16 = "Jaw2:  " + jawb[0:18] + "." + jawb[18:len(jawb)]
+    string14 = "."
+    string15 = "."
+    string16 = "."
     string17 = "Sea:   " + t0["sea"]
     string18 = "Horns: " + t0["horns"]
     string19 = "Mouth: " + t0["mouth"][0:40]
     string20 = "Mouth: " + "      " + t0["mouth"][40:len(t0["mouth"])]
 
+    # actual graphics
     background = fbs.btn(string1, 512, 260, colbg, colfg)
     x = 0
     y = 0
+    background.blit(jawprint, (410, 8))
+    background.blit(jawprint2, (320, 8))
+    background.blit(hornsprint, (300, 30))
 
-    jawprint = mouf.jawprint(t0["mouth"])
-    background.blit(jawprint, (400, 8))
-
+    # Print text to screen.
     background.blit(fbs.say(string2, colfg), (x + 16, y + 12))
     background.blit(fbs.say(string3, colfg), (x + 16, y + 24))
     background.blit(fbs.say(string4, colfg), (x + 16, y + 36))
@@ -601,7 +612,7 @@ def trollmakepage():  # interface
 def displaybigdefaultmouf(blood):
     global font
     page = fbs.pysurface(170, 42, (0, 0, 0))
-    page.blit(pygame.transform.scale2x(mouf.jawprint(slurry.spectrumgenemouth[blood])), (0, 0))
+    page.blit(pygame.transform.scale2x(graphics.jawprint(slurry.spectrumgenemouth[blood])), (0, 0))
     page.blit(font.render(blood, 1, colg.bloodtorgb(blood)), (0, 10))
     return page
 
@@ -635,11 +646,11 @@ def moufpage():
     page.blit(displaybigdefaultmouf("Rb"), (550, 425))
     page.blit(displaybigdefaultmouf("rb"), (550, 500))
 
-    page.blit(pygame.transform.scale2x(mouf.jawprint(slurry.spectrumgenemouth["high"])), (800, 50))
+    page.blit(pygame.transform.scale2x(graphics.jawprint(slurry.spectrumgenemouth["high"])), (800, 50))
     page.blit(font.render("high", 1, colg.bloodtorgb("BB")), (800, 60))
-    page.blit(pygame.transform.scale2x(mouf.jawprint(slurry.spectrumgenemouth["low"])), (800, 275))
+    page.blit(pygame.transform.scale2x(graphics.jawprint(slurry.spectrumgenemouth["low"])), (800, 275))
     page.blit(font.render("low", 1, colg.bloodtorgb("RR")), (800, 285))
-    page.blit(pygame.transform.scale2x(mouf.jawprint(slurry.spectrumgenemouth["mut"])), (800, 500))
+    page.blit(pygame.transform.scale2x(graphics.jawprint(slurry.spectrumgenemouth["mut"])), (800, 500))
     page.blit(font.render("mutant1", 1, (255, 0, 0)), (800, 510))
     font = pygame.font.SysFont("Verdana", 12, False, False)
     return page
@@ -757,7 +768,7 @@ btncurrent = 1
 screencurrent = ScrPage()
 # screens: maketroll, loadingzone, bloodpage, donationpage,
 pageloadtroll = ScrPage("loadingzone", 101, 360, False, True)  # There is an artificial maxbtn limiter in loadtroll()
-pagemaketroll = ScrPage("maketroll", 51, 59, True, False)
+pagemaketroll = ScrPage("maketroll", 51, 60, True, False)
 pageblood = ScrPage("bloodpage", 51, 57, True, False)
 pagename = ScrPage("namepage", 51, 53, True, False)
 pagemouf = ScrPage("moufpage", 51, 55, False, False)
