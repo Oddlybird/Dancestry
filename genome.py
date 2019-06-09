@@ -5,6 +5,7 @@ import colorgarbage as colg
 import formattingbs as fbs
 import names
 import slurry
+import traits  # gamelike stats
 
 # Phenotype Classes, containing genes
 
@@ -56,17 +57,19 @@ class Troll:
     hair = ""
     skin = ""
     height = ""
-    # Traits
+    stats = ""
+    aspect = ""
+    # social details
     firname = ""
     surname = ""
     sex = ""
     donator1 = ""
     donator2 = ""
 
-    def __init__(self, code):
-        if len(code) < 10:
+    def __init__(self, inblood):
+        if len(inblood) < 10:
             self.code = ""
-            self.blood = code
+            self.blood = inblood
             self.eyes = ""
             self.horns = slurry.spectrumgenehorn[self.blood]
             self.mouth = slurry.spectrumgenemouth[self.blood]
@@ -77,9 +80,12 @@ class Troll:
             self.hair = slurry.spectrumhairtemp[self.blood]
             self.skin = slurry.spectrumskintemp[self.blood]
             self.height = slurry.spectrumheight[self.blood]
-            # Traits
+            self.stats = traits.Stats(self.blood, -1)
+            self.stats = traits.statdistrib(self.stats)
+            self.aspect = traits.getaspect(self.stats)
+            # Social
             self.firname = "FIRNAM"
-            self.surname = "SURNAM"
+            self.surname = defaultnames(self.blood[0:2])
             self.sex = "N"
             self.donator1 = "?.?"
             self.donator2 = "?.?"
@@ -92,12 +98,12 @@ class Troll:
 
 # Make a troll class /As Well/.
 def trolldict(introll=""):  # trolldeets
+    blood = premadeblood()
+    bloodreal = blood[0:2]
     if introll == "":
-        introll = Troll("rr")
+        introll = Troll(bloodreal)
     if introll != "":
         introll = introll
-    blood = "rr"
-    bloodreal = ""
     horns = ""
     sea = ""
     mouth = ""
@@ -111,8 +117,8 @@ def trolldict(introll=""):  # trolldeets
     sex = ""
     donator1 = ""
     donator2 = ""
+    stats = traits.Stats(bloodreal)
     if introll == "":
-        bloodreal = premadeblood()
         sea = slurry.genesealand
         if slurry.spectrumdwell[blood] != "landdweller":
             sea = slurry.geneseasea
@@ -123,13 +129,15 @@ def trolldict(introll=""):  # trolldeets
         hair = slurry.spectrumhairtemp[blood]
         skin = slurry.spectrumskintemp[blood]
         powers = slurry.spectrumpowerstemp[blood]
+        stats = traits.statdistrib(traits.Stats(blood))
         firname = "FIRNAM"
-        surname = "SURNAM"
+        surname = defaultnames(blood)
         sex = "N"
         donator1 = "?.?"
         donator2 = "?.?"
     if introll != "":
         bloodreal = introll.blood
+        blood = bloodreal[0:2]
         sea = introll.sea
         horns = introll.horns
         mouth = introll.mouth
@@ -138,6 +146,7 @@ def trolldict(introll=""):  # trolldeets
         hair = introll.hair
         skin = introll.skin
         powers = introll.powers
+        stats = introll.stats
         firname = introll.firname
         surname = introll.surname
         sex = introll.sex
@@ -148,7 +157,7 @@ def trolldict(introll=""):  # trolldeets
     blood = bloodreal[0:2]
 
     t0 = {
-        "savetype": "10",  # Save Version
+        "savetype": "11",  # Save Version
         "firname": firname,  # six letters
         "surname": surname,  # six letters
         "sex": sex,          # M/N/F
@@ -156,6 +165,8 @@ def trolldict(introll=""):  # trolldeets
         "dwell": slurry.spectrumdwell[blood],
         # Genes
         "blood": bloodreal,  # RGB rgb
+        "stats": stats,
+        "aspect": traits.getaspect(stats),
         "mouth": mouth,
         "sea": sea,
         "horns": horns,
@@ -188,51 +199,39 @@ def getpremadetroll(x=9001):
     # Go through and give each troll a different one once the systems exist.
     if x == 1:  # Maroon
         t0["firname"] = "Normal"
-        t0["surname"] = "Maroon"
         t0["blood"] = "RR"
     if x == 2:  # Bronze
         t0["firname"] = "Normal"
-        t0["surname"] = "Bronze"
         t0["blood"] = "rr"
     if x == 3:  # Gold
         t0["firname"] = "Normal"
-        t0["surname"] = "-Gold-"
         t0["blood"] = "RG"
     if x == 4:  # Lime
         t0["firname"] = "Normal"
-        t0["surname"] = "-Lime-"
         t0["blood"] = "rg"
     if x == 5:  # Olive
         t0["firname"] = "Normal"
-        t0["surname"] = "Olive-"
         t0["blood"] = "GG"
     if x == 6:  # Jade
         t0["firname"] = "Normal"
-        t0["surname"] = "Jade--"
         t0["blood"] = "gg"
     if x == 7:  # Teal
         t0["firname"] = "Normal"
-        t0["surname"] = "-Teal-"
         t0["blood"] = "GB"
     if x == 8:  # Ceru
         t0["firname"] = "Normal"
-        t0["surname"] = "Cerule"
         t0["blood"] = "gb"
     if x == 9:  # Bloo
         t0["firname"] = "Normal"
-        t0["surname"] = "-Bloo-"
         t0["blood"] = "BB"
     if x == 10:  # Indigo
         t0["firname"] = "Normal"
-        t0["surname"] = "Indigo"
         t0["blood"] = "bb"
     if x == 11:  # Violet
         t0["firname"] = "Normal"
-        t0["surname"] = "Violet"
         t0["blood"] = "RB"
     if x == 12:  # Tyrian
         t0["firname"] = "Normal"
-        t0["surname"] = "Tyrian"
         t0["blood"] = "rb"
     # Most traits get set to defaults based on blood
     shortblood = t0["blood"]
@@ -244,11 +243,13 @@ def getpremadetroll(x=9001):
     t0["height"] = slurry.spectrumheight[shortblood]
     t0["sea"] = slurry.spectrumgenesea[shortblood]
     t0["sex"] = getsex(t0["blood"])
+    t0["surname"] = defaultnames(shortblood)
     # These ones need to be redone when the relevant systems are remade
     t0["skin"] = slurry.spectrumskintemp[shortblood]
     t0["powers"] = slurry.spectrumpowerstemp[shortblood]
     t0["build"] = slurry.spectrumbuildtemp[shortblood]
     t0["hair"] = slurry.spectrumhairtemp[shortblood]
+
     # Weird Mutants Ho; overwrite caste-based traits.
     if x == 13:
         t0["firname"] = "Lobbah"
@@ -264,37 +265,30 @@ def getpremadetroll(x=9001):
         t0["hair"] = "matted"
     if x == 14:
         t0["firname"] = "Mutant"
-        t0["surname"] = "Horns2"
         t0["horns"] = slurry.spectrumgenehorn["m2"]
     if x == 15:
         t0["firname"] = "Mutant"
-        t0["surname"] = "Horns3"
         t0["horns"] = slurry.spectrumgenehorn["m3"]
     if x == 16:
         t0["firname"] = "Mutant"
-        t0["surname"] = "Horns4"
         t0["horns"] = slurry.spectrumgenehorn["m4"]
     if x == 17:
         t0["firname"] = "Mutant"
-        t0["surname"] = "Horns5"
         t0["horns"] = slurry.spectrumgenehorn["m5"]
     if x == 18:
         t0["firname"] = "Mutant"
-        t0["surname"] = "Horns6"
         t0["horns"] = slurry.spectrumgenehorn["m6"]
     if x == 19:
         t0["firname"] = "Mutant"
-        t0["surname"] = "Horns7"
         t0["horns"] = slurry.spectrumgenehorn["m7"]
     if x == 20:
         t0["firname"] = "Mutant"
-        t0["surname"] = "Horns8"
         t0["horns"] = slurry.spectrumgenehorn["m8"]
     if x == 21:
         t0["firname"] = "Mutant"
-        t0["surname"] = "Horns9"
         t0["horns"] = slurry.spectrumgenehorn["m9"]
     # Even mutants get descriptions based on their individual traits.
+    t0["stats"] = slurry.spectrumcorestat[shortblood]
     t0["heightstr"] = heightstr(t0["height"])
     strhornsdesc, strhornl, strhornr = describehorns2(t0["horns"])
     t0["hornsdesc"] = strhornsdesc
@@ -302,6 +296,21 @@ def getpremadetroll(x=9001):
     t0["hornRdesc"] = strhornr
 
     return t0
+
+
+# Incomplete
+class Face:
+    code = ""
+    hairback = ""
+    hairmid = ""
+    hairline = ""
+    hairfront = ""
+    jawline = ""
+    cheek = ""
+    chin = ""
+    eyebrow = ""
+    eyeshape = ""
+    eyelash = ""
 
 
 # Incomplete
@@ -503,7 +512,7 @@ class Aquatic:
     s3w = "N"  # biolum, teeth
     s4w = "N"  # eyelids, dorsal / bodyfins
     bladders = "bb"    # Swim bladders - several / one / none
-    cheekfins = "cc"     # yes / half / no
+    cheekfins = "cc"   # yes / half / no
     # Make genes for earfin size, number of tines, etc.
     ears = "EE"        # yes / half / no.   Someday ear types?
     wfingers = "ww"    # webbed fingers?  full/half/none
@@ -1064,7 +1073,7 @@ def muttroll(spectrum=slurry.spectrumfull):
     strmouthgene = slurry.spectrumgenemouth[strblood[0:2]]
     a = 0
     while a < 5:
-        b = random.randint(0, 8)
+        b = random.randint(0, 10)
         gene2 = slurry.spectrumgenemouth[strblood[0:2]]
         if b == 2:
             gene2 = slurry.spectrumgenemouth["high"]
@@ -1074,7 +1083,13 @@ def muttroll(spectrum=slurry.spectrumfull):
             gene2 = slurry.spectrumgenemouth["m1"]
         if b == 5:
             gene2 = slurry.spectrumgenemouth["m2"]
-        if b > 5:
+        if b == 6:
+            gene2 = slurry.spectrumgenemouth["m3"]
+        if b == 7:
+            gene2 = slurry.spectrumgenemouth["m4"]
+        if b == 8:
+            gene2 = slurry.spectrumgenemouth["m5"]
+        if b > 8:
             gene2 = slurry.spectrumgenemouth[bloodtemp[0:2]]
         strmouthgene = genecombine(strmouthgene, gene2, 5, 2)
         a = a + 1
@@ -1129,8 +1144,8 @@ def muttroll(spectrum=slurry.spectrumfull):
     strhornsdesc, strhornl, strhornr = describehorns2(hornsfinal)
 
     # names
-    firstname = names.newname()
-    lastname = "Mutant"
+    firstname = "Mutant"
+    lastname = defaultnames(bloodtemp[0:2])
 
     t1 = trolldict()
     t1["firname"] = firstname
@@ -2481,3 +2496,51 @@ def spectrumrand():
         premadeblood(), premadeblood(), premadeblood(), premadeblood(), premadeblood(),
     ]
     return spectrum
+
+
+def defaultnames(inblood):
+    blood = inblood[0:2]
+    name = "Surnam"
+    if blood == "RR":
+        name = "Maroon"
+    if blood == "Rr":
+        name = "Marbro"
+    if blood == "rr":
+        name = "Bronze"
+    if blood == "Rg":
+        name = "Brogol"
+    if blood == "RG":
+        name = "-Gold-"
+    if blood == "rG":
+        name = "Gollim"
+    if blood == "rg":
+        name = "-Lime-"
+    if blood == "GG":
+        name = "Olive-"
+    if blood == "Gg":
+        name = "Olijad"
+    if blood == "gg":
+        name = "-Jade-"
+    if blood == "Gb":
+        name = "Jadtea"
+    if blood == "GB":
+        name = "-Teal-"
+    if blood == "gB":
+        name = "Teacer"
+    if blood == "gb":
+        name = "Cerule"
+    if blood == "BB":
+        name = "-Blue-"
+    if blood == "Bb":
+        name = "Bluind"
+    if blood == "bb":
+        name = "Indigo"
+    if blood == "rB":
+        name = "Indvio"
+    if blood == "RB":
+        name = "Violet"
+    if blood == "Rb":
+        name = "Viotyr"
+    if blood == "rb":
+        name = "Tyrian"
+    return name

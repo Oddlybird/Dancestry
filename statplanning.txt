@@ -22,8 +22,8 @@ Heart <- SELF -> Mind
 Light <- LUCK -> Void
 
 List stats in order of priority, based on personality.
-- apply modifiers / mins and maxes based on actual caste(s nearest to hue)
-- Generalist vs Specialist stat order (highest to lowest, lowest to highest, ..)
+* applied modifiers / mins and maxes based on actual caste(s nearest to hue)
+> Generalist vs Specialist stat order (highest to lowest, lowest to highest, ..)
 			Semi-randomized.  ( may have stat order from different caste)
 - Generalist vs Specialist stat spreads (minmax vs even spread vs semi-even)
 

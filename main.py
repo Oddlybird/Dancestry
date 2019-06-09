@@ -18,11 +18,10 @@ try:
     import slurry
     import names
     import graphics
+    import traits
 except ImportError:
     print("couldn't load module.")
     sys.exit(2)
-
-VERSION = "0.0"
 
 # getcastefromblood(b) is a function you can use to get the plaintext of a caste.  Put in the blood-code.
 # Will be tagging each function / class / etc
@@ -539,63 +538,99 @@ def displaytroll(t0):  # interface -- prints a standard-format window display to
     t0["caste"] = gene.getcastefromblood(blood)
     castedefaultheight = slurry.spectrumheight[blood]
     seawrap = fbs.wordwrap2(t0["seadesc"], 60)
-    # Graphics-related logic
-    jawprint = graphics.jawprint(t0["mouth"])
-    jawprint2 = graphics.jawprint(t0["mouth"], True)
-    hornsprint, horndescr = graphics.hornsprint(t0["horns"])
+    t0stats = t0["stats"]
+    t0stat = t0stats.statmain
+    smax = t0stats.statmax
+    t0secret = t0stats.statsecret
+
+    # Get actual graphics
+    background = fbs.btn("", 512, 260, colbg, colfg)
+    x = 0
+    y = 0
+    img, horndescr = trollimg(t0)
+    background.blit(img, (308, 0))
 
     # Text string definition
     string1 = t0["firname"] + " " + t0["surname"] + ", " + t0["blood"] + " " + t0["sex"]
     string2 = t0["caste"] + ", " + t0["dwell"]
     string3 = t0["donator1"] + " / " + t0["donator2"]
     string4 = t0["heightstr"] + "/" + gene.heightstr(castedefaultheight) + ", " + t0["build"] + " build, "
-    string4 = string4 + t0["hair"] + " hair, " + t0["skin"] + " skin"
-    string5 = seawrap[0]
-    string6 = "  " + seawrap[1]
-    string7 = "  " + seawrap[2]
-    string8 = "  " + seawrap[3]
-    string9 = t0["powers"]
-    string10 = "Horns: " + horndescr
-    string11 = "."
-    string12 = "."
-    string13 = "."
-    string14 = "."
-    string15 = "."
+    string5 = t0["hair"] + " hair, " + t0["skin"] + " skin"
+    string6 = seawrap[0]
+    string7 = "  " + seawrap[1]
+    string8 = "  " + seawrap[2]
+    string9 = "  " + seawrap[3]
+    string10 = t0["aspect"] + ", " + t0["powers"]
+    string11 = "Horns: " + horndescr
+
+    string12 = "Clout: " + str(t0stat["clout"]) + "/" + str(smax["clout"]) + " "
+    string12 = string12 + "Grit: " + str(t0stat["grit"]) + "/" + str(smax["grit"]) + " "
+    string12 = string12 + "Hunch: " + str(t0stat["hunch"]) + "/" + str(smax["hunch"]) + " "
+    string12 = string12 + "Moxie: " + str(t0stat["moxie"]) + "/" + str(smax["moxie"]) + " "
+
+    string13 = "Acumen: " + str(t0stat["acumen"]) + "/" + str(smax["acumen"]) + " "
+    string13 = string13 + "Alacrity: " + str(t0stat["alacrity"]) + "/" + str(smax["alacrity"]) + " "
+    string13 = string13 + "Resolve: " + str(t0stat["resolve"]) + "/" + str(smax["resolve"]) + " "
+    string13 = string13 + "Psyche: " + str(t0stat["psyche"]) + "/" + str(smax["psyche"]) + " "
+
+    string14 = "Faith: " + str(t0secret["faith"])
+    string14 = string14 + " Order: " + str(t0secret["order"])
+    string14 = string14 + " Entropy: " + str(t0secret["entropy"])
+    string14 = string14 + " Connection: " + str(t0secret["connection"])
+    string14 = string14 + " Self: " + str(t0secret["self"])
+    string14 = string14 + " Luck: " + str(t0secret["luck"])
+
+    string15 = "dpts: " + str(t0["stats"].dpts)
     string16 = "."
     string17 = "Sea:   " + t0["sea"]
     string18 = "Horns: " + t0["horns"]
     string19 = "Mouth: " + t0["mouth"][0:40]
     string20 = "Mouth: " + "      " + t0["mouth"][40:len(t0["mouth"])]
 
-    # actual graphics
-    background = fbs.btn(string1, 512, 260, colbg, colfg)
+    # Print text to screen.
+    textheight = 12
+    background.blit(fbs.say(string1, colfg, 16, True), (x + 32, y))
+    background.blit(fbs.say(string2, colfg), (x + 16, y + 2*textheight))
+    background.blit(fbs.say(string3, colfg), (x + 16, y + 3*textheight))
+    background.blit(fbs.say(string4, colfg), (x + 16, y + 4*textheight))
+    background.blit(fbs.say(string5, colfg), (x + 16, y + 5*textheight))
+    background.blit(fbs.say(string6, colfg), (x + 16, y + 6*textheight))
+    background.blit(fbs.say(string7, colfg), (x + 16, y + 7*textheight))
+    background.blit(fbs.say(string8, colfg), (x + 16, y + 8*textheight))
+    background.blit(fbs.say(string9, colfg), (x + 16, y + 9*textheight))
+    background.blit(fbs.say(string10, colfg), (x + 16, y + 10*textheight))
+    background.blit(fbs.say(string11, colfg), (x + 16, y + 11*textheight))
+    background.blit(fbs.say(string12, colfg), (x + 16, y + 12*textheight))
+    background.blit(fbs.say(string13, colfg), (x + 16, y + 13*textheight))
+    background.blit(fbs.say(string14, colfg), (x + 16, y + 14*textheight))
+    background.blit(fbs.say(string15, colfg), (x + 16, y + 15*textheight))
+    background.blit(fbs.say(string16, colfg), (x + 16, y + 16*textheight))
+    background.blit(fbs.say(string17, colfg), (x + 16, y + 17*textheight))
+    background.blit(fbs.say(string18, colfg), (x + 16, y + 18*textheight))
+    background.blit(fbs.say(string19, colfg), (x + 16, y + 19*textheight))
+    background.blit(fbs.say(string20, colfg), (x + 16, y + 20*textheight))
+    return background
+
+
+def trollimg(t0):
+    #Basic logic
+    blood = t0["blood"][0:2]
+    colbg = colg.bloodtorgb(t0["blood"])
+    colfg = (255, 255, 255)
+
+    # Graphics-related logic
+    jawprint = graphics.jawprint(t0["mouth"])
+    jawprint2 = graphics.jawprint(t0["mouth"], True)
+    hornsprint, horndescr = graphics.hornsprint(t0["horns"])
+
+    background = fbs.btn("", 204, 260, colbg, colfg)
+    midpt = 102
     x = 0
     y = 0
-    background.blit(jawprint, (410, 8))
-    background.blit(jawprint2, (320, 8))
-    background.blit(hornsprint, (300, 30))
-
-    # Print text to screen.
-    background.blit(fbs.say(string2, colfg), (x + 16, y + 12))
-    background.blit(fbs.say(string3, colfg), (x + 16, y + 24))
-    background.blit(fbs.say(string4, colfg), (x + 16, y + 36))
-    background.blit(fbs.say(string5, colfg), (x + 16, y + 48))
-    background.blit(fbs.say(string6, colfg), (x + 16, y + 60))
-    background.blit(fbs.say(string7, colfg), (x + 16, y + 72))
-    background.blit(fbs.say(string8, colfg), (x + 16, y + 84))
-    background.blit(fbs.say(string9, colfg), (x + 16, y + 96))
-    background.blit(fbs.say(string10, colfg), (x + 16, y + 108))
-    background.blit(fbs.say(string11, colfg), (x + 16, y + 120))
-    background.blit(fbs.say(string12, colfg), (x + 16, y + 132))
-    background.blit(fbs.say(string13, colfg), (x + 16, y + 144))
-    background.blit(fbs.say(string14, colfg), (x + 16, y + 156))
-    background.blit(fbs.say(string15, colfg), (x + 16, y + 168))
-    background.blit(fbs.say(string16, colfg), (x + 16, y + 180))
-    background.blit(fbs.say(string17, colfg), (x + 16, y + 192))
-    background.blit(fbs.say(string18, colfg), (x + 16, y + 204))
-    background.blit(fbs.say(string19, colfg), (x + 16, y + 216))
-    background.blit(fbs.say(string20, colfg), (x + 16, y + 228))
-    return background
+    background.blit(jawprint, (midpt - 90, 8))
+    background.blit(jawprint2, (midpt, 8))
+    background.blit(hornsprint, (0, 30))
+    return background, horndescr
 
 
 # The display for individual screens.
@@ -763,7 +798,7 @@ def checkloadable():
 # Project-specific globals, Menu/misc
 screen_width = 1280
 screen_height = 600
-versionnum = "0.2.9"
+versionnum = "0.3.1"
 btncurrent = 1
 screencurrent = ScrPage()
 # screens: maketroll, loadingzone, bloodpage, donationpage,

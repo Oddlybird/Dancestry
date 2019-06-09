@@ -233,7 +233,10 @@ spectrumgenemouth = {
     "high": "64ddTTTTTT445444PPPPPPTTTTTT445444PPPPPPTTTTTT444544PPPPGGTTTTTT444544PPPPGG",
     "mut": "46DdFFFFFF272727PPPPPPFFFFFF727272PPPPPPFFFFFF272729PPPPPPFFFFFF727272PPPPPP",
     "m1": "46DdFFFFFF272727PPPPPPFFFFFF727272PPPPPPFFFFFF272727PPPPPPFFFFFF727272PPPPPP",
-    "m2": "64dDFFFFFF727272PPPPPPFFFFFF272727PPPPPPFFFFFF727272PPPPPPFFFFFF272727PPPPPP",
+    "m2": "63dDFFFFFF727272PPPPPPFFFFFF272727PPPPPPFFFFFF727272PPPPPPFFFFFF272727PPPPPP",
+    "m3": "55ddTTTTTT444444CCCPGGTTTTTT444444CCCPGGTTTTTT444444CCCCGGTTTTTT444444CCPPGG",
+    "m4": "63ddTTTTTT444444CCCPGGTTTTTT444444CCCPGGTTTTTT444444CCCCGGTTTTTT444444CCPPGG",
+    "m5": "72ddTTTTTT444444CCCPGGTTTTTT444444CCCPGGTTTTTT444444CCCCGGTTTTTT444444CCPPGG",
 
     # Add more mutant mouth types
 }
@@ -394,3 +397,54 @@ spectrumskintemp = {
     "Rb": "grey",
     "rb": "grey",  # Tyrian
 }
+
+spectrumcorestat = {
+    "mm": {"clout": 0, "acumen": 0, "grit": 0, "alacrity": 0,  # Mutant
+           "hunch": 0, "resolve": 0, "moxie": 0, "psyche": 0, "pts": 2},
+
+    "RR": {"clout": -1, "acumen": 0, "grit": 0, "alacrity": 0,  # Maroon
+           "hunch": 2, "resolve": 0, "moxie": 0, "psyche": 1, "pts": 0},
+    "Rr": {"clout": -1, "acumen": 0, "grit": 0, "alacrity": 0,  #
+           "hunch": 1, "resolve": 0, "moxie": 1, "psyche": 1, "pts": 0},
+    "rr": {"clout": -1, "acumen": 0, "grit": 0, "alacrity": 0,  # Bronze
+           "hunch": 0, "resolve": 0, "moxie": 2, "psyche": 1, "pts": 0},
+    "Rg": {"clout": -1, "acumen": 1, "grit": 0, "alacrity": 0,  #
+           "hunch": 0, "resolve": 0, "moxie": 1, "psyche": 1, "pts": 0},
+    "RG": {"clout": -1, "acumen": 1, "grit": 0, "alacrity": 0,  # Gold
+           "hunch": 0, "resolve": 0, "moxie": 0, "psyche": 2, "pts": 0},
+    "rG": {"clout": -1, "acumen": 1, "grit": 0, "alacrity": 0,  #
+           "hunch": 0, "resolve": 0, "moxie": 0, "psyche": 2, "pts": 0},
+    "rg": {"clout": -1, "acumen": 0, "grit": -1, "alacrity": 0,  # Lime
+           "hunch": 0, "resolve": 0, "moxie": 0, "psyche": 3, "pts": 0},
+
+    "GG": {"clout": 0, "acumen": 0, "grit": 0, "alacrity": 1,  # Olive
+           "hunch": 1, "resolve": 0, "moxie": 0, "psyche": 0, "pts": 0},
+    "Gg": {"clout": 0, "acumen": 0.25, "grit": 0.25, "alacrity": 0.25,  #
+           "hunch": 0.25, "resolve": 0, "moxie": 0, "psyche": 0, "pts": 0},
+    "gg": {"clout": 0, "acumen": 1, "grit": 1, "alacrity": 0,  # Jade
+           "hunch": 0, "resolve": 0, "moxie": 0, "psyche": 0, "pts": 0},
+    "Gb": {"clout": 0, "acumen": 1, "grit": 0.5, "alacrity": 0,  #
+           "hunch": 0, "resolve": 0, "moxie": 0.5, "psyche": 0, "pts": 0},
+    "GB": {"clout": 0, "acumen": 1, "grit": 0, "alacrity": 0,  # Teal
+           "hunch": 0, "resolve": 0, "moxie": 1, "psyche": 0, "pts": 0},
+    "gB": {"clout": 0, "acumen": 0.5, "grit": 0, "alacrity": 0,  #
+           "hunch": 0.5, "resolve": 0, "moxie": 1, "psyche": 0, "pts": 0},
+    "gb": {"clout": 0, "acumen": 0, "grit": 0, "alacrity": 0,  # Ceru
+           "hunch": 1, "resolve": 0, "moxie": 1, "psyche": 0, "pts": 0},
+
+    "BB": {"clout": 1, "acumen": 1, "grit": 0, "alacrity": -1,  # Bloo
+           "hunch": 0, "resolve": 1, "moxie": 0, "psyche": 0, "pts": 0},
+    "Bb": {"clout": 1, "acumen": 0, "grit": 1, "alacrity": 0,  #
+           "hunch": 0, "resolve": 1, "moxie": -1, "psyche": 0, "pts": 0},
+    "bb": {"clout": 1, "acumen": -1, "grit": 1, "alacrity": 0,  # Indigo
+           "hunch": 0, "resolve": 1, "moxie": 0, "psyche": 0, "pts": 0},
+    "rB": {"clout": 1, "acumen": 0, "grit": 1, "alacrity": 0,  #
+           "hunch": 0, "resolve": 1, "moxie": -1, "psyche": -1, "pts": 0},
+    "RB": {"clout": 1, "acumen": 0, "grit": 1, "alacrity": 0,  # Violet
+           "hunch": 0, "resolve": 1, "moxie": 0, "psyche": -2, "pts": 0},
+    "Rb": {"clout": 1, "acumen": 0, "grit": 1, "alacrity": 0,  #
+           "hunch": 0, "resolve": 1, "moxie": 0, "psyche": -4, "pts": 0},
+    "rb": {"clout": 1, "acumen": 0, "grit": 1, "alacrity": 0,  # Tyrian
+           "hunch": 0, "resolve": 1, "moxie": 0, "psyche": -6, "pts": 0},
+}
+
