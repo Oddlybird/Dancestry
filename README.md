@@ -3,9 +3,30 @@ Generates adult trolls from arbitrary parentage, loads and saves adult trolls to
 
 Original version written in freebasic in late 2017.  Being adapted to Python in early 2019.
 
+Goal: 0.4.0, major graphical, UI, or back-end update.  The last significant UI -AND- graphics overhauls before 1.0 should be done by 0.5.0.
+
 =
 Approximate version history:
 =
+
+
+V. 0.3.1: 2019-06-08
+
+-- Created Troll Class.  Accidentally broke savefiles.
+
+-- Basic stats included in traits.py; not JSON compatible.  Save .troll files temporarily broken; screenshots still working fine.  Core and secret stats present.  Some bugs left; stat maximums often incorrect.
+
+-- Simple Aspect-calculator included.  Currently bland / not well integrated. Consider adding Aspect icons?
+
+-- Updated stats defaults from if-statement forest to slurry-defined.
+
+-- Began planning splitting seadweller traits into graphics, starting with earfins and eyegills.
+
+-- Began planning combination of all genestrands into one splittable object, so cross-strand interactions are easier (eg: seadweller doubled-teeth, eyelids)
+
+-- Updated Feature Project with subgoals.  Aim to have 0.4.0 be either a significant graphics/display/interface update (full graphical support for all currently statted genestrands + groundwork for later additions, or a significant back-end update for ease-of-use.  More genestrands being added along the way is fine, but only counts for abcd level updates.
+
+-- Created secondary copy of Genome file, containing only resource functions (genecombine, printing to screen, basic graphics, genestrand template) and no setting-specific data.  IE, a blank copy of the engine.  Use later for non-fanwork programs along these lines, and for final revision of this project once it's time for the Complete Rewrite / Redesign.
 
 V. 0.3.0: 2019-06-04
 
