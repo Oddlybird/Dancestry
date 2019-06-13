@@ -1,5 +1,15 @@
 import os
 import pygame
+import random
+
+
+def randsel(inp="X", length=1):
+    x = 0
+    which = "X"
+    while x < length:
+        which = which + inp[random.randint(0, len(inp))]
+        x = x + 1
+    return which
 
 
 def wordwrap2(instring, wraplength = 20):
