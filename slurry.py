@@ -1,5 +1,6 @@
 import genome as gene
 import random
+from formattingbs import randsel
 
 # This file contains:
 # -- source data to produce random trolls from slurry
@@ -942,67 +943,67 @@ def genehorns(inp):
     # Primary Hornsets
     rand = {
         "left": {
-            1: genehorn(0,4,0, 0,8,0, "rand", "rand", "rand", "rand"),
-            2: genehorn(0,4,0, 0,8,0, "rand", "rand", "rand", "rand"),
-            3: genehorn(0,4,0, 0,8,0, "rand", "rand", "rand", "rand")},
+            1: genehorn(0, 4, 0, 0, 8, 0, "rand", "rand", "rand", "rand"),
+            2: genehorn(0, 4, 0, 0, 8, 0, "rand", "rand", "rand", "rand"),
+            3: genehorn(0, 4, 0, 0, 8, 0, "rand", "rand", "rand", "rand")},
         "right": {
-            1: genehorn(0,4,0, 0,8,0, "rand", "rand", "rand", "rand"),
-            2: genehorn(0,4,0, 0,8,0, "rand", "rand", "rand", "rand"),
-            3: genehorn(0,4,0, 0,8,0, "rand", "rand", "rand", "rand")}}
+            1: genehorn(0, 4, 0, 0, 8, 0, "rand", "rand", "rand", "rand"),
+            2: genehorn(0, 4, 0, 0, 8, 0, "rand", "rand", "rand", "rand"),
+            3: genehorn(0, 4, 0, 0, 8, 0, "rand", "rand", "rand", "rand")}}
     standardup = {
         "left": {
-            1: genehorn(2,2,0, 0,2,1, "R", "IIIIIIIO", "n", "PPPPPPPbHHHJRSSSsLL"),
-            2: genehorn(1,3,1, 0,3,0, "RRRRRROOOTTCI", "FBIIIIO", "nnnnnnnw", "PPbHHJRSsL"),
-            3: genehorn(1,2,0, 0,4,0, "RRRRRROOOTTCI", "FBIIIIO", "nnnnnnnw", "PPbFHHJRSsL")},
+            1: genehorn(2, 2, 0, 0, 2, 1, "R", "IIIIIIIO", "n", "PPPPPPPbHHHJRSSSsLL"),
+            2: genehorn(1, 3, 1, 0, 3, 0, "RRRRRROOOTTCI", "FBIIIIO", "nnnnnnnw", "PPbHHJRSsL"),
+            3: genehorn(1, 2, 0, 0, 4, 0, "RRRRRROOOTTCI", "FBIIIIO", "nnnnnnnw", "PPbFHHJRSsL")},
         "right": {
-            1: genehorn(2,2,0, 0,2,1, "R", "IIIIIIIO", "n", "PPPPPPPbHHHJRSSSsLL"),
-            2: genehorn(1,3,1, 0,3,0, "RRRRRROOOTTCI", "FBIIIIO", "nnnnnnnw", "PPbHHJRSsL"),
-            3: genehorn(1,2,0, 0,4,0, "RRRRRROOOTTCI", "FBIIIIO", "nnnnnnnw", "PPbFHHJRSsL")}}
+            1: genehorn(2, 2, 0, 0, 2, 1, "R", "IIIIIIIO", "n", "PPPPPPPbHHHJRSSSsLL"),
+            2: genehorn(1, 3, 1, 0, 3, 0, "RRRRRROOOTTCI", "FBIIIIO", "nnnnnnnw", "PPbHHJRSsL"),
+            3: genehorn(1, 2, 0, 0, 4, 0, "RRRRRROOOTTCI", "FBIIIIO", "nnnnnnnw", "PPbFHHJRSsL")}}
     miscwiggle = {
         "left": {
-            1: genehorn(2,3,0, 2,4,0, "RRROI", "FBIIIO", "rand", "PPPPPPPBbCFHJRSsL"),
-            2: genehorn(1,4,0, 2,4,0, "RRROTI", "FBIIO", "rand", "PPPPPBbCFHJRSsL"),
-            3: genehorn(1,4,0, 1,8,0, "RRROTCI", "FBIIO", "rand", "PPPBbCFHJRSsL")},
+            1: genehorn(2, 3, 0, 2, 4, 0, "RRROI", "FBIIIO", "rand", "PPPPPPPBbCFHJRSsL"),
+            2: genehorn(1, 4, 0, 2, 4, 0, "RRROTI", "FBIIO", "rand", "PPPPPBbCFHJRSsL"),
+            3: genehorn(1, 4, 0, 1, 8, 0, "RRROTCI", "FBIIO", "rand", "PPPBbCFHJRSsL")},
         "right": {
-            1: genehorn(2,3,0, 2,4,0, "RRROI", "FBIIIO", "rand", "PPPPPPPBbCFHJRSsL"),
-            2: genehorn(1,4,0, 2,4,0, "RRROTI", "FBIIO", "rand", "PPPPPBbCFHJRSsL"),
-            3: genehorn(1,4,0, 1,8,0, "RRROTCI", "FBIIO", "rand", "PPPBbCFHJRSsL")}}
+            1: genehorn(2, 3, 0, 2, 4, 0, "RRROI", "FBIIIO", "rand", "PPPPPPPBbCFHJRSsL"),
+            2: genehorn(1, 4, 0, 2, 4, 0, "RRROTI", "FBIIO", "rand", "PPPPPBbCFHJRSsL"),
+            3: genehorn(1, 4, 0, 1, 8, 0, "RRROTCI", "FBIIO", "rand", "PPPBbCFHJRSsL")}}
     ram = {
         "left": {
-            1: genehorn(2,3,0, 6,7,0, "RRRRROTC", "B", "nw", "PR"),
-            2: genehorn(1,4,0, 5,8,0, "RRRRRROOOTTCI", "BBBBBBBOOIF", "nnw", "PR"),
-            3: genehorn(1,4,0, 5,8,0, "RRRRRROOOTTCI", "BBBBBBBOOIF", "nnw", "PPbFHHJRSsL")},
+            1: genehorn(2, 3, 0, 6, 7, 0, "RRRRROTC", "B", "nw", "PR"),
+            2: genehorn(1, 4, 0, 5, 8, 0, "RRRRRROOOTTCI", "BBBBBBBOOIF", "nnw", "PR"),
+            3: genehorn(1, 4, 0, 5, 8, 0, "RRRRRROOOTTCI", "BBBBBBBOOIF", "nnw", "PPbFHHJRSsL")},
         "right": {
-            1: genehorn(2,3,0, 6,7,0, "RRRRROTC", "B", "nw", "PR"),
-            2: genehorn(1,4,0, 5,8,0, "RRRRRROOOTTCI", "BBBBBBBOOIF", "nnw", "PR"),
-            3: genehorn(1,4,0, 5,8,0, "RRRRRROOOTTCI", "BBBBBBBOOIF", "nnw", "PPbFHHJRSsL")}}
+            1: genehorn(2, 3, 0, 6, 7, 0, "RRRRROTC", "B", "nw", "PR"),
+            2: genehorn(1, 4, 0, 5, 8, 0, "RRRRRROOOTTCI", "BBBBBBBOOIF", "nnw", "PR"),
+            3: genehorn(1, 4, 0, 5, 8, 0, "RRRRRROOOTTCI", "BBBBBBBOOIF", "nnw", "PPbFHHJRSsL")}}
     bull = {
         "left": {
-            1: genehorn(0,4,2, 3,4,0, "RO", "FFI", "rand", "PPPPRSLJ"),
-            2: genehorn(0,4,2, 1,5,0, "ROTI", "FI", "rand", "PPPPRSLJFH"),
-            3: genehorn(0,4,2, 1,5,0, "ROTI", "FBIO", "wn", "PPPPRSLJFH")},
+            1: genehorn(0, 4, 2, 3, 4, 0, "RO", "FFI", "rand", "PPPPRSLJ"),
+            2: genehorn(0, 4, 2, 1, 5, 0, "ROTI", "FI", "rand", "PPPPRSLJFH"),
+            3: genehorn(0, 4, 2, 1, 5, 0, "ROTI", "FBIO", "wn", "PPPPRSLJFH")},
         "right": {
-            1: genehorn(0,4,2, 3,4,0, "RO", "FFI", "rand", "PPPPRSLJ"),
-            2: genehorn(0,4,2, 1,5,0, "ROTI", "FI", "rand", "PPPPRSLJFH"),
-            3: genehorn(0,4,2, 1,5,0, "ROTI", "FBIO", "wn", "PPPPRSLJFH")}}
+            1: genehorn(0, 4, 2, 3, 4, 0, "RO", "FFI", "rand", "PPPPRSLJ"),
+            2: genehorn(0, 4, 2, 1, 5, 0, "ROTI", "FI", "rand", "PPPPRSLJFH"),
+            3: genehorn(0, 4, 2, 1, 5, 0, "ROTI", "FBIO", "wn", "PPPPRSLJFH")}}
     stabnub = {
         "left": {
-            1: genehorn(1,3,-1, 0,1,0, "ROTSC", "I", "wwwwwwn", "PPPPPPHJSL"),
-            2: genehorn(1,3,-1, 0,2,0, "ROTSC", "IO", "wwwnnn", "PPPPHHJJSL"),
-            3: genehorn(1,3,-1, 0,4,0, "ROTSCI", "FBIO", "wn", "PPHHHJJSSLL")},
+            1: genehorn(1, 3, -1, 0, 1, 0, "ROTSC", "I", "wwwwwwn", "PPPPPPHJSL"),
+            2: genehorn(1, 3, -1, 0, 2, 0, "ROTSC", "IO", "wwwnnn", "PPPPHHJJSL"),
+            3: genehorn(1, 3, -1, 0, 4, 0, "ROTSCI", "FBIO", "wn", "PPHHHJJSSLL")},
         "right": {
-            1: genehorn(1,3,-1, 0,1,0, "ROTSC", "I", "wwwwwwn", "PPPPPPHJSL"),
-            2: genehorn(1,3,-1, 0,2,0, "ROTSC", "IO", "wwwnnn", "PPPPHHJJSL"),
-            3: genehorn(1,3,-1, 0,4,0, "ROTSCI", "FBIO", "wn", "PPHHHJJSSLL")}}
+            1: genehorn(1, 3, -1, 0, 1, 0, "ROTSC", "I", "wwwwwwn", "PPPPPPHJSL"),
+            2: genehorn(1, 3, -1, 0, 2, 0, "ROTSC", "IO", "wwwnnn", "PPPPHHJJSL"),
+            3: genehorn(1, 3, -1, 0, 4, 0, "ROTSCI", "FBIO", "wn", "PPHHHJJSSLL")}}
     swirl = {
         "left": {
-            1: genehorn(2,4,0, 1,8,0, "TS", "IO", "wn", "PPPPPPPPPPPPPBHSsL"),
-            2: genehorn(1,4,0, 1,8,0, "TSI", "IO", "wn", "PPPPPPPPPPPBHJSsL"),
-            3: genehorn(1,4,0, 1,8,0, "TSI", "FBIO", "wn", "PPPPPPPBFHJRSsL")},
+            1: genehorn(2, 4, 0, 1, 8, 0, "TS", "IO", "wn", "PPPPPPPPPPPPPBHSsL"),
+            2: genehorn(1, 4, 0, 1, 8, 0, "TSI", "IO", "wn", "PPPPPPPPPPPBHJSsL"),
+            3: genehorn(1, 4, 0, 1, 8, 0, "TSI", "FBIO", "wn", "PPPPPPPBFHJRSsL")},
         "right": {
-            1: genehorn(2,4,0, 1,8,0, "TS", "IO", "wn", "PPPPPPPPPPPPPBHSsL"),
-            2: genehorn(1,4,0, 1,8,0, "TSI", "IO", "wn", "PPPPPPPPPPPBHJSsL"),
-            3: genehorn(1,4,0, 1,8,0, "TSI", "FBIO", "wn", "PPPPPPPBFHJRSsL")}}
+            1: genehorn(2, 4, 0, 1, 8, 0, "TS", "IO", "wn", "PPPPPPPPPPPPPBHSsL"),
+            2: genehorn(1, 4, 0, 1, 8, 0, "TSI", "IO", "wn", "PPPPPPPPPPPBHJSsL"),
+            3: genehorn(1, 4, 0, 1, 8, 0, "TSI", "FBIO", "wn", "PPPPPPPBFHJRSsL")}}
 
     # Meat
     gene = blank
@@ -1102,9 +1103,9 @@ def genehorns(inp):
         gene["controls"]["select"] = randsel("xxxddddDDt")
     if inp == "rg":  # Lime
         gene = standardup
-        if random.randint(1,10) > 7:
+        if random.randint(1, 10) > 7:
             gene["left"][0]["tip"] = "p"
-        if random.randint(1,10) > 7:
+        if random.randint(1, 10) > 7:
             gene["right"][0]["tip"] = "p"
         gene["controls"] = conwrong
         gene["controls"]["stunt"] = randsel("CCCCcccEEee")
