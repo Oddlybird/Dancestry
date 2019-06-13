@@ -6,11 +6,18 @@ Original version written in freebasic in late 2017.  Being adapted to Python in 
 Goal: 0.4.0, major graphical, UI, or back-end update.  The last significant UI -AND- graphics overhauls before 1.0 should be done by 0.5.0.
 
 =
-Approximate version history:
+Approximate version history: (x = nonfunctional)
 =
 
+V. 0.3.2x: 
 
-V. 0.3.1: 2019-06-08
+-- Converted hornobj, hornset, seagene, and mouth to nested dictionary form.
+
+-- Slurry.py, formattingbs.py names.py, colorgarbage.py, should be done.
+
+-- left:  genome.py, graphics.py, traits.py, main.py.
+
+V. 0.3.1x: 2019-06-08
 
 -- Created Troll Class.  Accidentally broke savefiles.
 
