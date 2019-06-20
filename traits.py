@@ -1,18 +1,14 @@
-# import genome as gene
 import slurry
-# import formattingbs as fbs
 import random
 
 
-def defaultcastestats(blood):
-    extrapts = 0 + random.randint(0, 6) - 2
+def defaultcastestats(blood="mm"):
     blood = blood[0:2]
-    if blood == "mm":
-        extrapts = 2
-
     statmain = corestatdict()
     statmax = corestatdict()
     castemods = slurry.spectrumcorestat[blood]
+    extrapts = castemods["pts"] + random.randint(0, 6) - 2
+
     for arb in statmain:
         statmain[arb] = castemods[arb]
         if statmain[arb] == 0.5:
@@ -44,272 +40,74 @@ def defaultcastestats(blood):
     return statmain, statsecret, dpts, dorder, statmax
 
 
-def defaultcastestats_orig(blood):
-    clout = 0
-    acumen = 0
-    grit = 0
-    alacrity = 0
-    hunch = 0
-    resolve = 0
-    moxie = 0
-    psyche = 0
-    extrapts = 0 + random.randint(0, 6) - 2
-
-    blood = blood[0:2]
-    if blood == "RR":  # Maroon
-        clout = clout - 1
-        hunch = hunch + 2
-        psyche = psyche + 1
-    if blood == "Rr":
-        clout = clout - 1
-        hunch = hunch + 1
-        moxie = moxie + 1
-        psyche = psyche + 1
-    if blood == "rr":  # Bronze
-        clout = clout - 1
-        moxie = moxie + 2
-        psyche = psyche + 1
-    if blood == "rG":
-        clout = clout - 1
-        moxie = moxie + 1
-        acumen = acumen + 1
-        psyche = psyche + 1
-    if blood == "RG":  # Gold
-        clout = clout - 1
-        acumen = acumen + 1
-        psyche = psyche + 2
-    if blood == "Rg":
-        clout = clout - 1
-        acumen = acumen + 1
-        psyche = psyche + 2
-    if blood == "rg": # lime
-        clout = clout - 1
-        grit = grit - 1
-        psyche = psyche + 3
-
-    if blood == "GG":  # Olive
-        alacrity = alacrity + 1
-        hunch = hunch + 1
-    if blood == "Gg":  # Olive-Jades have some variety.
-        bonuses = 0
-        b = True
-        c = True
-        d = True
-        e = True
-        while bonuses < 2:
-            a = random.randint(1, 5)
-            if a == 1:
-                if b:
-                    acumen = acumen + 1
-                    b = False
-                    bonuses = bonuses + 1
-            if a == 2:
-                if c:
-                    grit = grit + 1
-                    c = False
-                    bonuses = bonuses + 1
-            if a == 3:
-                if d:
-                    alacrity = alacrity + 1
-                    d = False
-                    bonuses = bonuses + 1
-            if a == 4:
-                if e:
-                    hunch = hunch + 1
-                    e = False
-                    bonuses = bonuses + 1
-    if blood == "gg":  # Jade
-        acumen = acumen + 1
-        grit = grit + 1
-    if blood == "Gb":
-        acumen = acumen + 1
-        bonuses = 0
-        b = True
-        c = True
-        while bonuses < 1:
-            a = random.randint(1, 2)
-            if a == 1:
-                if b:
-                    moxie = moxie + 1
-                    b = False
-                    bonuses = bonuses + 1
-            if a == 2:
-                if c:
-                    grit = grit + 1
-                    c = False
-                    bonuses = bonuses + 1
-    if blood == "GB":  # Teal
-        acumen = acumen + 1
-        moxie = moxie + 1
-    if blood == "gB":
-        moxie = moxie + 1
-        bonuses = 0
-        b = True
-        c = True
-        while bonuses < 1:
-            a = random.randint(1, 2)
-            if a == 1:
-                if b:
-                    hunch = hunch + 1
-                    b = False
-                    bonuses = bonuses + 1
-            if a == 2:
-                if c:
-                    acumen = acumen + 1
-                    c = False
-                    bonuses = bonuses + 1
-    if blood == "gb":  # Ceru
-        hunch = hunch + 1
-        moxie = moxie + 1
-
-    if blood == "BB":  # Blue
-        clout = clout + 1
-        resolve = resolve + 1
-        acumen = acumen + 1
-        alacrity = alacrity - 1
-    if blood == "Bb":
-        clout = clout + 1
-        resolve = resolve + 1
-        grit = grit + 1
-        moxie = moxie - 1
-    if blood == "bb":  # Indigo
-        clout = clout + 1
-        resolve = resolve + 1
-        grit = grit + 1
-        acumen = acumen - 1
-    if blood == "rB":  # Violet
-        clout = clout + 1
-        resolve = resolve + 1
-        grit = grit + 1
-        psyche = psyche - 1
-        moxie = moxie - 1
-    if blood == "RB":
-        clout = clout + 1
-        resolve = resolve + 1
-        grit = grit + 1
-        psyche = psyche - 2
-    if blood == "Rb":  # Tyrian
-        clout = clout + 1
-        resolve = resolve + 1
-        grit = grit + 1
-        psyche = psyche - 6
-    if blood == "rb":
-        clout = clout + 1
-        resolve = resolve + 1
-        grit = grit + 1
-    if blood == "mm":
-        extrapts = 2
-
-    # secret stats
-    faith = random.randint(1, 20) - 10
-    order = random.randint(1, 20) - 10
-    entropy = random.randint(1, 20) - 10
-    connection = random.randint(1, 20) - 10
-    self = random.randint(1, 20) - 10
-    luck = random.randint(1, 20) - 10
-
-    statmain = {
-        "clout": clout,
-        "acumen": acumen,
-        "grit": grit,
-        "alacrity": alacrity,
-        "hunch": hunch,
-        "resolve": resolve,
-        "moxie": moxie,
-        "psyche": psyche,
-    }
-    statsecret = {
-        "faith": faith,
-        "order": order,
-        "entropy": entropy,
-        "connection": connection,
-        "self": self,
-        "luck": luck,
-    }
-
-    dpts = 20 + extrapts
-    dorder = "A"    # Average.  Replace later.
-
-    return statmain, statsecret, dpts, dorder
-
-
-def corestatdict(instat=""):
-    if instat == "":
+def corestatdict(inblood=""):
+    if inblood == "" or inblood == "blank":
         s = {"clout": 0, "acumen": 0,
              "grit": 0,  "alacrity": 0,
              "hunch": 0, "resolve": 0,
-             "moxie": 0, "psyche": 0}
-    if instat != "":
-        s = {"clout": instat.statmain["clout"], "acumen": instat.statmain["acumen"],
-             "grit": instat.statmain["grit"],  "alacrity": instat.statmain["alacrity"],
-             "hunch": instat.statmain["hunch"], "resolve": instat.statmain["resolve"],
-             "moxie": instat.statmain["moxie"], "psyche": instat.statmain["psyche"]}
+             "moxie": 0, "psyche": 0,
+             "pts": 0}
+    else:
+        src = slurry.spectrumcorestat[inblood]
+        s = {"clout": src["clout"],
+             "acumen": src["acumen"],
+             "grit": src["grit"],
+             "alacrity": src["alacrity"],
+             "hunch": src["hunch"],
+             "resolve": src["resolve"],
+             "moxie": src["moxie"],
+             "psyche": src["psyche"],
+             "pts": src["pts"]}
     return s
 
 
-def secstatdict(instat=""):
-    if instat == "":
-        s = {
-            "faith": 0,
-            "order": 0,
-            "entropy": 0,
-            "connection": 0,
-            "self": 0,
-            "luck": 0,
+def secstatdict(inblood=""):
+    s = {
+        "faith": 0,
+        "order": 0,
+        "entropy": 0,
+        "connection": 0,
+        "self": 0,
+        "luck": 0,
         }
-    if instat != "":
-        s = {
-            "faith": instat.statsecret["faith"],
-            "order": instat.statsecret["order"],
-            "entropy": instat.statsecret["entropy"],
-            "connection": instat.statsecret["connection"],
-            "self": instat.statsecret["self"],
-            "luck": instat.statsecret["luck"],
-        }
+#    if inblood != "":
+#        src = inblood
+#        # There's no difference based on caste, yet.  But if there was, it would go here.
     return s
 
 
-class Stats:
-    # Core stats
-    blood = ""
-    statmain = corestatdict()
-    statmax = corestatdict()
-    # Secret stats
-    statsecret = secstatdict()
-    # distribution stats
+def stats(blood=""):
     a = random.randint(1, 5)
     dorder = "A"  # G(generalist), S(specialist), A(average), other things.
     if a == 1:
         dorder = "G"
     if a == 2:
         dorder = "S"
-    dpts = 0
 
-    def __init__(self, b="mm", pts=20):
-        self.blood = b
-        if self.blood == "mm":
-            self.blood = "rr"
-        # assign default stats per caste
-        smain, ssecret, dpts, dorder, smax = defaultcastestats(b)
-        # main: clout acumen grit alacrity hunch resolve moxie psyche
-        self.statmain = smain
-        self.statmax = smax
-        for arb in self.statmax:
-            self.statmax[arb] = self.statmax[arb] + 6
-        # secret: faith order entropy connection self luck
-        self.statsecret = ssecret
-        # distribution
-        self.dpts = dpts
-        self.dorder = dorder  # distriborder
+    corestat = corestatdict(blood)
+    secstat = secstatdict(blood)
+
+    blank = {
+        # Core stats
+        "statmain": corestat,
+        "statmax": corestat,
+        # Secret stats
+        "statsecret": secstat,
+        "aspect": "",
+        # distribution stats
+        "dorder": dorder,  # distrib order
+        "dpts": corestat["pts"],
+    }
+    return blank
 
 
-def getaspect(stat=Stats()):
-    faith = stat.statsecret["faith"]
-    order = stat.statsecret["order"]
-    entropy = stat.statsecret["entropy"]
-    connection = stat.statsecret["connection"]
-    self = stat.statsecret["self"]
-    luck = stat.statsecret["luck"]
+def getaspect(stat):
+    faith = stat["statsecret"]["faith"]
+    order = stat["statsecret"]["order"]
+    entropy = stat["statsecret"]["entropy"]
+    connection = stat["statsecret"]["connection"]
+    self = stat["statsecret"]["self"]
+    luck = stat["statsecret"]["luck"]
     aspectdict = {
         "Rage": faith,
         "Hope": (-1) * faith,
@@ -337,14 +135,14 @@ def getaspect(stat=Stats()):
 
 # stats are listed by caste preference, needs individual preference modifications
 # stat distribution style = Average; generalist/specialist currently unused.
-def statdistrib(stat):
+def statdistrib(stat, blood):
     # lists of the stat names in order from highest to lowest.
     statmain, smindex = orderstats(stat, "core")
-    statmax = slurry.spectrumcorestat[stat.blood]
+    statmax = slurry.spectrumcorestat[blood]
     for arb in statmax:
         statmax[arb] = statmax[arb] + 6
     # clout, acumen, grit, alacrity, hunch, resolve, moxie, psyche
-    pts = stat.dpts  # number of points to distribute
+    pts = stat["dpts"]  # number of points to distribute
 
     # minimum stat = 1.
     for arb in statmain:
@@ -360,7 +158,7 @@ def statdistrib(stat):
         pts = pts - 1
         statmain[smindex[a]] = statmain[smindex[a]] + 1
     # sort by new order
-    stat.statmain = statmain
+    stat["statmain"] = statmain
     statmain, smindex = orderstats(stat, "core")
     # a = random.randint(0, 10)
     # if (a // 3) == 0:
@@ -400,9 +198,9 @@ def statdistrib(stat):
                 else:
                     break
     # put values into stat object
-    stat.dpts = pts
-    stat.statmain = statmain
-    stat.statmax = statmax
+    stat["dpts"] = pts
+    stat["statmain"] = statmain
+    stat["statmax"] = statmax
     return stat
 
 
@@ -410,9 +208,9 @@ def orderstats(t, flag="core"):
     d1 = {}  # Source dict
     d2 = []  # dest list, to be constructed during function
     if flag == "core" or flag == "main":
-        d1 = t.statmain
+        d1 = t["statmain"]
     if flag == "secret":
-        d1 = t.statsecret
+        d1 = t["statsecret"]
     if flag == "manual":
         d1 = t
     # Actual sorting function

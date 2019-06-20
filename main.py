@@ -23,8 +23,6 @@ except ImportError:
     print("couldn't load module.")
     sys.exit(2)
 
-# getcastefromblood(b) is a function you can use to get the plaintext of a caste.  Put in the blood-code.
-# Will be tagging each function / class / etc
 # screens:  maketroll, loadingzone, bloodpage, donationpage,
 # screens are named ""page, and their ScrPage objects are named page""
 # to activate a new main menu button, go to btnselect(), drawmenu(),
@@ -130,19 +128,19 @@ def handlekeys(gameon=True):
                 if screencurrent.name == "maketroll":
                     if btncurrent == 51:
                         # Btn 1 : Troll from parents
-                        troll3 = gene.trolldict()
-                        troll3 = gene.blendtroll(troll1, troll2)
+                        troll3 = gene.troll("blank")
+                        troll3 = gene.trollgen("blend", spectrum, troll1, troll2)
                         updatescreen()
                         return gameon
                     if btncurrent == 52:
                         # Btn 2 : Troll from slurry
-                        troll3 = gene.trolldict()
-                        troll3 = gene.slurrytroll(spectrum)
+                        troll3 = gene.troll("blank")
+                        troll3 = gene.trollgen("rand", spectrum)
                         updatescreen()
                         return gameon
                     if btncurrent == 53:
                         # Btn 3 : Put random default troll into slot 3
-                        troll3 = gene.trolldict()
+                        troll3 = gene.troll("blank")
                         troll3 = gene.getpremadetroll()
                         updatescreen()
                         return gameon
@@ -178,8 +176,8 @@ def handlekeys(gameon=True):
                         return gameon
                     if btncurrent == 60:
                         # Btn 10 : Put random default troll into slot 3
-                        troll3 = gene.trolldict()
-                        troll3 = gene.muttroll()
+                        troll3 = gene.troll("blank")
+                        troll3 = gene.trollgen("mutant", spectrum)
                         updatescreen()
                         return gameon
                     return gameon
@@ -311,14 +309,14 @@ def drawmenu(background):  # interface.  Contains Labels for all main and submen
     if screencurrent == pagemaketroll:
         btnA = fbs.btn("  Troll From Parents   ", btnwsmall, btnhsmall, btnselect(51), txtcol)
         btnB = fbs.btn("  Troll From Slurry    ", btnwsmall, btnhsmall, btnselect(52), txtcol)
-        btnC = fbs.btn(" Rand.Normal to #3", btnwsmall, btnhsmall, btnselect(53), txtcol)
-        btnD = fbs.btn("  Load #3 Into #1  ", btnwsmall, btnhsmall, btnselect(54), txtcol)
-        btnE = fbs.btn("  Load #3 Into #2  ", btnwsmall, btnhsmall, btnselect(55), txtcol)
-        btnF = fbs.btn("  Save slot3.troll   ", btnwsmall, btnhsmall, btnselect(56), txtcol)
-        btnG = fbs.btn("    Save slot1.png   ", btnwsmall, btnhsmall, btnselect(57), txtcol)
-        btnH = fbs.btn("    Save slot2.png   ", btnwsmall, btnhsmall, btnselect(58), txtcol)
-        btnI = fbs.btn("    Save slot3.png   ", btnwsmall, btnhsmall, btnselect(59), txtcol)
-        btnJ = fbs.btn("    Acquire Mutant   ", btnwsmall, btnhsmall, btnselect(60), txtcol)
+        btnC = fbs.btn("  Rand.Normal to #3    ", btnwsmall, btnhsmall, btnselect(53), txtcol)
+        btnD = fbs.btn("   Load #3 Into #1     ", btnwsmall, btnhsmall, btnselect(54), txtcol)
+        btnE = fbs.btn("   Load #3 Into #2     ", btnwsmall, btnhsmall, btnselect(55), txtcol)
+        btnF = fbs.btn("  Save slot3.troll     ", btnwsmall, btnhsmall, btnselect(56), txtcol)
+        btnG = fbs.btn("    Save slot1.png     ", btnwsmall, btnhsmall, btnselect(57), txtcol)
+        btnH = fbs.btn("    Save slot2.png     ", btnwsmall, btnhsmall, btnselect(58), txtcol)
+        btnI = fbs.btn("    Save slot3.png     ", btnwsmall, btnhsmall, btnselect(59), txtcol)
+        btnJ = fbs.btn("    Acquire Mutant     ", btnwsmall, btnhsmall, btnselect(60), txtcol)
         btnK = fbs.btn("", btnwsmall, btnhsmall, btnselect(61), txtcol)
         btnL = fbs.btn("", btnwsmall, btnhsmall, btnselect(62), txtcol)
         btnM = fbs.btn("", btnwsmall, btnhsmall, btnselect(63), txtcol)
@@ -379,7 +377,6 @@ def drawmenu(background):  # interface.  Contains Labels for all main and submen
         background.blit(btnG, (392, 12))
         background.blit(btnH, (392, 36))
         background.blit(btnI, (392, 60))
-
     return background
 
 
@@ -475,15 +472,15 @@ def savetroll(grub):  # interface     Save Troll
 
 
 def loadtroll(filename):  # interface     Load Troll
-    trollobj = gene.trolldict()
+    trollobj = gene.troll("blank")
     savedtroll = "Caverns/AncestralCave/" + filename + ".troll"
     if os.path.exists(savedtroll):
         loadedtroll = open(savedtroll, "rt")
         y = loadedtroll.read()
         trollobj = json.loads(y)
         loadedtroll.close()
-    if trollobj["savetype"] != "5":
-        trollobj = gene.trolldict()
+    if trollobj["savetype"] != "12":
+        trollobj = gene.troll("blank")
     return trollobj
 
 
@@ -533,22 +530,21 @@ def displaytroll(t0):  # interface -- prints a standard-format window display to
     h = t0["height"]
     t0["heightstr"] = gene.heightstr(h)
     seatemp = t0["sea"]
-    t0["seadesc"] = gene.describesea(blood, seatemp)
+    # t0["seadesc"] = gene.describesea(blood, seatemp)
     t0["dwell"] = gene.describedwell(seatemp)
     t0["caste"] = gene.getcastefromblood(blood)
     castedefaultheight = slurry.spectrumheight[blood]
-    seawrap = fbs.wordwrap2(t0["seadesc"], 60)
-    t0stats = t0["stats"]
-    t0stat = t0stats.statmain
-    smax = t0stats.statmax
-    t0secret = t0stats.statsecret
+#    seawrap = fbs.wordwrap2(t0["seadesc"], 60)
+    statmain = t0["stats"]["statmain"]
+    statmax = t0["stats"]["statmax"]
+    statsec = t0["stats"]["statsecret"]
 
     # Get actual graphics
-    background = fbs.btn("", 512, 260, colbg, colfg)
+    background = fbs.btn("", 512, 260, colbg, colfg)  # Background of trolldisplay chunk
     x = 0
     y = 0
-    img, horndescr = trollimg(t0)
-    background.blit(img, (308, 0))
+    img, horndescr = trollimg(t0)   # Get Horns
+    background.blit(img, (308, 0))  # Print Horns
 
     # Text string definition
     string1 = t0["firname"] + " " + t0["surname"] + ", " + t0["blood"] + " " + t0["sex"]
@@ -556,31 +552,31 @@ def displaytroll(t0):  # interface -- prints a standard-format window display to
     string3 = t0["donator1"] + " / " + t0["donator2"]
     string4 = t0["heightstr"] + "/" + gene.heightstr(castedefaultheight) + ", " + t0["build"] + " build, "
     string5 = t0["hair"] + " hair, " + t0["skin"] + " skin"
-    string6 = seawrap[0]
-    string7 = "  " + seawrap[1]
-    string8 = "  " + seawrap[2]
-    string9 = "  " + seawrap[3]
-    string10 = t0["aspect"] + ", " + t0["powers"]
+    string6 = "."  # seawrap[0]
+    string7 = "."  # "  " + seawrap[1]
+    string8 = "."  # "  " + seawrap[2]
+    string9 = "."  # "  " + seawrap[3]
+    string10 = t0["stats"]["aspect"] + ", " + t0["powers"]
     string11 = "Horns: " + horndescr
 
-    string12 = "Clout: " + str(t0stat["clout"]) + "/" + str(smax["clout"]) + " "
-    string12 = string12 + "Grit: " + str(t0stat["grit"]) + "/" + str(smax["grit"]) + " "
-    string12 = string12 + "Hunch: " + str(t0stat["hunch"]) + "/" + str(smax["hunch"]) + " "
-    string12 = string12 + "Moxie: " + str(t0stat["moxie"]) + "/" + str(smax["moxie"]) + " "
+    string12 = "Clout: " + str(statmain["clout"]) + "/" + str(statmax["clout"]) + " "
+    string12 = string12 + "Grit: " + str(statmain["grit"]) + "/" + str(statmax["grit"]) + " "
+    string12 = string12 + "Hunch: " + str(statmain["hunch"]) + "/" + str(statmax["hunch"]) + " "
+    string12 = string12 + "Moxie: " + str(statmain["moxie"]) + "/" + str(statmax["moxie"]) + " "
 
-    string13 = "Acumen: " + str(t0stat["acumen"]) + "/" + str(smax["acumen"]) + " "
-    string13 = string13 + "Alacrity: " + str(t0stat["alacrity"]) + "/" + str(smax["alacrity"]) + " "
-    string13 = string13 + "Resolve: " + str(t0stat["resolve"]) + "/" + str(smax["resolve"]) + " "
-    string13 = string13 + "Psyche: " + str(t0stat["psyche"]) + "/" + str(smax["psyche"]) + " "
+    string13 = "Acumen: " + str(statmain["acumen"]) + "/" + str(statmax["acumen"]) + " "
+    string13 = string13 + "Alacrity: " + str(statmain["alacrity"]) + "/" + str(statmax["alacrity"]) + " "
+    string13 = string13 + "Resolve: " + str(statmain["resolve"]) + "/" + str(statmax["resolve"]) + " "
+    string13 = string13 + "Psyche: " + str(statmain["psyche"]) + "/" + str(statmax["psyche"]) + " "
 
-    string14 = "Faith: " + str(t0secret["faith"])
-    string14 = string14 + " Order: " + str(t0secret["order"])
-    string14 = string14 + " Entropy: " + str(t0secret["entropy"])
-    string14 = string14 + " Connection: " + str(t0secret["connection"])
-    string14 = string14 + " Self: " + str(t0secret["self"])
-    string14 = string14 + " Luck: " + str(t0secret["luck"])
+    string14 = "Faith: " + str(statsec["faith"])
+    string14 = string14 + " Order: " + str(statsec["order"])
+    string14 = string14 + " Entropy: " + str(statsec["entropy"])
+    string14 = string14 + " Connection: " + str(statsec["connection"])
+    string14 = string14 + " Self: " + str(statsec["self"])
+    string14 = string14 + " Luck: " + str(statsec["luck"])
 
-    string15 = "dpts: " + str(t0["stats"].dpts)
+    string15 = "dpts: " + str(t0["stats"]["dpts"])
     string16 = "."
     string17 = "Sea:   " + t0["sea"]
     string18 = "Horns: " + t0["horns"]
@@ -647,7 +643,9 @@ def trollmakepage():  # interface
 def displaybigdefaultmouf(blood):
     global font
     page = fbs.pysurface(170, 42, (0, 0, 0))
-    page.blit(pygame.transform.scale2x(graphics.jawprint(slurry.spectrumgenemouth[blood])), (0, 0))
+    jawprint = graphics.jawprint(slurry.genemouth(blood))
+
+    page.blit(pygame.transform.scale2x(jawprint), (0, 0))
     page.blit(font.render(blood, 1, colg.bloodtorgb(blood)), (0, 10))
     return page
 
@@ -681,12 +679,20 @@ def moufpage():
     page.blit(displaybigdefaultmouf("Rb"), (550, 425))
     page.blit(displaybigdefaultmouf("rb"), (550, 500))
 
-    page.blit(pygame.transform.scale2x(graphics.jawprint(slurry.spectrumgenemouth["high"])), (800, 50))
+    page.blit(pygame.transform.scale2x(graphics.jawprint(slurry.genemouth("high"))), (800, 50))
     page.blit(font.render("high", 1, colg.bloodtorgb("BB")), (800, 60))
-    page.blit(pygame.transform.scale2x(graphics.jawprint(slurry.spectrumgenemouth["low"])), (800, 275))
-    page.blit(font.render("low", 1, colg.bloodtorgb("RR")), (800, 285))
-    page.blit(pygame.transform.scale2x(graphics.jawprint(slurry.spectrumgenemouth["mut"])), (800, 500))
-    page.blit(font.render("mutant1", 1, (255, 0, 0)), (800, 510))
+    page.blit(pygame.transform.scale2x(graphics.jawprint(slurry.genemouth("low"))), (800, 125))
+    page.blit(font.render("low", 1, colg.bloodtorgb("RR")), (800, 135))
+    page.blit(pygame.transform.scale2x(graphics.jawprint(slurry.genemouth("allG"))), (800, 200))
+    page.blit(font.render("allG", 1, colg.bloodtorgb("rg")), (800, 210))
+    page.blit(pygame.transform.scale2x(graphics.jawprint(slurry.genemouth("allC"))), (800, 275))
+    page.blit(font.render("allC", 1, colg.bloodtorgb("rg")), (800, 285))
+    page.blit(pygame.transform.scale2x(graphics.jawprint(slurry.genemouth("allP"))), (800, 350))
+    page.blit(font.render("allP", 1, colg.bloodtorgb("rg")), (800, 360))
+    page.blit(pygame.transform.scale2x(graphics.jawprint(slurry.genemouth("length1"))), (800, 425))
+    page.blit(font.render("length1", 1, colg.bloodtorgb("rg")), (800, 435))
+    page.blit(pygame.transform.scale2x(graphics.jawprint(slurry.genemouth("sym1"))), (800, 500))
+    page.blit(font.render("sym1", 1, colg.bloodtorgb("rg")), (800, 510))
     font = pygame.font.SysFont("Verdana", 12, False, False)
     return page
 
@@ -816,8 +822,8 @@ while sametroll:
         sametroll = False
 troll1 = libbie
 troll2 = lester
-troll3 = gene.trolldict()
-trollblank = gene.trolldict()
+troll3 = gene.troll("blank")
+trollblank = gene.troll("blank")
 spectrum = slurry.spectrumfull
 
 # Initialize pygame and graphics window

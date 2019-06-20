@@ -4,25 +4,49 @@ import formattingbs as fbs
 
 
 # TEETH
-def thetooth(moufstr):
-    mouf = gene.Mouth(moufstr)
-    left = ["", "", "", "", "", ""]
-    right = ["", "", "", "", "", ""]
-    x = 0
-    while x < 6:
-        if mouf.symtopl[x] == "F" and mouf.symtopr[x] == "F":
-            left[x] = mouf.typetopl[x] + mouf.typetopl[x] + mouf.lengthtopl[x]
-            right[x] = mouf.typetopr[x] + mouf.typetopr[x] + mouf.lengthtopr[x]
-        if mouf.symtopl[x] == "T" and mouf.symtopr[x] == "F":
-            left[x] = mouf.typetopl[x] + mouf.typetopl[x] + mouf.lengthtopl[x]
-            right[x] = mouf.typetopl[x] + mouf.typetopl[x] + mouf.lengthtopl[x]
-        if mouf.symtopl[x] == "F" and mouf.symtopr[x] == "T":
-            left[x] = mouf.typetopr[x] + mouf.typetopr[x] + mouf.lengthtopr[x]
-            right[x] = mouf.typetopr[x] + mouf.typetopr[x] + mouf.lengthtopr[x]
-        if mouf.symtopl[x] == "T" and mouf.symtopr[x] == "T":
-            toofleng = str((int(mouf.lengthtopl[x]) + int(mouf.lengthtopr[x])) // 2)
-            left[x] = mouf.typetopl[x] + mouf.typetopr[x] + toofleng
-            right[x] = mouf.typetopr[x] + mouf.typetopl[x] + toofleng
+def thetooth(mouf):
+    left = ["", "", "", "", "", "", ""]
+    right = ["", "", "", "", "", "", ""]
+
+    athing = mouf["top"]
+    for a in athing:  # L/R
+        bthing = athing[a]
+        for b in bthing:  # type/length
+            cthing = bthing[b]
+            for c in cthing:  # (indiv teeth)
+                cthing[c] = str(cthing[c])
+            bthing[b] = cthing
+        athing[a] = bthing
+    mouf["top"] = athing
+    athing = mouf["bot"]
+    for a in athing:  # L/R
+        bthing = athing[a]
+        for b in bthing:  # type/length
+            cthing = bthing[b]
+            for c in cthing:  # (indiv teeth)
+                cthing[c] = str(cthing[c])
+            bthing[b] = cthing
+        athing[a] = bthing
+    mouf["top"] = athing
+
+    for arb in mouf["top"]["L"]["type"]:
+        mouf["top"]["L"]["type"][arb] = str(mouf["top"]["L"]["type"][arb])
+
+    x = 1
+    while x < 7:
+        if mouf["top"]["L"]["sym"][x] is False and mouf["top"]["R"]["sym"][x] is False:
+            left[x] = mouf["top"]["L"]["type"][x] + mouf["top"]["L"]["type"][x] + mouf["top"]["L"]["length"][x]
+            right[x] = mouf["top"]["R"]["type"][x] + mouf["top"]["R"]["type"][x] + mouf["top"]["R"]["length"][x]
+        if mouf["top"]["L"]["sym"][x] is True and mouf["top"]["R"]["sym"][x] is False:
+            left[x] = mouf["top"]["L"]["type"][x] + mouf["top"]["L"]["type"][x] + mouf["top"]["L"]["length"][x]
+            right[x] = mouf["top"]["L"]["type"][x] + mouf["top"]["L"]["type"][x] + mouf["top"]["L"]["length"][x]
+        if mouf["top"]["L"]["sym"][x] is False and mouf["top"]["R"]["sym"][x] is True:
+            left[x] = mouf["top"]["R"]["type"][x] + mouf["top"]["R"]["type"][x] + mouf["top"]["R"]["length"][x]
+            right[x] = mouf["top"]["R"]["type"][x] + mouf["top"]["R"]["type"][x] + mouf["top"]["R"]["length"][x]
+        if mouf["top"]["L"]["sym"][x] is True and mouf["top"]["R"]["sym"][x] is True:
+            toofleng = str((mouf["top"]["L"]["length"][x] + mouf["top"]["R"]["length"][x]) // 2)
+            left[x] = mouf["top"]["L"]["type"][x] + mouf["top"]["R"]["type"][x] + toofleng
+            right[x] = mouf["top"]["R"]["type"][x] + mouf["top"]["L"]["type"][x] + toofleng
             while left[x] != right[x]:
                 # If the teeth are identical, it'll move on to the next tooth.
                 if left[x][0:2] != "PC" and left[x][0:2] != "CP":
@@ -32,59 +56,57 @@ def thetooth(moufstr):
                     left[x] = "PC" + toofleng
                     right[x] = "PC" + toofleng
         x = x + 1
-    jawtop = right[5] + right[4] + right[3] + right[2] + right[1] + right[0]
-    jawtop = jawtop + left[0] + left[1] + left[2] + left[3] + left[4] + left[5]
-    left = ["", "", "", "", "", ""]
-    right = ["", "", "", "", "", ""]
-    x = 0
-    while x < 6:
-        if mouf.symbotl[x] == "F" and mouf.symbotr[x] == "F":
-            left[x] = mouf.typebotl[x] + mouf.typebotl[x] + mouf.lengthbotl[x]
-            right[x] = mouf.typebotr[x] + mouf.typebotr[x] + mouf.lengthbotr[x]
-        if mouf.symbotl[x] == "T" and mouf.symbotr[x] == "F":
-            left[x] = mouf.typebotl[x] + mouf.typebotl[x] + mouf.lengthbotl[x]
-            right[x] = mouf.typebotl[x] + mouf.typebotl[x] + mouf.lengthbotl[x]
-        if mouf.symbotl[x] == "F" and mouf.symbotr[x] == "T":
-            left[x] = mouf.typebotr[x] + mouf.typebotr[x] + mouf.lengthbotr[x]
-            right[x] = mouf.typebotr[x] + mouf.typebotr[x] + mouf.lengthbotr[x]
-        if mouf.symbotl[x] == "T" and mouf.symbotr[x] == "T":
-            toofleng = str((int(mouf.lengthbotl[x]) + int(mouf.lengthbotr[x])) // 2)
-            left[x] = mouf.typebotl[x] + mouf.typebotr[x] + toofleng
-            right[x] = mouf.typebotr[x] + mouf.typebotl[x] + toofleng
-            while left[x] != right[x]:
-                # If the teeth are identical, it'll move on to the next tooth.
-                if left[x][0:2] != "PC" and left[x][0:2] != "CP":
-                    left[x] = "RR" + toofleng
-                    right[x] = "RR" + toofleng
-                if left[x][0:2] == "PC" or left[x][0:2] == "CP":
-                    left[x] = "PC" + toofleng
-                    right[x] = "PC" + toofleng
+    jawtop = right[6] + right[5] + right[4] + right[3] + right[2] + right[1]
+    jawtop = jawtop + left[1] + left[2] + left[3] + left[4] + left[5] + left[6]
+    left = ["", "", "", "", "", "", ""]
+    right = ["", "", "", "", "", "", ""]
+    x = 1
+    if mouf["bot"]["L"]["sym"][x] is False and mouf["bot"]["R"]["sym"][x] is False:
+        left[x] = mouf["bot"]["L"]["type"][x] + mouf["bot"]["L"]["type"][x] + mouf["bot"]["L"]["length"][x]
+        right[x] = mouf["bot"]["R"]["type"][x] + mouf["bot"]["R"]["type"][x] + mouf["bot"]["R"]["length"][x]
+    if mouf["bot"]["L"]["sym"][x] is True and mouf["bot"]["R"]["sym"][x] is False:
+        left[x] = mouf["bot"]["L"]["type"][x] + mouf["bot"]["L"]["type"][x] + mouf["bot"]["L"]["length"][x]
+        right[x] = mouf["bot"]["L"]["type"][x] + mouf["bot"]["L"]["type"][x] + mouf["bot"]["L"]["length"][x]
+    if mouf["bot"]["L"]["sym"][x] is False and mouf["bot"]["R"]["sym"][x] is True:
+        left[x] = mouf["bot"]["R"]["type"][x] + mouf["bot"]["R"]["type"][x] + mouf["bot"]["R"]["length"][x]
+        right[x] = mouf["bot"]["R"]["type"][x] + mouf["bot"]["R"]["type"][x] + mouf["bot"]["R"]["length"][x]
+    if mouf["bot"]["L"]["sym"][x] is True and mouf["bot"]["R"]["sym"][x] is True:
+        toofleng = str((mouf["bot"]["L"]["length"][x] + mouf["bot"]["R"]["length"][x]) // 2)
+        left[x] = mouf["bot"]["L"]["type"][x] + mouf["bot"]["R"]["type"][x] + toofleng
+        right[x] = mouf["bot"]["R"]["type"][x] + mouf["bot"]["L"]["type"][x] + toofleng
+        while left[x] != right[x]:
+            # If the teeth are identical, it'll move on to the next tooth.
+            if left[x][0:2] != "PC" and left[x][0:2] != "CP":
+                left[x] = "RR" + toofleng
+                right[x] = "RR" + toofleng
+            if left[x][0:2] == "PC" or left[x][0:2] == "CP":
+                left[x] = "PC" + toofleng
+                right[x] = "PC" + toofleng
         x = x + 1
-    jawbot = right[5] + right[4] + right[3] + right[2] + right[1] + right[0]
-    jawbot = jawbot + left[0] + left[1] + left[2] + left[3] + left[4] + left[5]
+    jawbot = right[6] + right[5] + right[4] + right[3] + right[2] + right[1]
+    jawbot = jawbot + left[1] + left[2] + left[3] + left[4] + left[5] + left[6]
     return jawtop, jawbot
 
 
-def thewholetooth(moufstr):
-    mouf = gene.Mouth(moufstr)
-    left = ["", "", "", "", "", ""]
-    right = ["", "", "", "", "", ""]
-    x = 0
-    while x < 6:
-        left[x] = mouf.typetopl[x] + mouf.typetopl[x] + mouf.lengthtopl[x]
-        right[x] = mouf.typetopr[x] + mouf.typetopr[x] + mouf.lengthtopr[x]
+def thewholetooth(mouf):
+    left = ["", "", "", "", "", "", ""]
+    right = ["", "", "", "", "", "", ""]
+    x = 1
+    while x < 7:
+        left[x] = mouf["top"]["L"]["type"][x] + mouf["top"]["L"]["type"][x] + mouf["top"]["L"]["length"][x]
+        right[x] = mouf["top"]["R"]["type"][x] + mouf["top"]["R"]["type"][x] + mouf["top"]["R"]["length"][x]
         x = x + 1
-    jawtop = right[5] + right[4] + right[3] + right[2] + right[1] + right[0]
-    jawtop = jawtop + left[0] + left[1] + left[2] + left[3] + left[4] + left[5]
-    left = ["", "", "", "", "", ""]
-    right = ["", "", "", "", "", ""]
-    x = 0
-    while x < 6:
-        left[x] = mouf.typebotl[x] + mouf.typebotl[x] + mouf.lengthbotl[x]
-        right[x] = mouf.typebotr[x] + mouf.typebotr[x] + mouf.lengthbotr[x]
+    jawtop = right[6] + right[5] + right[4] + right[3] + right[2] + right[1]
+    jawtop = jawtop + left[1] + left[2] + left[3] + left[4] + left[5] + left[6]
+    left = ["", "", "", "", "", "", ""]
+    right = ["", "", "", "", "", "", ""]
+    x = 1
+    while x < 7:
+        left[x] = mouf["bot"]["L"]["type"][x] + mouf["bot"]["L"]["type"][x] + mouf["bot"]["L"]["length"][x]
+        right[x] = mouf["bot"]["R"]["type"][x] + mouf["bot"]["R"]["type"][x] + mouf["bot"]["R"]["length"][x]
         x = x + 1
-    jawbot = right[5] + right[4] + right[3] + right[2] + right[1] + right[0]
-    jawbot = jawbot + left[0] + left[1] + left[2] + left[3] + left[4] + left[5]
+    jawbot = right[6] + right[5] + right[4] + right[3] + right[2] + right[1]
+    jawbot = jawbot + left[1] + left[2] + left[3] + left[4] + left[5] + left[6]
     return jawtop, jawbot
 
 
@@ -109,9 +131,9 @@ def jawprint(mouf, closed=False):
 
     if closed:
         # Assemble Variables
-        mouth = gene.Mouth(mouf)
-        maxlength = int(mouth.lipl)
-        maxwidth = int(mouth.lipw) * 7
+        mouth = mouf
+        maxlength = int(mouth["high"])
+        maxwidth = int(mouth["wide"]) * 7
         middle = 42  # 85//2 round down
         # Make temporary screen
         offscreen2 = pygame.Surface((85, 20))
@@ -172,30 +194,23 @@ def jawprintgraphics(mouf, whole=False):
 # HORNS
 def hornprint(inhorn, controls):
     iconw = 33
-    # Do a few backflips to put the variables where we want them.
-    hornscode = "Rgx2dccPBACTn.12RSnH.12RSnH.12RSnH.12RSnH.12RSnH.12RSnH"
-    hornset = gene.Horns(hornscode)
-    hornset.controls = controls
-    hornset.hornleft1 = inhorn
-    hornset.update()
-    hornscode = hornset.code
-    hornset = gene.Horns(hornscode)
-    hornleft1 = gene.HornObj(hornset.hornleft1)
-    # Hornset now contains the right controls, and hornleft1 is the horn we want.
+    # inhorn is of format: {"length": 0, "curl": 0, "radial": "", "dir": "", "width": "", "tip": ""}
+    # controls is:         {"select": "XX", "stunt": "XX", "type": "XX", "angle": "XX",
+    #                       "noclip": "XX", "mountpt": "X", "gaps": "XX"},
 
     offscreen = pygame.Surface(((iconw), (iconw * 3)))
     offscreen.fill((0, 0, 0))
     # Feed all data into functions preprocessed.  No hornobj inside.
-    img = hornarch(hornset.hornleft1, hornset.angle)
+    img = hornarch(inhorn, controls["angle"])
     offscreen.blit(img, (0, 0))
-    img = hornradial(hornleft1.radial, hornleft1.wide, hornset.gaps)
+    img = hornradial(controls["radial"], inhorn["width"], controls["gaps"])
     offscreen.blit(img, (0, iconw))
-    img = horntip(hornleft1.tip)
+    img = horntip(inhorn["tip"])
     offscreen.blit(img, (0, 2*iconw))
     return offscreen
 
 
-def hornsprint(inhorns):
+def hornsprint(me):
     numhorns = 22
     hornright1 = ""
     hornright2 = ""
@@ -210,137 +225,136 @@ def hornsprint(inhorns):
     dlh1 = False  # Describe Horn Left 1
     dlh2 = False  # Describe Horn left 2
     dlh3 = False
-    me = gene.Horns(inhorns)
 
     # Horn presence...
-    if me.select == "TT":
+    if me["controls"]["select"] == "TT":
         numhorns = 6
         dlh1 = True
         dlh2 = True
         dlh3 = True
-        hornleft1 = me.hornleft1
-        hornleft2 = me.hornleft2
-        hornleft3 = me.hornleft3
+        hornleft1 = me["left"][1]
+        hornleft2 = me["left"][2]
+        hornleft3 = me["left"][3]
         drh1 = True
         drh2 = True
         drh3 = True
-        hornright1 = me.hornright1
-        hornright2 = me.hornright2
-        hornright3 = me.hornright3
-    if me.select == "TD":
+        hornright1 = me["right"][1]
+        hornright2 = me["right"][2]
+        hornright3 = me["right"][3]
+    if me["controls"]["select"] == "TD":
         numhorns = 5
         dlh1 = True
         dlh2 = True
         dlh3 = True
-        hornleft1 = me.hornleft1
-        hornleft2 = me.hornleft2
-        hornleft3 = me.hornleft3
+        hornleft1 = me["left"][1]
+        hornleft2 = me["left"][2]
+        hornleft3 = me["left"][3]
         drh1 = True
         drh2 = True
-        hornright1 = me.hornright1
-        hornright2 = me.hornright2
+        hornright1 = me["right"][1]
+        hornright2 = me["right"][2]
         hornright3 = "none"
-    if me.select == "DT":
+    if me["controls"]["select"] == "DT":
         numhorns = 5
         dlh1 = True
         dlh2 = True
-        hornleft1 = me.hornleft1
-        hornleft2 = me.hornleft2
+        hornleft1 = me["left"][1]
+        hornleft2 = me["left"][2]
         hornleft3 = "none"
         drh1 = True
         drh2 = True
         drh3 = True
-        hornright1 = me.hornright1
-        hornright2 = me.hornright2
-        hornright3 = me.hornright3
-    if me.select == "Td":
+        hornright1 = me["right"][1]
+        hornright2 = me["right"][2]
+        hornright3 = me["right"][3]
+    if me["controls"]["select"] == "Td":
         numhorns = 4
         dlh1 = True
         dlh2 = True
         dlh3 = True
-        hornleft1 = me.hornleft1
-        hornleft2 = me.hornleft2
-        hornleft3 = me.hornleft3
+        hornleft1 = me["left"][1]
+        hornleft2 = me["left"][2]
+        hornleft3 = me["left"][3]
         drh1 = True
-        hornright1 = me.hornright1
+        hornright1 = me["right"][1]
         hornright2 = "none"
         hornright3 = "none"
-    if me.select == "dT":
+    if me["controls"]["select"] == "dT":
         numhorns = 4
         dlh1 = True
-        hornleft1 = me.hornleft1
+        hornleft1 = me["left"][1]
         hornleft2 = "none"
         hornleft3 = "none"
         drh1 = True
         drh2 = True
         drh3 = True
-        hornright1 = me.hornright1
-        hornright2 = me.hornright2
-        hornright3 = me.hornright3
-    if me.select == "DD":
+        hornright1 = me["right"][1]
+        hornright2 = me["right"][2]
+        hornright3 = me["right"][3]
+    if me["controls"]["select"] == "DD":
         numhorns = 4
         dlh1 = True
         dlh2 = True
-        hornleft1 = me.hornleft1
-        hornleft2 = me.hornleft2
+        hornleft1 = me["left"][1]
+        hornleft2 = me["left"][2]
         hornleft3 = "none"
         drh1 = True
         drh2 = True
-        hornright1 = me.hornright1
-        hornright2 = me.hornright2
+        hornright1 = me["right"][1]
+        hornright2 = me["right"][2]
         hornright3 = "none"
-    if me.select == "Dd":
+    if me["controls"]["select"] == "Dd":
         numhorns = 3
         dlh1 = True
         dlh2 = True
-        hornleft1 = me.hornleft1
-        hornleft2 = me.hornleft2
+        hornleft1 = me["left"][1]
+        hornleft2 = me["left"][2]
         hornleft3 = "none"
         drh1 = True
-        hornright1 = me.hornright1
+        hornright1 = me["right"][1]
         hornright2 = "none"
         hornright3 = "none"
-    if me.select == "dD":
+    if me["controls"]["select"] == "dD":
         numhorns = 3
         dlh1 = True
-        hornleft1 = me.hornleft1
+        hornleft1 = me["left"][1]
         hornleft2 = "none"
         hornleft3 = "none"
         drh1 = True
         drh2 = True
-        hornright1 = me.hornright1
-        hornright2 = me.hornright2
+        hornright1 = me["right"][1]
+        hornright2 = me["right"][2]
         hornright3 = "none"
-    if me.select == "Xx":
+    if me["controls"]["select"] == "Xx":
         numhorns = 1
         hornleft1 = "none"
         hornleft2 = "none"
         hornleft3 = "none"
         drh1 = True
-        hornright1 = me.hornright1
+        hornright1 = me["right"][1]
         hornright2 = "none"
         hornright3 = "none"
-    if me.select == "xX":
+    if me["controls"]["select"] == "xX":
         numhorns = 1
-        hornleft1 = me.hornleft1
+        hornleft1 = me["left"][1]
         hornleft2 = "none"
         hornleft3 = "none"
         dlh1 = True
         hornright1 = "none"
         hornright2 = "none"
         hornright3 = "none"
-    if me.select == "TX":
+    if me["controls"]["select"] == "TX":
         numhorns = 3
         dlh1 = True
         dlh2 = True
         dlh3 = True
-        hornleft1 = me.hornleft1
-        hornleft2 = me.hornleft2
-        hornleft3 = me.hornleft3
+        hornleft1 = me["left"][1]
+        hornleft2 = me["left"][2]
+        hornleft3 = me["left"][3]
         hornright1 = "none"
         hornright2 = "none"
         hornright3 = "none"
-    if me.select == "XT":
+    if me["controls"]["select"] == "XT":
         numhorns = 3
         hornleft1 = "none"
         hornleft2 = "none"
@@ -348,30 +362,30 @@ def hornsprint(inhorns):
         drh1 = True
         drh2 = True
         drh3 = True
-        hornright1 = me.hornright1
-        hornright2 = me.hornright2
-        hornright3 = me.hornright3
-    if me.select == "DX":
+        hornright1 = me["right"][1]
+        hornright2 = me["right"][2]
+        hornright3 = me["right"][3]
+    if me["controls"]["select"] == "DX":
         numhorns = 2
         dlh1 = True
         dlh2 = True
-        hornleft1 = me.hornleft1
-        hornleft2 = me.hornleft2
+        hornleft1 = me["left"][1]
+        hornleft2 = me["left"][2]
         hornleft3 = "none"
         hornright1 = "none"
         hornright2 = "none"
         hornright3 = "none"
-    if me.select == "XD":
+    if me["controls"]["select"] == "XD":
         numhorns = 2
         hornleft1 = "none"
         hornleft2 = "none"
         hornleft3 = "none"
         drh1 = True
         drh2 = True
-        hornright1 = me.hornright1
-        hornright2 = me.hornright2
+        hornright1 = me["right"][1]
+        hornright2 = me["right"][2]
         hornright3 = "none"
-    if me.select == "XX":
+    if me["controls"]["select"] == "XX":
         numhorns = 0
         hornleft1 = "none"
         hornleft2 = "none"
@@ -383,45 +397,41 @@ def hornsprint(inhorns):
     if numhorns == 22:  # If the troll has the default number of horns
         dlh1 = True
         drh1 = True
-        hornleft1 = me.hornleft1    # Set to default.  This also covers when
+        hornleft1 = me["left"][1]    # Set to default.  This also covers when
         hornleft2 = "none"
         hornleft3 = "none"
-        hornright1 = me.hornright1  # either of the genes given are "1"
+        hornright1 = me["right"][1]  # either of the genes given are "1"
         hornright2 = "none"
         hornright3 = "none"
         numhorns = 2
         # Now, if any of the genes are 2's or 3's, overwrite appropriately:
-    if me.select[0] == "2":
-        hornleft1 = me.hornleft2
-    if me.select[0] == "3":
-        hornleft1 = me.hornleft3
-    if me.select[1] == "2":
-        hornright1 = me.hornright2
-    if me.select[1] == "3":
-        hornright1 = me.hornright3
+    if me["controls"]["select"][0] == "2":
+        hornleft1 = me["left"][2]
+    if me["controls"]["select"][0] == "3":
+        hornleft1 = me["left"][3]
+    if me["controls"]["select"][1] == "2":
+        hornright1 = me["right"][2]
+    if me["controls"]["select"][1] == "3":
+        hornright1 = me["right"][3]
     # hornright1, hornright2, hornleft1, hornleft2, and numhorns know what we're describing.
 
     # horn length adjustments:
     if dlh2:
-        hornleft2 = shornten(hornleft2, 1)
-        if hornleft1[0] == "4":
-            hornleft2 = shornten(hornleft2, 3)
-        if hornleft1[0] == "3":
-            hornleft2 = shornten(hornleft2, 2)
+        hornleft2["length"] = hornleft1["length"] - 1  # One unit shorter than the previous horn
+        if hornleft2["length"] < 1:     # But at least 1 unit.
+            hornleft2["length"] = 1
     if dlh3:
-        hornleft3 = shornten(hornleft3, 1)
-        if hornleft2[0] == "3":
-            hornleft3 = shornten(hornleft3, 2)
+        hornleft3["length"] = hornleft2["length"] - 1  # One unit shorter than previous horn
+        if hornleft3["length"] < 1:     # But at least 1 unit.
+            hornleft3["length"] = 1
     if drh2:
-        hornright2 = shornten(hornright2, 1)
-        if hornright1[0] == "4":
-            hornright2 = shornten(hornright2, 3)
-        if hornright1[0] == "3":
-            hornright2 = shornten(hornright2, 2)
+        hornright2["length"] = hornright1["length"] - 1  # One unit shorter than the previous horn
+        if hornright2["length"] < 1:     # But at least 1 unit.
+            hornright2["length"] = 1
     if drh3:
-        hornright3 = shornten(hornright3, 1)
-        if hornright2[0] == "3":
-            hornright3 = shornten(hornright3, 2)
+        hornright3["length"] = hornright2["length"] - 1  # One unit shorter than the previous horn
+        if hornright3["length"] < 1:     # But at least 1 unit.
+            hornright3["length"] = 1
 
     iconw = 33
     background = pygame.Surface(((iconw*6+5), (iconw * 4)))
@@ -430,44 +440,72 @@ def hornsprint(inhorns):
     pos = 3*iconw
 
     if dlh3:
-        img = hornprint(hornleft3, me.controls)
+        img = hornprint(hornleft3, me["controls"])
         img = pygame.transform.flip(img, 1, 0)
         background.blit(img, (pos-(3*iconw), 0))
     if dlh2:
-        img = hornprint(hornleft2, me.controls)
+        img = hornprint(hornleft2, me["controls"])
         img = pygame.transform.flip(img, 1, 0)
         background.blit(img, (pos-(2*iconw), 0))
     if dlh1:
-        img = hornprint(hornleft1, me.controls)
+        img = hornprint(hornleft1, me["controls"])
         img = pygame.transform.flip(img, 1, 0)
         background.blit(img, (pos-iconw, 0))
     if drh1:
-        img = hornprint(hornright1, me.controls)
+        img = hornprint(hornright1, me["controls"])
         background.blit(img, (pos+5, 0))
     if drh2:
-        img = hornprint(hornright2, me.controls)
+        img = hornprint(hornright2, me["controls"])
         background.blit(img, (pos+5+(1*iconw), 0))
     if drh3:
-        img = hornprint(hornright3, me.controls)
+        img = hornprint(hornright3, me["controls"])
         background.blit(img, (pos+5+(2*iconw), 0))
 
     # Horn type
+    ttype = me["controls"]["type"]
     ht = ""
-    if me.horntype[0] == "K" or me.horntype[1] == "K":
+    typeK = 0
+    typeE = 0
+    typeA = 0
+    typeP = 0
+    typeB = 0
+    for arb in ttype:
+        if arb == "K":
+            typeK = typeK + 2
+        if arb == "k":
+            typeK = typeK + 1
+        if arb == "E":
+            typeE = typeE + 2
+        if arb == "e":
+            typeE = typeE + 1
+        if arb == "A":
+            typeA = typeA + 2
+        if arb == "a":
+            typeA = typeA + 1
+        if arb == "P":
+            typeP = typeP + 2
+        if arb == "p":
+            typeP = typeP + 1
+        if arb == "B":
+            typeB = typeB + 2
+        if arb == "b":
+            typeB = typeB + 1
+
+    if typeK > 1:
         ht = ht + "/Keratin"
-    if me.horntype[0] == "E" or me.horntype[1] == "E":
+    if typeE > 1:
         ht = ht + "/Electrosensory"
-    if me.horntype[0] == "A" or me.horntype[1] == "A":
+    if typeA > 1:
         ht = ht + "/Antler"
-    if me.horntype[0] == "P" or me.horntype[1] == "P":
+    if typeP > 1:
         ht = ht + "/Power"
-    if me.horntype[0] == "B" or me.horntype[1] == "B":
+    if typeB > 1:
         ht = ht + "/Balance"
     if ht != "":
         descr = fbs.lyst(descr, ht[1:len(ht)])
 
         # Self-impact test.
-        if me.noclip == "X":
+        if me["controls"]["noclip"] == "X":
             descr = fbs.lyst(descr, "Potentially clipping")
     #    To be in danger, must have X gene, * and *horns shaped in a way that can impact.
     #    - spiraling: treat curl as 1 greater than it actually is.
@@ -480,69 +518,75 @@ def hornsprint(inhorns):
     #    - Side + in = mild skull deformities.
 
     # Gaps
-    if me.gaps == "N":
+    gaps = me["controls"]["gaps"]
+    if gaps == "NN" or gaps == "Nn" or gaps == "nN" or gaps == "Nh" or gaps == "hN":
         descr = fbs.lyst(descr, "a notch")
-    if me.gaps == "n":
+    if gaps == "nn" or gaps == "nh":
         descr = fbs.lyst(descr, "small notches")
-    if me.gaps == "H":
+    if gaps == "HH" or gaps == "Hh" or gaps == "hH" or gaps == "Hn" or gaps == "nH":
         descr = fbs.lyst(descr, "a hole")
-    if me.gaps == "h":
+    if gaps == "hh" or gaps == "hn":
         descr = fbs.lyst(descr, "small holes")
+    if gaps == "OO" or gaps == "Oo" or gaps == "oO":
+        descr = fbs.lyst(descr, "hollow")
+    if gaps == "oo" or gaps == "oh" or gaps == "on" or gaps == "ho" or gaps == "no":
+        descr = fbs.lyst(descr, "porous")
 
-    if me.mountpt == "U" or me.mountpt == "M":
+    (mx, my) = me["controls"]["mountpt"]
+    if my == 0:
         if dlh1 or drh1:
             descr = fbs.lyst("centered", descr)
+    if mx > 2:
+        if dlh1 or drh1:
+            descr = fbs.lyst("backmounted", descr)
+    if my > 2:
+        if dlh1 or drh1:
+            descr = fbs.lyst("sidemounted", descr)
 
     return background, descr
 
 
-def shornten(inhorn, length=1):
-    leng = str(length)
-    inhorn2 = leng + inhorn[1:len(inhorn)]
-    return inhorn2
-
-
-def hornarch(inhorn, angle):
-    horn = gene.HornObj(inhorn)
+# Move Hollow=assessment to an outside function
+def hornarch(horn, angle):
 
     # By default, horns are S-shaped.
     imgloc = "arch4.PNG"
     # Overwrite with the actual curl data:
-    if horn.curl == "1":
+    if horn["curl"] == 1:
         imgloc = "arch1.PNG"
-    if horn.curl == "2":
+    if horn["curl"] == 2:
         imgloc = "arch2.PNG"
-    if horn.curl == "3":
+    if horn["curl"] == 3:
         imgloc = "arch3.PNG"
-    if horn.curl == "4":
+    if horn["curl"] == 4:
         imgloc = "arch4.PNG"
-    if horn.curl == "5":
+    if horn["curl"] == 5:
         imgloc = "arch5.PNG"
-    if horn.curl == "6":
+    if horn["curl"] == 6:
         imgloc = "arch6.PNG"
-    if horn.curl == "7":
+    if horn["curl"] == 7:
         imgloc = "arch7.PNG"
-    if horn.curl == "8":
+    if horn["curl"] == 8:
         imgloc = "arch8.PNG"
 
     # Length.  By default, length 1.
     x = 1
-    if horn.length == "1":
+    if horn["length"] == 1:
         x = 0
-    if horn.length == "2":
+    if horn["length"] == 2:
         x = 1
-    if horn.length == "3":
+    if horn["length"] == 3:
         x = 2
-    if horn.length == "4":
+    if horn["length"] == 4:
         x = 3
 
     # Angularity, by default, smooth.
     y = 0
-    if angle == "S":
+    if angle == "SS":
         y = 0
-    if angle == "B":
+    if angle == "SA" or angle == "AS":
         y = 1
-    if angle == "A":
+    if angle == "AA":
         y = 2
 
     offscreen = pygame.Surface((133, 100))
@@ -553,18 +597,17 @@ def hornarch(inhorn, angle):
     x = x * 33
     y = y * 33
     archfinal = hornimg.subsurface(pygame.Rect(x, y, 33, 33))
-
     return archfinal
 
 
+# Move Hollow=assessment to an outside function
 def hornradial(radial, wide, hollow):
-
     # By default, horns are solid.
     imgloc = "radialsolid.png"
     # Overwrite with the actual type:
-    if hollow == "O":
+    if hollow == "OO" or hollow == "Oo" or hollow == "oO":
         imgloc = "radialH1.png"
-    if hollow == "o":
+    if hollow == "oo" or hollow == "oh" or hollow == "ho" or hollow == "on" or hollow == "no":
         imgloc = "radialH+.png"
 
     # Width
@@ -597,7 +640,6 @@ def hornradial(radial, wide, hollow):
     x = x * 33
     y = y * 33
     radfinal = hornimg.subsurface(pygame.Rect(x, y, 33, 33))
-
     return radfinal
 
 
@@ -608,7 +650,7 @@ def horntip(tip):
 
     # Rows
     y = 0
-    if tip == "p" or tip == "?" or tip == "?":
+    if tip == "p":
         # List of tips on row 1.
         y = 1
     if tip == "?" or tip == "?" or tip == "?":
@@ -620,7 +662,7 @@ def horntip(tip):
     if tip == "P" or tip == "p":
         # row 1
         x = 0
-    if tip == "B" or tip == "B":
+    if tip == "B":
         # row 2
         x = 2
     if tip == "b":
@@ -654,6 +696,6 @@ def horntip(tip):
 
 
 def hornplacement(inhorn):
-    #
-    #
+    # Have a pic with three circles of different colors (the 3 horn colors, in order?)
+    # Use palleteswap to turn the unneeded two of them skintone.
     return inhorn

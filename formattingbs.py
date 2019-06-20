@@ -5,16 +5,16 @@ import random
 
 def randsel(inp="X", length=1):
     x = 0
-    which = "X"
+    which = ""
     while x < length:
-        which = which + inp[random.randint(0, len(inp))]
+        which = which + inp[random.randint(0, len(inp) - 1)]
         x = x + 1
     return which
 
 
-def wordwrap2(instring, wraplength = 20):
+def wordwrap2(instring, wraplength=20):
     splitup = instring.split(" ")
-    result = [ "", "", "", "", "", "", "", "", "", ]
+    result = ["", "", "", "", "", "", "", "", ""]
     a = 0
     for arb in splitup:
         if (len(result[a]) + 1 + len(arb)) <= wraplength:
@@ -56,7 +56,7 @@ def lyst2(a, b):
 
 def load_png(name, fold=""):
     """ Load image and return image object"""
-    fullname = os.path.join('data', fold, name)
+    fullname = os.path.join('caverns', '=slurry=', fold, name)
     try:
         image = pygame.image.load(fullname)
         if image.get_alpha() is None:

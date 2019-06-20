@@ -10,115 +10,8 @@ from formattingbs import randsel
 # -- spectrum groupings (high, mid, low, reds, blues, greens..)
 # -- spectrums with by-caste entries and mutant entries
 
-def eugenics(t0):
-    return t0
 
-
-# Globals go below here.
-# CASTE COLOR SETS
-spectrumfull = [
-    "RR", "RRr", "RRR", "RRg", "RRG", "RrB", "Rrb",
-    "Rr", "Rrr", "RrR", "Rrg", "RrG", "rrB", "rrb",
-    "rr", "rrr", "rrR", "rrg", "rrG", "rGR", "rGr", "rGB",
-    "RG",
-    "rG", "RGB", "RGb", "RGg", "RGG", "RgR", "Rgr", "RgB", "Rgb",
-    "Rg", "Rgg", "RgG", "rgR", "rgr", "rgB", "rgb",
-    "rg", "rgg", "rgG", "GGR", "GGr", "GGG", "GGg",
-    "GG", "GGb", "GGB", "GgR", "Ggr", "GgG", "Ggg",
-    "Gg", "Ggb", "GgB", "ggR", "ggr", "ggG", "ggg",
-    "gg", "ggb", "ggB", "GbG", "Gbg", "GbR", "Gbr",
-    "Gb", "Gbb", "GbB", "GBG", "GBg", "GBR", "GBr",
-    "GB", "GBb", "GBB", "gBG", "gBg", "gBR", "gBr",
-    "gB", "gBb", "gBB", "gbG", "gbg", "gbR", "gbr",
-    "gb", "gbb", "gbB", "BBG", "BBg", "BBB", "BBb",
-    "BB", "BBr", "BBR", "BbG", "Bbg", "BbB",
-    "Bb", "Bbb", "Bbr", "BbR", "bbG", "bbg", "bbb",
-    "bb", "bbB", "bbr", "bbR", "rBB", "rBb", "rBg",
-    "rB", "rBG", "rBr", "rBR", "RBB", "RBb", "RBG", "RBg",
-    "RB", "RBr", "RBR", "RbB", "Rbb", "RbG",
-    "Rb", "Rbr", "RbR", "rbB", "rbb", "rbg",
-    "rb", "rbG", "rbr", "rbR", "RRB", "RRb",
-    ]
-
-spectrummini = [
-    "RR", "Rr", "rr", "Rg", "RG", "rG", "rg",
-    "GG", "Gg", "gg", "Gb", "GB", "gB", "gb",
-    "BB", "Bb", "bb", "rB", "RB", "Rb", "rb"
-    ]
-
-spectrumshort = [
-    "RR", "rr", "RG", "rg",
-    "GG", "gg", "GB", "gb",
-    "BB", "bb", "RB", "rb"
-    ]
-
-spectrumlow = [
-    "RR", "RRr", "RRR", "RRg", "RRG", "RrB", "Rrb", "RRB", "RRb",
-    "Rr", "Rrr", "RrR", "Rrg", "RrG", "rrB", "rrb",
-    "rr", "rrr", "rrR", "rrg", "rrG", "rGR", "rGr", "rGB",
-    "rG", "RGB", "RGb", "RGg", "RGG", "RgR", "Rgr", "RgB", "Rgb",
-    "Rg", "Rgg", "RgG", "rgR", "rgr", "rgB", "rgb", "RG",
-    "rg", "rgg", "rgG",
-    ]
-
-spectrummid = [
-    "GG", "GGb", "GGB", "GgR", "Ggr", "GgG", "Ggg", "GGG", "GGg",
-    "Gg", "Ggb", "GgB", "ggR", "ggr", "ggG", "ggg", "GGR", "GGr",
-    "gg", "ggb", "ggB", "GbG", "Gbg", "GbR", "Gbr",
-    "Gb", "Gbb", "GbB", "GBG", "GBg", "GBR", "GBr",
-    "GB", "GBb", "GBB", "gBG", "gBg", "gBR", "gBr",
-    "gB", "gBb", "gBB", "gbG", "gbg", "gbR", "gbr",
-    "gb", "gbb", "gbB",
-    ]
-
-spectrumhigh = [
-    "BBB", "BBb", "BB", "BBr", "BBR", "BbG", "Bbg", "BbB",
-    "Bb", "Bbb", "Bbr", "BbR", "bbG", "bbg", "bbb", "BBG", "BBg",
-    "bb", "bbB", "bbr", "bbR", "rBB", "rBb", "rBg",
-    "rB", "rBG", "rBr", "rBR", "RBB", "RBb", "RBG", "RBg",
-    "RB", "RBr", "RBR", "RbB", "Rbb", "RbG",
-    "Rb", "Rbr", "RbR", "rbB", "rbb", "rbg",
-    "rb", "rbG", "rbr", "rbR",
-    ]
-
-spectrumrust = [
-    "RR", "RRr", "RRR", "RRg", "RRG", "RrB", "Rrb", "RRB", "RRb",
-    "Rr", "Rrr", "RrR", "Rrg", "RrG", "rrB", "rrb",
-    "rr", "rrr", "rrR", "rrg", "rrG", "rGR", "rGr", "rGB", "RG",
-    "rG", "RGB", "RGb", "RGg", "RGG", "RgR", "Rgr", "RgB", "Rgb",
-    "Rg",
-    ]
-
-spectrumgreens = [
-    "Rgg", "RgG", "rgR", "rgr", "rgB", "rgb", "rg", "rgg", "rgG",
-    "GG", "GGb", "GGB", "GgR", "Ggr", "GgG", "Ggg", "GGG", "GGg",
-    "Gg", "Ggb", "GgB", "ggR", "ggr", "ggG", "ggg", "GGR", "GGr",
-    "gg", "ggb", "ggB", "GbG", "Gbg", "GbR", "Gbr",
-    "Gb",
-    ]
-
-spectrumblues = [
-    "Gbb", "GbB", "GBG", "GBg", "GBR", "GBr",
-    "GB", "GBb", "GBB", "gBG", "gBg", "gBR", "gBr",
-    "gB", "gBb", "gBB", "gbG", "gbg", "gbR", "gbr",
-    "gb", "gbb", "gbB",
-    "BBB", "BBb", "BB", "BBr", "BBR", "BbG", "Bbg", "BbB",
-    "Bb", "BBG", "BBg",
-    ]
-
-spectrumpurples = [
-    "bbG", "bbg", "bbb", "Bbb", "Bbr", "BbR",
-    "bb", "bbB", "bbr", "bbR", "rBB", "rBb", "rBg",
-    "rB", "rBG", "rBr", "rBR", "RBB", "RBb", "RBG", "RBg",
-    "RB", "RBr", "RBR", "RbB", "Rbb", "RbG",
-    "Rb", "Rbr", "RbR", "rbB", "rbb", "rbg",
-    "rb", "rbG", "rbr", "rbR",
-    ]
-
-# END OF CASTE COLOR SETS
 # START OF GENES
-
-
 def genesea(inp):
     # Move all these settings into a .txt file that it gets loaded from at start of program?
     # That would be a memory and CPU hog, unless I put it in a .py in a cavern subfolder . . .
@@ -810,25 +703,25 @@ def genehorn(linmin=0, linmax=4, lweight=0, cinmin=0, cinmax=8, cweight=0, radia
     if radial == "rand":
         radial = "ROTSCI"
     temp3 = radial
-    which = random.randint(0, len(radial))
+    which = random.randint(0, len(radial) - 1)
     radial = temp3[which]
     # Dir
     if dir == "rand":
         dir = "FBIO"
     temp4 = dir
-    which = random.randint(0, len(dir))
+    which = random.randint(0, len(dir) - 1)
     dir = temp4[which]
     # Width
     if width == "rand":
         width = "wnnnnn"
     temp5 = width
-    which = random.randint(0, len(width))
+    which = random.randint(0, len(width) - 1)
     dir = temp5[which]
     # Tip
     if tip == "rand":
         tip = "PBbCFHJRSsL"
     temp6 = tip
-    which = random.randint(0, len(tip))
+    which = random.randint(0, len(tip) - 1)
     tip = temp6[which]
 
     gene = blank
@@ -843,66 +736,60 @@ def genehorn(linmin=0, linmax=4, lweight=0, cinmin=0, cinmax=8, cweight=0, radia
 
 
 # For single controls object
-def genehcon(select="rand", stunt="rand", ttype="rand", angle="rand", noclip="rand", mountpt="rand", gaps="rand"):
+def genehcon(select="rand", stunt="rand", ttype="rand", angle="rand", noclip="rand", m1=0, m2=4, m3=0, m4=4, gaps="rand"):
     blank = {
         "select": "",   # XX, 23TDdXx, 1
-        "stunt": "",    # XX, SsBbWwNn, AaCcDdEeFfGg
+        "stunt": "",    # XX, SsBbWwNn, ABCDEFGHIJKL
         "type": "",     # XX, KkEeAaPpBb
         "angle": "",    # XX, AA, AS/SA, SS.
-        "noclip": "",   # XX, CEJLNSU, X
-        "mountpt": "",  # X,  SBC, TtNn
-        "gaps": ""}     # X,  NnHhOo, Xx
+        "noclip": "",   # XX, ABCDEFGHIJKL, X
+        "mountpt": (1, 2),  # 0,0 = forehead, 2,4 = ear, (2,0) = top of head, (4,0) = back of head)
+        "gaps": ""}     # XX,  NnHhOo, Xx
     # Meat
     gene = blank
     # Select
     if select == "rand":
         select = "123TDdXx"
-    which1 = random.randint(0, len(select))
-    which2 = random.randint(0, len(select))
-    which = which1 + which2
-    select = select[which]
+    which1 = random.randint(0, len(select) - 1)
+    which2 = random.randint(0, len(select) - 1)
+    select = select[which1] + select[which2]
     # Stunt
     if stunt == "rand":
-        stunt = "SsBbWwNnAAAAaaaaCCCCccccDDDDddddEEEEeeeeFFFFffffGGGGgggg"
-    which1 = random.randint(0, len(stunt))
-    which2 = random.randint(0, len(stunt))
-    which = which1 + which2
-    stunt = stunt[which]
+        stunt = "SsBbWwNnAAAAAAAAABBBBBBBBCCCCCCCCDDDDDDDEEEEEEFFFFFGGGGGHHHHIIIIJJJKKL"
+    which1 = random.randint(0, len(stunt) - 1)
+    which2 = random.randint(0, len(stunt) - 1)
+    stunt = stunt[which1] + stunt[which2]
     # type
     if ttype == "rand":
         ttype = "PPPPPPPppBBBBBBBbbKkEEeeAa"
-    which1 = random.randint(0, len(ttype))
-    which2 = random.randint(0, len(ttype))
-    which = which1 + which2
-    ttype = ttype[which]
+    which1 = random.randint(0, len(ttype) - 1)
+    which2 = random.randint(0, len(ttype) - 1)
+    which3 = random.randint(0, len(ttype) - 1)
+    which4 = random.randint(0, len(ttype) - 1)
+    which5 = random.randint(0, len(ttype) - 1)
+    which6 = random.randint(0, len(ttype) - 1)
+    which = which1 + which2 + which3 + which4 + which5 + which6
+    ttype = ttype[which1] + ttype[which2] + ttype[which3] + ttype[which4] + ttype[which5] + ttype[which6]
     # angle
     if angle == "rand":
         angle = "AS"
-    which1 = random.randint(0, len(select))
-    which2 = random.randint(0, len(select))
-    which = which1 + which2
-    angle = angle[which]
+    which1 = random.randint(0, len(select) - 1)
+    which2 = random.randint(0, len(select) - 1)
+    angle = angle[which1] + angle[which2]
     # noclip
     if noclip == "rand":
-        noclip = "CCCCCCCCCEEEEEEEJJJJJJLLLLNNNSSUX"
-    which1 = random.randint(0, len(select))
-    which2 = random.randint(0, len(select))
-    which = which1 + which2
-    noclip = noclip[which]
+        noclip = "AAAAAAAAABBBBBBBBCCCCCCCCDDDDDDDEEEEEEFFFFFGGGGGHHHHIIIIJJJKKLXXXX"
+    which1 = random.randint(0, len(select) - 1)
+    which2 = random.randint(0, len(select) - 1)
+    noclip = noclip[which1] + noclip[which2]
     # mountpt
-    if mountpt == "rand":
-        mountpt = "TTTTTTTTTtttNNNNNNnnnSSSBBBC"
-    which1 = random.randint(0, len(select))
-    which2 = random.randint(0, len(select))
-    which = which1 + which2
-    mountpt = mountpt[which]
+    mountpt = (random.randint(m1, m2), random.randint(m3, m4))
     # gaps
     if gaps == "rand":
         gaps = "XXXXXXXXXXxxxxxNNnnHhOo"
-    which1 = random.randint(0, len(select))
-    which2 = random.randint(0, len(select))
-    which = which1 + which2
-    gaps = gaps[which]
+    which1 = random.randint(0, len(select) - 1)
+    which2 = random.randint(0, len(select) - 1)
+    gaps = gaps[which1] + gaps[which2]
 
     gene["select"] = select
     gene["stunt"] = stunt
@@ -918,12 +805,13 @@ def genehcon(select="rand", stunt="rand", ttype="rand", angle="rand", noclip="ra
 def genehorns(inp):
     # Blank
     blank = {
-        "controls": { "select": "",   # XX, 23TDdXx, 1
-            "stunt": "",    # XX, SsBbWwNn, AaCcDdEeFfGg
-            "type": "",     # XX, KkEeAaPpBb
+        "controls": {
+            "type": "",     # XXXXXX, KkEeAaPpBb
+            "select": "",   # XX, 23TDdXx, 1
+            "stunt": "",    # XX, SsBbWwNn, ABCDEFGHIJKL
             "angle": "",    # XX, AA, AS/SA, SS.
-            "noclip": "",   # XX, CEJLNSU, X
-            "mountpt": "",  # X,  SBC, TtNn
+            "noclip": "",   # XX, ABCDEFGHIJKL, X
+            "mountpt": (0, 0),  # 0,0 = forehead, 2,4 = ear, (2,0) = top of head, (4,0) = back of head)
             "gaps": ""},    # X,  NnHhOo, Xx
         "left": {
             1: {"length": 0, "curl": 0, "radial": "", "dir": "", "width": "", "tip": ""},
@@ -934,11 +822,12 @@ def genehorns(inp):
             2: {"length": 0, "curl": 0, "radial": "", "dir": "", "width": "", "tip": ""},
             3: {"length": 0, "curl": 0, "radial": "", "dir": "", "width": "", "tip": ""}}}
     # Primary Controls
-    conrand = genehcon("rand", "rand", "rand", "rand", "rand", "rand", "rand")
-    conspec = genehcon("11", "AaCcDdEeFfGg", "PB", "SS", "CEJLNSU", "TtNn", "Xx")
-    coffspec = genehcon("123dx", "rand", "PPPPBBBBKE", "SA", "rand", "rand", "rand")
-    conmult = genehcon("dxdxDDDDDDT", "rand", "rand", "rand", "rand", "rand", "rand")
-    conwrong = genehcon("dxdxdxdxDDTX", "SsBbWwNnACDEFG", "rand", "rand", "XCJS", "rand", "XxNnHhOo")
+    conrand = genehcon("rand", "rand", "rand", "rand", "rand", 0,4,0,4, "rand")
+    conspec = genehcon("11", "ABCDEFGHIJKL", "PB", "SS", "ABCDEFGHIJKL", 1,2,1,3, "Xx")
+    conside = genehcon("11", "ABCDEFGHIJKL", "PB", "SA", "ABCDEFGHIJKL", 1,3,2,4, "Xxoohn")
+    coffspec = genehcon("123dx", "rand", "PPPPBBBBKE", "SA", "rand", 1,3,1,4, "rand")
+    conmult = genehcon("dxdxDDDDDDT", "rand", "rand", "rand", "rand", 0,3,0,3, "rand")
+    conwrong = genehcon("dxdxdxdxDDTX", "SsBbWwNnACDEFGHIJKL", "rand", "rand", "XADGJ", 0,4,0,4, "XxNnHhOo")
 
     # Primary Hornsets
     rand = {
@@ -1011,6 +900,7 @@ def genehorns(inp):
     # Special presets
     if inp == "blank":
         gene = blank
+        gene["controls"] = genehcon("blank")
     if inp == "rand":
         gene = rand
         gene["controls"] = conrand
@@ -1021,13 +911,13 @@ def genehorns(inp):
         gene = ram
         gene["controls"] = coffspec
     if inp == "bull":
-        gene = ram
-        gene["controls"] = coffspec
+        gene = bull
+        gene["controls"] = conside
     if inp == "swirl":
-        gene = ram
+        gene = swirl
         gene["controls"] = coffspec
     if inp == "stabnub":
-        gene = ram
+        gene = stabnub
         gene["controls"] = coffspec
     if inp == "mult":
         gene = rand
@@ -1046,181 +936,241 @@ def genehorns(inp):
         gene["controls"]["select"] = "XX"
     if inp == "double":
         gene = rand
-        gene["controls"]["select"] = "DDDDd"
-    if inp == "Triple":
+        gene["controls"]["select"] = randsel("DDDDd", 2)
+    if inp == "triple":
         gene = rand
-        gene["controls"]["select"] = "TTTDd"
+        gene["controls"]["select"] = randsel("TTTDd", 2)
     if inp == "uni":
         gene = rand
-        gene["controls"]["mountpt"] = "C"
+        gene["controls"] = conrand
+        gene["controls"]["mountpt"] = (0, 0)
         gene["controls"]["select"] = "Xx"
         gene["right"][1]["curl"] = int(randsel("11111111111112222222233344567888"))
     if inp == "mohawk":
         gene = rand
-        gene["controls"]["mountpt"] = "C"
+        gene["controls"] = conrand
+        gene["controls"]["mountpt"] = (1, 0)
         gene["left"][1]["curl"] = int(randsel("111111111111122222222333448"))
         gene["left"][2]["curl"] = int(randsel("111111111111122222222333448"))
         gene["left"][3]["curl"] = int(randsel("111111111111122222222333448"))
         gene["right"][1]["curl"] = int(randsel("111111111111122222222333448"))
         gene["right"][2]["curl"] = int(randsel("111111111111122222222333448"))
         gene["right"][3]["curl"] = int(randsel("111111111111122222222333448"))
-        gene["controls"]["stunt"] = randsel("SsWwNnAaCcDdEeFfGg")
+        gene["controls"]["stunt"] = randsel("SsWwNnAaCcDdEeFfGg", 2)
         # Main castes section
     if inp == "RR":  # Maroon
         gene = ram
         gene["controls"] = conspec
-        gene["controls"]["stunt"] = randsel("AAAAAaaaaCc")
-        gene["controls"]["noclip"] = randsel("CCCCCC")
+        gene["controls"]["stunt"] = randsel("AA", 2)
+        gene["controls"]["noclip"] = randsel("AA", 2)
     if inp == "Rr":
         gene = miscwiggle
-        gene["controls"] = coffspec
-        gene["controls"]["stunt"] = randsel("AAAAAaaaCcc")
-        gene["controls"]["noclip"] = randsel("CCCCCCX")
-        gene["controls"]["mountpt"] = randsel("SSSTtNn")
+        gene["controls"] = conside
+        gene["controls"]["stunt"] = randsel("AB", 2)
+        gene["controls"]["noclip"] = randsel("ABX", 2)
     if inp == "rr":  # Bronze
         gene = bull
-        gene["controls"] = conspec
-        gene["controls"]["stunt"] = randsel("AAAAaaaCCcc")
-        gene["controls"]["noclip"] = randsel("CCCCCC")
-        gene["controls"]["mountpt"] = randsel("SSSSStn")
+        gene["controls"] = conside
+        gene["controls"]["stunt"] = randsel("BB", 2)
+        gene["controls"]["noclip"] = randsel("BB", 2)
     if inp == "rG":
         gene = miscwiggle
         gene["controls"] = coffspec
-        gene["controls"]["stunt"] = randsel("AAAaaaCCccc")
-        gene["controls"]["noclip"] = randsel("CCCCCCX")
-        gene["controls"]["select"] = randsel("xddddddDDt")
+        gene["controls"]["stunt"] = randsel("BC", 2)
+        gene["controls"]["noclip"] = randsel("BCX", 2)
+        gene["controls"]["select"] = randsel("xddddddDDt", 2)
     if inp == "RG":  # Gold
         gene = standardup
         gene["controls"] = conspec
-        gene["controls"]["stunt"] = randsel("AAaaCCCcccc")
-        gene["controls"]["noclip"] = randsel("CCCEEE")
-        gene["controls"]["select"] = randsel("xdDDDDDDDDT")
+        gene["controls"]["stunt"] = randsel("CC", 2)
+        gene["controls"]["noclip"] = randsel("CCCCCCX", 2)
+        gene["controls"]["select"] = randsel("xdDDDDDDDDT", 2)
     if inp == "Rg":
         gene = miscwiggle
         gene["controls"] = coffspec
-        gene["controls"]["stunt"] = randsel("CCCCCccccEe")
-        gene["controls"]["noclip"] = randsel("EEEEEEX")
-        gene["controls"]["select"] = randsel("xxxddddDDt")
+        gene["controls"]["stunt"] = randsel("CD", 2)
+        gene["controls"]["noclip"] = randsel("CDX", 2)
+        gene["controls"]["select"] = randsel("xxxddddDDt", 2)
     if inp == "rg":  # Lime
         gene = standardup
         if random.randint(1, 10) > 7:
-            gene["left"][0]["tip"] = "p"
+            gene["left"][1]["tip"] = "p"
         if random.randint(1, 10) > 7:
-            gene["right"][0]["tip"] = "p"
+            gene["right"][1]["tip"] = "p"
         gene["controls"] = conwrong
-        gene["controls"]["stunt"] = randsel("CCCCcccEEee")
-        gene["controls"]["noclip"] = randsel("EEEEXXX")
+        gene["controls"]["stunt"] = randsel("DD", 2)
+        gene["controls"]["noclip"] = randsel("DX", 2)
     if inp == "GG":  # Olive
         gene = stabnub
         gene["controls"] = conspec
-        gene["controls"]["stunt"] = randsel("CCCccEEEeee")
-        gene["controls"]["noclip"] = randsel("JJJJJJ")
+        gene["controls"]["stunt"] = randsel("EE", 2)
+        gene["controls"]["noclip"] = randsel("EE", 2)
     if inp == "Gg":
         gene = miscwiggle
         gene["controls"] = coffspec
-        gene["controls"]["stunt"] = randsel("CCcEEEEeeee")
-        gene["controls"]["noclip"] = randsel("JJJJJJX")
+        gene["controls"]["stunt"] = randsel("EF", 2)
+        gene["controls"]["noclip"] = randsel("EFX", 2)
     if inp == "gg":  # Jade
         gene = standardup
         gene["controls"] = conspec
-        gene["controls"]["stunt"] = randsel("EEEEeeeeJjj")
-        gene["controls"]["noclip"] = randsel("JJJLLL")
+        gene["controls"]["stunt"] = randsel("FF", 2)
+        gene["controls"]["noclip"] = randsel("FF", 2)
     if inp == "Gb":
         gene = miscwiggle
         gene["controls"] = coffspec
-        gene["controls"]["stunt"] = randsel("EEEeeJJJjjj")
-        gene["controls"]["noclip"] = randsel("JJJLLLX")
+        gene["controls"]["stunt"] = randsel("FG", 2)
+        gene["controls"]["noclip"] = randsel("FGX", 2)
     if inp == "GB":  # Teal
         gene = stabnub
-        if random.randint(1,10) > 3:
-            gene["left"][0]["radial"] = "R"
-        if random.randint(1,10) > 3:
-            gene["right"][0]["radial"] = "R"
-        if random.randint(1,10) > 7:
-            gene["left"][0]["tip"] = "P"
-        if random.randint(1,10) > 7:
-            gene["right"][0]["tip"] = "P"
-        if random.randint(1,10) < 3:
-            gene["left"][0]["tip"] = "H"
-        if random.randint(1,10) < 3:
-            gene["right"][0]["tip"] = "H"
+        if random.randint(1, 10) > 3:
+            gene["left"][1]["radial"] = "R"
+        if random.randint(1, 10) > 3:
+            gene["right"][1]["radial"] = "R"
+        if random.randint(1, 10) > 7:
+            gene["left"][1]["tip"] = "P"
+        if random.randint(1, 10) > 7:
+            gene["right"][1]["tip"] = "P"
+        if random.randint(1, 10) < 3:
+            gene["left"][1]["tip"] = "H"
+        if random.randint(1, 10) < 3:
+            gene["right"][1]["tip"] = "H"
         gene["controls"] = conspec
-        gene["controls"]["stunt"] = randsel("JJJJJjjjLLl")
-        gene["controls"]["noclip"] = randsel("LLLNNN")
+        gene["controls"]["stunt"] = randsel("GG", 2)
+        gene["controls"]["noclip"] = randsel("GG", 2)
     if inp == "gB":
         gene = miscwiggle
         gene["controls"] = coffspec
-        gene["controls"]["stunt"] = randsel("JjLLLLLllNn")
-        gene["controls"]["noclip"] = randsel("LLLNNNX")
+        gene["controls"]["stunt"] = randsel("GH", 2)
+        gene["controls"]["noclip"] = randsel("GHX", 2)
     if inp == "gb":  # Ceru
         gene = standardup
-        if random.randint(1,10) > 7:
-            gene["left"][0]["tip"] = "p"
-        if random.randint(1,10) > 7:
-            gene["right"][0]["tip"] = "p"
+        if random.randint(1, 10) > 7:
+            gene["left"][1]["tip"] = "p"
+        if random.randint(1, 10) > 7:
+            gene["right"][1]["tip"] = "p"
         gene["controls"] = conspec
-        gene["controls"]["stunt"] = randsel("LLLLLllNNnn")
-        gene["controls"]["noclip"] = randsel("NNNNNN")
+        gene["controls"]["stunt"] = randsel("HH", 2)
+        gene["controls"]["noclip"] = randsel("HH", 2)
     if inp == "BB":  # Bloo
         gene = standardup
-        if random.randint(1,10) > 5:
-            gene["left"][0]["curl"] = 1
-        if random.randint(1,10) > 5:
-            gene["right"][0]["curl"] = 1
+        if random.randint(1, 10) > 5:
+            gene["left"][1]["curl"] = 1
+        if random.randint(1, 10) > 5:
+            gene["right"][1]["curl"] = 1
         gene["controls"] = conspec
-        gene["controls"]["stunt"] = randsel("LLlNNNNnnnn")
-        gene["controls"]["noclip"] = randsel("NNNNNX")
+        gene["controls"]["stunt"] = randsel("II", 2)
+        gene["controls"]["noclip"] = randsel("IIX", 2)
     if inp == "Bb":
         gene = miscwiggle
         gene["controls"] = coffspec
-        gene["controls"]["stunt"] = randsel("NNNNNNnnnnn")
-        gene["controls"]["noclip"] = randsel("NNSSSSX")
+        gene["controls"]["stunt"] = randsel("IJ", 2)
+        gene["controls"]["noclip"] = randsel("IJX", 2)
     if inp == "bb":  # Indigo
         gene = swirl
         gene["controls"] = conspec
-        gene["controls"]["stunt"] = randsel("NNNNNNnnnSs")
-        gene["controls"]["noclip"] = randsel("SSSSSS")
+        gene["controls"]["stunt"] = randsel("JJ", 2)
+        gene["controls"]["noclip"] = randsel("JJ", 2)
     if inp == "rB":
         gene = miscwiggle
-        if random.randint(1,10) > 5:
-            gene["left"][0]["radial"] = randsel("TS")
-        if random.randint(1,10) > 5:
-            gene["right"][0]["radial"] = randsel("TS")
+        if random.randint(1, 10) > 5:
+            gene["left"][1]["radial"] = randsel("TS")
+        if random.randint(1, 10) > 5:
+            gene["right"][1]["radial"] = randsel("TS")
         gene["controls"] = coffspec
-        gene["controls"]["stunt"] = randsel("NNNNnnSSSss")
-        gene["controls"]["noclip"] = randsel("SSSSSSX")
+        gene["controls"]["stunt"] = randsel("JK", 2)
+        gene["controls"]["noclip"] = randsel("JKX", 2)
     if inp == "RB":  # Violet
         gene = miscwiggle
-        if random.randint(1,10) > 5:
-            gene["left"][0]["curl"] = int(randsel("1248"))
-        if random.randint(1,10) > 5:
-            gene["right"][0]["curl"] = int(randsel("1248"))
+        if random.randint(1, 10) > 5:
+            gene["left"][1]["curl"] = int(randsel("1248"))
+        if random.randint(1, 10) > 5:
+            gene["right"][1]["curl"] = int(randsel("1248"))
         gene["controls"] = conspec
-        gene["controls"]["stunt"] = randsel("SSSSSSSssss")
-        gene["controls"]["noclip"] = randsel("SSSSSS")
+        gene["controls"]["stunt"] = randsel("KK", 2)
+        gene["controls"]["noclip"] = randsel("KK", 2)
     if inp == "Rb":
         gene = miscwiggle
-        if random.randint(1,10) > 5:
-            gene["left"][0]["curl"] = int(randsel("124"))
-        if random.randint(1,10) > 5:
-            gene["right"][0]["curl"] = int(randsel("124"))
+        if random.randint(1, 10) > 5:
+            gene["left"][1]["curl"] = int(randsel("124"))
+        if random.randint(1, 10) > 5:
+            gene["right"][1]["curl"] = int(randsel("124"))
         gene["controls"] = coffspec
-        gene["controls"]["stunt"] = randsel("SSSSSSSsssu")
-        gene["controls"]["noclip"] = randsel("SSSSSUX")
+        gene["controls"]["stunt"] = randsel("KKKKL", 2)
+        gene["controls"]["noclip"] = randsel("KKKKLXX", 2)
     if inp == "rb":  # Tyrian
         gene = standardup
-        if random.randint(1,10) > 5:
-            gene["left"][0]["curl"] = int(randsel("12"))
-        if random.randint(1,10) > 5:
-            gene["left"][0]["dir"] = randsel("OOOI")
-        if random.randint(1,10) > 5:
-            gene["right"][0]["dir"] = randsel("OOOI")
-        if random.randint(1,10) > 5:
-            gene["right"][0]["curl"] = int(randsel("12"))
+        if random.randint(1, 10) > 5:
+            gene["left"][1]["curl"] = int(randsel("12"))
+        if random.randint(1, 10) > 5:
+            gene["left"][1]["dir"] = randsel("OOOI")
+        if random.randint(1, 10) > 5:
+            gene["right"][1]["dir"] = randsel("OOOI")
+        if random.randint(1, 10) > 5:
+            gene["right"][1]["curl"] = int(randsel("12"))
         gene["controls"] = conspec
-        gene["controls"]["stunt"] = randsel("UUUUuuuuuu")
-        gene["controls"]["noclip"] = randsel("UUUUUU")
+        gene["controls"]["stunt"] = randsel("KL", 2)
+        gene["controls"]["noclip"] = randsel("KL", 2)
     return gene
+
+
+# ------------------------------------
+# Partially finished Zone
+# ------------------------------------
+
+
+# Incomplete
+# needs bio functions for producing and blending these
+def geneface():
+    gene = {
+        "hair": {"back": "", "mid": "", "line": "", "front": ""},
+        "jawline": "",
+        "cheek": "",
+        "chin": "",
+        "eyebrow": "",  # Move all eye bits to a subgene?
+        "eyeshape": "",
+        "eyelash": ""
+    }
+    return gene
+
+
+# Incomplete
+# needs bio functions for producing and blending these
+def geneeyeobj():
+    gene = {
+        "active": "",       # eye present or unexpressed
+        "shape": "",        # almond-shaped, narrow slits, big wide round, boxy
+        "multipupil": "",   # multipupil?  Y/N?  PP = Y, all else = no
+        "onecol": "",       # solid color eye?  CC = Y, all else = no
+        "col": (0, 0, 0),   # color of glow / solid for this eye
+        "glow": "",         # eye glow?
+        "sym": "TT",        # symmetry, blend Y eyes together, N's together, Y's overwrite N's.
+        "pupilnum": 1,      # number pupils in this eye
+        "pupilshape": ""    # R = round, capital dominant, lowercase not dominant
+                            # Octopus, goat, round, triangle, symbols, oval, slit pupil, diamond, star, ?
+    }
+    return gene
+
+
+# Incomplete
+# needs bio functions for producing and blending these
+def geneeyes():
+    gene = {
+        "eye1": geneeyeobj(),
+        "eye2": geneeyeobj(),
+        "eye3": geneeyeobj(),
+        "eye4": geneeyeobj(),
+        "eye5": geneeyeobj(),
+        "focus": "",            # nearsight, farsight, astigmatism
+        "colorsense": "",       # red/green colorblind, tetrachromaticism, infravision, ultraviolet, etc.
+        "movevision": "",       # How well the vision tracks movement
+        "lightvision": "",      # Daylight sight, vs. eye damage taken from daylight
+        "darkvision": "",       # How well see in the dark?
+        "polarityvision": "",   # Can you see polarization of light?
+        "xfoldvision": "",      # Fancy bullshit vision senses
+        "independence": "",     # Can each eye move independently? (cross-eyed, lazy eye, gecko eye)
+    }
+    return gene
+
 
 spectrumgeneseasocial = {
     "RR": genesea("land"),  # Maroon
@@ -1444,3 +1394,104 @@ spectrumcorestat = {
            "hunch": 0, "resolve": 1, "moxie": 0, "psyche": -6, "pts": 0},
 }
 
+# CASTE COLOR SETS
+spectrumfull = [
+    "RR", "RRr", "RRR", "RRg", "RRG", "RrB", "Rrb",
+    "Rr", "Rrr", "RrR", "Rrg", "RrG", "rrB", "rrb",
+    "rr", "rrr", "rrR", "rrg", "rrG", "rGR", "rGr", "rGB",
+    "RG",
+    "rG", "RGB", "RGb", "RGg", "RGG", "RgR", "Rgr", "RgB", "Rgb",
+    "Rg", "Rgg", "RgG", "rgR", "rgr", "rgB", "rgb",
+    "rg", "rgg", "rgG", "GGR", "GGr", "GGG", "GGg",
+    "GG", "GGb", "GGB", "GgR", "Ggr", "GgG", "Ggg",
+    "Gg", "Ggb", "GgB", "ggR", "ggr", "ggG", "ggg",
+    "gg", "ggb", "ggB", "GbG", "Gbg", "GbR", "Gbr",
+    "Gb", "Gbb", "GbB", "GBG", "GBg", "GBR", "GBr",
+    "GB", "GBb", "GBB", "gBG", "gBg", "gBR", "gBr",
+    "gB", "gBb", "gBB", "gbG", "gbg", "gbR", "gbr",
+    "gb", "gbb", "gbB", "BBG", "BBg", "BBB", "BBb",
+    "BB", "BBr", "BBR", "BbG", "Bbg", "BbB",
+    "Bb", "Bbb", "Bbr", "BbR", "bbG", "bbg", "bbb",
+    "bb", "bbB", "bbr", "bbR", "rBB", "rBb", "rBg",
+    "rB", "rBG", "rBr", "rBR", "RBB", "RBb", "RBG", "RBg",
+    "RB", "RBr", "RBR", "RbB", "Rbb", "RbG",
+    "Rb", "Rbr", "RbR", "rbB", "rbb", "rbg",
+    "rb", "rbG", "rbr", "rbR", "RRB", "RRb",
+    ]
+
+spectrummini = [
+    "RR", "Rr", "rr", "Rg", "RG", "rG", "rg",
+    "GG", "Gg", "gg", "Gb", "GB", "gB", "gb",
+    "BB", "Bb", "bb", "rB", "RB", "Rb", "rb"
+    ]
+
+spectrumshort = [
+    "RR", "rr", "RG", "rg",
+    "GG", "gg", "GB", "gb",
+    "BB", "bb", "RB", "rb"
+    ]
+
+spectrumlow = [
+    "RR", "RRr", "RRR", "RRg", "RRG", "RrB", "Rrb", "RRB", "RRb",
+    "Rr", "Rrr", "RrR", "Rrg", "RrG", "rrB", "rrb",
+    "rr", "rrr", "rrR", "rrg", "rrG", "rGR", "rGr", "rGB",
+    "rG", "RGB", "RGb", "RGg", "RGG", "RgR", "Rgr", "RgB", "Rgb",
+    "Rg", "Rgg", "RgG", "rgR", "rgr", "rgB", "rgb", "RG",
+    "rg", "rgg", "rgG",
+    ]
+
+spectrummid = [
+    "GG", "GGb", "GGB", "GgR", "Ggr", "GgG", "Ggg", "GGG", "GGg",
+    "Gg", "Ggb", "GgB", "ggR", "ggr", "ggG", "ggg", "GGR", "GGr",
+    "gg", "ggb", "ggB", "GbG", "Gbg", "GbR", "Gbr",
+    "Gb", "Gbb", "GbB", "GBG", "GBg", "GBR", "GBr",
+    "GB", "GBb", "GBB", "gBG", "gBg", "gBR", "gBr",
+    "gB", "gBb", "gBB", "gbG", "gbg", "gbR", "gbr",
+    "gb", "gbb", "gbB",
+    ]
+
+spectrumhigh = [
+    "BBB", "BBb", "BB", "BBr", "BBR", "BbG", "Bbg", "BbB",
+    "Bb", "Bbb", "Bbr", "BbR", "bbG", "bbg", "bbb", "BBG", "BBg",
+    "bb", "bbB", "bbr", "bbR", "rBB", "rBb", "rBg",
+    "rB", "rBG", "rBr", "rBR", "RBB", "RBb", "RBG", "RBg",
+    "RB", "RBr", "RBR", "RbB", "Rbb", "RbG",
+    "Rb", "Rbr", "RbR", "rbB", "rbb", "rbg",
+    "rb", "rbG", "rbr", "rbR",
+    ]
+
+spectrumrust = [
+    "RR", "RRr", "RRR", "RRg", "RRG", "RrB", "Rrb", "RRB", "RRb",
+    "Rr", "Rrr", "RrR", "Rrg", "RrG", "rrB", "rrb",
+    "rr", "rrr", "rrR", "rrg", "rrG", "rGR", "rGr", "rGB", "RG",
+    "rG", "RGB", "RGb", "RGg", "RGG", "RgR", "Rgr", "RgB", "Rgb",
+    "Rg",
+    ]
+
+spectrumgreens = [
+    "Rgg", "RgG", "rgR", "rgr", "rgB", "rgb", "rg", "rgg", "rgG",
+    "GG", "GGb", "GGB", "GgR", "Ggr", "GgG", "Ggg", "GGG", "GGg",
+    "Gg", "Ggb", "GgB", "ggR", "ggr", "ggG", "ggg", "GGR", "GGr",
+    "gg", "ggb", "ggB", "GbG", "Gbg", "GbR", "Gbr",
+    "Gb",
+    ]
+
+spectrumblues = [
+    "Gbb", "GbB", "GBG", "GBg", "GBR", "GBr",
+    "GB", "GBb", "GBB", "gBG", "gBg", "gBR", "gBr",
+    "gB", "gBb", "gBB", "gbG", "gbg", "gbR", "gbr",
+    "gb", "gbb", "gbB",
+    "BBB", "BBb", "BB", "BBr", "BBR", "BbG", "Bbg", "BbB",
+    "Bb", "BBG", "BBg",
+    ]
+
+spectrumpurples = [
+    "bbG", "bbg", "bbb", "Bbb", "Bbr", "BbR",
+    "bb", "bbB", "bbr", "bbR", "rBB", "rBb", "rBg",
+    "rB", "rBG", "rBr", "rBR", "RBB", "RBb", "RBG", "RBg",
+    "RB", "RBr", "RBR", "RbB", "Rbb", "RbG",
+    "Rb", "Rbr", "RbR", "rbB", "rbb", "rbg",
+    "rb", "rbG", "rbr", "rbR",
+    ]
+
+# END OF CASTE COLOR SETS
