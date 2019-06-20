@@ -9,6 +9,14 @@ Goal: 0.4.0, major graphical, UI, or back-end update.  The last significant UI -
 Approximate version history: (x = nonfunctional)
 =
 
+V. 0.3.3x: 
+
+-- Made a pass through genome.py, graphics.py, traits.py (did a bad job), and main.py
+
+-- Program now loads some screens but not others
+
+-- severe troubleshooting needed on trollmakepage, and traits.py.  Not in that order.
+
 V. 0.3.2x: 
 
 -- Converted hornobj, hornset, seagene, and mouth to nested dictionary form.
