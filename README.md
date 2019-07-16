@@ -9,6 +9,10 @@ Goal: 0.4.0, major graphical, UI, or back-end update.  The last significant UI -
 Approximate version history: (x = nonfunctional)
 =
 
+V: 0.3.4x: 
+
+-- Enabled mouse movement, converted back from nested dict to class-based
+
 V. 0.3.3x: 
 
 -- Made a pass through genome.py, graphics.py, traits.py (did a bad job), and main.py
