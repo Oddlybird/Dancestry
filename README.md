@@ -1,7 +1,7 @@
 # Dancestry
 Generates adult trolls from arbitrary parentage, loads and saves adult trolls to file.
 
-Original version written in freebasic in late 2017.  Being adapted to Python in early 2019.
+Original version written in freebasic in late 2017.  Being adapted to Python in early 2019.  The next version is being transferred to java in 2021.
 
 Goal: 0.4.0, major graphical, UI, or back-end update.  The last significant UI -AND- graphics overhauls before 1.0 should be done by 0.5.0.
 
